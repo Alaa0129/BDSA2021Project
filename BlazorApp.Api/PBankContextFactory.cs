@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using BlazorApp.Entities;
 
 namespace BlazorApp.Api 
 {
@@ -17,7 +18,7 @@ namespace BlazorApp.Api
             
             var connectionString = configuration.GetConnectionString("PBank");
 
-            var optionsBuilder = new DbContextOptionsBuilder<KanbanContext>().UseSqlServer(connectionString);
+            var optionsBuilder = new DbContextOptionsBuilder<PBankContext>().UseSqlServer(connectionString);
 
             return new PBankContext(optionsBuilder.Options);
         }
