@@ -10,7 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using BlazorApp.Infrastructure;
+using BlazorApp.Core;
 
 namespace BlazorApp.Api
 {
@@ -26,6 +29,11 @@ namespace BlazorApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<PBankContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("PBank")));
+            services.AddScoped<IPBankContext, PBankContext>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

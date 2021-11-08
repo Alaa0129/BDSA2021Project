@@ -15,4 +15,9 @@ namespace BlazorApp.Core
         [StringLength(50)]
         public string Lastname { get; init; }
     }
+
+    public record UserUpdateDTO : UserCreateDTO
+    {
+        public int Id { get; init; }
+    }
 }

@@ -3,6 +3,8 @@ using BlazorApp.Core;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Collections.Generic;
+using System.Net;
 
 namespace BlazorApp.Infrastructure
 {
@@ -43,8 +45,26 @@ namespace BlazorApp.Infrastructure
                         );
 
             return users.FirstOrDefaultAsync();
+        }
 
+        public async Task<IReadOnlyCollection<UserDTO>> ReadAsync() =>
+            (await _context.Users
+                            .Select(u => new UserDTO(u.Id, u.Firstname, u.Lastname))
+                            .ToListAsync())
+                            .AsReadOnly();
 
+        public async Task<HttpStatusCode> UpdateAsync(UserUpdateDTO user)
+        {
+            var entity = await _context.Users.Where(u => u.Id == user.Id).FirstOrDefaultAsync();
+
+            if (entity == null) return HttpStatusCode.NotFound;
+
+            entity.Firstname = user.Firstname;
+            entity.Lastname = user.Lastname;
+
+            await _context.SaveChangesAsync();
+
+            return HttpStatusCode.OK;
         }
     }
 }
