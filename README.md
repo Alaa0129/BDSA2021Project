@@ -26,3 +26,13 @@ notifications once a project or thesis with the given keyword is uploaded
 or once students express their interest in specific topics.
 • The service should allow users to describe themselves in terms of interests
 allowing other types of focused searches.
+
+
+
+$password = New-Guid
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$password" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest
+$database = "PBank"
+$connectionString = "Server=localhost;Database=$database;User Id=sa;Password=$password"
+
+
+dotnet user-secrets set "ConnectionStrings:PBank" "$connectionString"

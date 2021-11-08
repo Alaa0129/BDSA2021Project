@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace BlazorApp.Tests
+namespace BlazorApp.Infrastructure.Tests
 {
     public class UnitTest1
     {
