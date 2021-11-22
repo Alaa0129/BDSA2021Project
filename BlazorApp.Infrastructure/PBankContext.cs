@@ -7,6 +7,7 @@ namespace BlazorApp.Infrastructure
     public class PBankContext : DbContext, IPBankContext
     {
         public DbSet<User> Users {get; set;}
+        public DbSet<Project> Projects {get; set;}
 
         public PBankContext(DbContextOptions<PBankContext> options) : base(options) { }
 

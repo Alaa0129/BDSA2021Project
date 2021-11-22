@@ -30,12 +30,13 @@ namespace BlazorApp.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddControllers();
             services.AddDbContext<PBankContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PBank")));
             services.AddScoped<IPBankContext, PBankContext>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
 
-            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BlazorApp.Api", Version = "v1" });
@@ -52,7 +53,9 @@ namespace BlazorApp.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BlazorApp.Api v1"));
             }
 
-            app.UseHttpsRedirection();
+
+            // If this is active the client cannot access the API due to somekind of missing SSL ceritficate??
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 

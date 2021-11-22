@@ -35,6 +35,16 @@ namespace BlazorApp.Api
 
                 context.SaveChanges();
             }
+
+            if(!context.Projects.Any())
+            {
+                context.Projects.AddRange(
+                    new Project{Title = "Project One", Description = "Project One Description", SupervisorId = 1, MaxApplications = 4, AppliedStudents = new User[] {context.Users.Find(1)}},
+                    new Project{Title = "Project Two", Description = "Project Two Description", SupervisorId = 1, MaxApplications = 100}
+                );
+
+                context.SaveChanges();
+            }
         }
     }
 }

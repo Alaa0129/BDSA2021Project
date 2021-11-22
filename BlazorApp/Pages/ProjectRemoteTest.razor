@@ -1,0 +1,44 @@
+@page "/ProjectRemoteTest"
+
+
+@using BlazorApp.Core
+@inject IProjectRemote ProjectRemote
+
+
+
+<h1>Project Remote Test </h1>
+
+<h3>The text below shows the data of the first project in the database using the ProjectRemote.GetProject:</h3>
+@if (@projectDetailsDTO != null)
+{
+    <li> Title: @projectDetailsDTO.Title </li>
+    <li> Description: @projectDetailsDTO.Description </li>
+    <li> MaxApplications: @projectDetailsDTO.MaxApplications </li>
+    <li> SupervisorId: @projectDetailsDTO.SupervisorId </li>
+}
+
+<h3>This will update the project with different values using ProjectRmeote.UpdateProject (A refresh is needed, as of now)</h3>
+<button @onclick="@UpdateProject">
+    Click Me
+</button>
+
+@code {
+
+    ProjectDetailsDTO projectDetailsDTO = null;
+
+    ProjectUpdateDTO projectUpdateDTO1 = new ProjectUpdateDTO{Id = 1, Title = "I Updated", Description = "This also updated", MaxApplications = 100, SupervisorId = 10};
+    ProjectUpdateDTO projectUpdateDTO2 = new ProjectUpdateDTO{Id = 1, Title = "I Updated Again", Description = "This is also updated again", MaxApplications = 5, SupervisorId = 100};
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        projectDetailsDTO = await ProjectRemote.GetProject(1);
+    }
+
+    protected async void UpdateProject()
+    {
+        if (projectDetailsDTO.Title.Equals("I Updated")) await ProjectRemote.UpdateProject(projectUpdateDTO2);
+        else await ProjectRemote.UpdateProject(projectUpdateDTO1);
+
+    }
+}
