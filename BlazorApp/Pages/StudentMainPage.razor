@@ -1,0 +1,170 @@
+@layout StudentMainPageLayout
+@page "/studentMainPage"
+@using BlazorApp.Infrastructure
+@using BlazorPagination
+
+<form class="form-inline">
+    <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
+        placeholder="Search for projects..." aria-label="Search">
+    <button class="btn btn-light my-sm-0" type="button">Search</button>
+    <button type="button" @onclick="AddProject"> Add </button>
+    <button type="button" @onclick="DeleteProject"> remove </button>
+</form>
+
+<br /><br>
+
+@foreach (var project in filteredProjects) //TODO: scale searchbar searches + merge Gustav branch into mine
+{
+    <div class="ProjectView" onclick="">
+
+        <div class="ProjectTitleView">
+            <p class="ProjectTitle">
+                @project.Title
+            </p>
+        </div>
+        <div class="ProjectDescriptionView">
+            <div class="ProjectDescriptionBox">
+                <p class="ProjectDescription"> @project.Description </p>
+            </div>
+        </div>
+        <div class="LastRowOuter">
+            <div class="LastRowInner">
+                <p class="SupervisorName"> @project.PublishedBy.Name </p>
+                <p class="publishedDate"> @project.PublishDate </p>
+                <button type="button" class="ReadMoreButton"> Read more </button>
+            </div>
+        </div>
+    </div>
+    <br /><br>
+
+}
+
+<div class="pageButtonsDiv">
+    <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("prev"))"> Previous </button>
+
+    @for (int i = 0; i < totalPages; i++)
+    {
+        var pageNumber = i;
+        <button class="btn btn-info @(currentPage == pageNumber? "btn-dark" : "btn-white")"
+        @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
+    }
+
+    <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("next"))"> Next </button>
+</div>
+
+@code
+{
+
+    //Use database tables instead - this is done for test purposes
+    private List<Project> projects = new List<Project>();
+    private List<Project> filteredProjects = new List<Project>();
+
+    private int pageSize = 5;
+    private int totalPages;
+    private int currentPage;
+
+    private string _searchedProject;
+
+    public string searchedProject
+    {
+        get { return _searchedProject; }
+
+        set
+        {
+            _searchedProject = value;
+
+            SearchProjects();
+        }
+    }
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        projects = new List<Project>()
+        {
+        new Project()
+        {
+        Title = "testProject1",
+        Description = "Description1",
+        PublishedBy = new Supervisor() { Name = "Supervisor1" },
+        PublishDate = DateTime.Now
+        },
+        new Project()
+        {
+        Title = "testProject2",
+        Description = "Description2",
+        PublishedBy = new Supervisor() { Name = "Supervisor2" },
+        PublishDate = DateTime.Now
+        },
+
+        new Project()
+        {
+        Title = "testProject3",
+        Description = "Description3",
+        PublishedBy = new Supervisor() { Name = "Supervisor3" },
+        PublishDate = DateTime.Now
+        },
+
+        };
+
+        filteredProjects = projects.Take(pageSize).ToList();
+        totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
+    }
+
+    private void AddProject()
+    {
+        var p4 = new Project()
+        {
+            Title = "testProject4",
+            Description = "Description4",
+            PublishedBy = new Supervisor() { Name = "Alaa" },
+            PublishDate = DateTime.Now
+        };
+
+        projects.Add(p4);
+
+        filteredProjects = projects;
+
+        totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
+    }
+
+    private void DeleteProject()
+    {
+        projects.Remove(projects.Last());
+
+        filteredProjects = projects;
+
+        totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
+
+    }
+
+    private void SearchProjects()
+    {
+        filteredProjects = projects.Where(p => p.Title
+                                   .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase) || p.PublishedBy.Name
+                                   .Contains(_searchedProject,StringComparison.OrdinalIgnoreCase))
+                                   .ToList();
+    }
+
+    private void UpdateProjects(int pageNumber) //shows the projects dependeing on which page the user is
+    {
+        filteredProjects = projects.Skip(pageNumber * pageSize).Take(pageSize).ToList();
+        currentPage = pageNumber;
+
+    }
+
+    private void NewPage(string buttonType) //this handles the next and previous buttons when these are clicked on
+    {
+        if (buttonType == "next" && currentPage != totalPages - 1) currentPage++;
+
+        if (buttonType == "prev" && currentPage != 0) currentPage--;
+
+        UpdateProjects(currentPage);
+    }
+
+
+
+
+}
