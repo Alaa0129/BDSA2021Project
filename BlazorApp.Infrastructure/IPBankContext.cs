@@ -9,6 +9,7 @@ namespace BlazorApp.Infrastructure
     public interface IPBankContext : IDisposable
     {
         DbSet<User> Users { get; }
+        DbSet<Project> Projects { get; }
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         

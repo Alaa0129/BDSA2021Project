@@ -4,14 +4,16 @@ using BlazorApp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorApp.Infrastructure.Migrations
 {
     [DbContext(typeof(PBankContext))]
-    partial class PBankContextModelSnapshot : ModelSnapshot
+    [Migration("20211122173524_05dd34d2-4f2b-451e-a702-37307f1eac4a")]
+    partial class _05dd34d24f2b451ea70237307f1eac4a
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

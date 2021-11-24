@@ -1,19 +1,18 @@
 @layout StudentMainPageLayout
 @page "/studentMainPage"
-@using BlazorApp.Infrastructure
-@using BlazorPagination
+@inject IProjectRemote ProjectRemote
+@using BlazorApp.Core
 
 <form class="form-inline">
     <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
         placeholder="Search for projects..." aria-label="Search">
     <button class="btn btn-light my-sm-0" type="button">Search</button>
-    <button type="button" @onclick="AddProject"> Add </button>
-    <button type="button" @onclick="DeleteProject"> remove </button>
+
 </form>
 
 <br /><br>
 
-@foreach (var project in filteredProjects) //TODO: scale searchbar searches + merge Gustav branch into mine
+@foreach (var project in filteredProjects) 
 {
     <div class="ProjectView" onclick="">
 
@@ -29,8 +28,7 @@
         </div>
         <div class="LastRowOuter">
             <div class="LastRowInner">
-                <p class="SupervisorName"> @project.PublishedBy.Name </p>
-                <p class="publishedDate"> @project.PublishDate </p>
+                <p class="SupervisorName"> @project.SupervisorId </p>
                 <button type="button" class="ReadMoreButton"> Read more </button>
             </div>
         </div>
@@ -55,10 +53,9 @@
 @code
 {
 
-    //Use database tables instead - this is done for test purposes
-    private List<Project> projects = new List<Project>();
-    private List<Project> filteredProjects = new List<Project>();
-
+    private IEnumerable<ProjectDetailsDTO> projects = new List<ProjectDetailsDTO>();
+    private IEnumerable<ProjectDetailsDTO> filteredProjects = new List<ProjectDetailsDTO>();
+        
     private int pageSize = 5;
     private int totalPages;
     private int currentPage;
@@ -78,79 +75,28 @@
     }
 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        await base.OnInitializedAsync();
 
-        projects = new List<Project>()
-        {
-        new Project()
-        {
-        Title = "testProject1",
-        Description = "Description1",
-        PublishedBy = new Supervisor() { Name = "Supervisor1" },
-        PublishDate = DateTime.Now
-        },
-        new Project()
-        {
-        Title = "testProject2",
-        Description = "Description2",
-        PublishedBy = new Supervisor() { Name = "Supervisor2" },
-        PublishDate = DateTime.Now
-        },
+        projects = await ProjectRemote.GetProjects();
 
-        new Project()
-        {
-        Title = "testProject3",
-        Description = "Description3",
-        PublishedBy = new Supervisor() { Name = "Supervisor3" },
-        PublishDate = DateTime.Now
-        },
-
-        };
-
-        filteredProjects = projects.Take(pageSize).ToList();
+        filteredProjects = projects.Take(pageSize);
+        
         totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
-    }
-
-    private void AddProject()
-    {
-        var p4 = new Project()
-        {
-            Title = "testProject4",
-            Description = "Description4",
-            PublishedBy = new Supervisor() { Name = "Alaa" },
-            PublishDate = DateTime.Now
-        };
-
-        projects.Add(p4);
-
-        filteredProjects = projects;
-
-        totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
-    }
-
-    private void DeleteProject()
-    {
-        projects.Remove(projects.Last());
-
-        filteredProjects = projects;
-
-        totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
-
     }
 
     private void SearchProjects()
     {
         filteredProjects = projects.Where(p => p.Title
-                                   .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase) || p.PublishedBy.Name
-                                   .Contains(_searchedProject,StringComparison.OrdinalIgnoreCase))
-                                   .ToList();
+                                   .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase) 
+                                            || p.SupervisorId.ToString()
+                                   .Contains(_searchedProject,StringComparison.OrdinalIgnoreCase));
     }
 
     private void UpdateProjects(int pageNumber) //shows the projects dependeing on which page the user is
     {
-        filteredProjects = projects.Skip(pageNumber * pageSize).Take(pageSize).ToList();
+        filteredProjects = projects.Skip(pageNumber * pageSize).Take(pageSize);
         currentPage = pageNumber;
 
     }
