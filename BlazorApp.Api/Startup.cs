@@ -53,9 +53,7 @@ namespace BlazorApp.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BlazorApp.Api v1"));
             }
 
-
-            // If this is active the client cannot access the API due to somekind of missing SSL ceritficate??
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

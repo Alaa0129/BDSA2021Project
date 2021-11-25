@@ -2,6 +2,7 @@
 
 
 @using BlazorApp.Core
+@using System.Collections.Generic;
 @inject IProjectRemote ProjectRemote
 
 
@@ -17,14 +18,27 @@
     <li> SupervisorId: @projectDetailsDTO.SupervisorId </li>
 }
 
+@if (@projectDetails != null)
+{
+    foreach (ProjectDetailsDTO project in projectDetails)
+    {
+        <li> Title: @project.Title</li>
+        <li> Description: @project.Description</li>
+    }
+    <h1> @projectDetails.Count() </h1>
+}
+
 <h3>This will update the project with different values using ProjectRmeote.UpdateProject (A refresh is needed, as of now)</h3>
 <button @onclick="@UpdateProject">
     Click Me
 </button>
 
+
+
 @code {
 
     ProjectDetailsDTO projectDetailsDTO = null;
+    IEnumerable<ProjectDetailsDTO> projectDetails = null;
 
     ProjectUpdateDTO projectUpdateDTO1 = new ProjectUpdateDTO{Id = 1, Title = "I Updated", Description = "This also updated", MaxApplications = 100, SupervisorId = 10};
     ProjectUpdateDTO projectUpdateDTO2 = new ProjectUpdateDTO{Id = 1, Title = "I Updated Again", Description = "This is also updated again", MaxApplications = 5, SupervisorId = 100};
@@ -33,6 +47,7 @@
     protected override async Task OnInitializedAsync()
     {
         projectDetailsDTO = await ProjectRemote.GetProject(1);
+        projectDetails = await ProjectRemote.GetProjects();
     }
 
     protected async void UpdateProject()

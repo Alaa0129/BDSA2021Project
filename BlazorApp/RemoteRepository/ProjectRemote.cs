@@ -14,7 +14,7 @@ namespace BlazorApp
 
         public ProjectRemote(IHttpClientFactory clientFactory)
         {
-            _httpClient = clientFactory.CreateClient("default_client");
+            _httpClient = clientFactory.CreateClient("BlazorApp.Api");
         }
 
         public async Task<bool> CreateProject(ProjectCreateDTO project)

@@ -25,10 +25,9 @@ namespace BlazorApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            Uri Api = new Uri("http://localhost:3000");
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddHttpClient("default_client", client => client.BaseAddress = Api);
+            services.AddHttpClient("BlazorApp.Api", client => client.BaseAddress = new Uri("https://localhost:3001"));
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IProjectRemote, ProjectRemote>();
         }
