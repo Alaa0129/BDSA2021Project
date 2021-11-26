@@ -2,6 +2,11 @@
 
   <ItemGroup>
   <ProjectReference Include="..\BlazorApp.Core\BlazorApp.Core.csproj" />
+  <ProjectReference Include="..\BlazorApp.Infrastructure\BlazorApp.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.1.0" />
   </ItemGroup>
 
   <PropertyGroup>

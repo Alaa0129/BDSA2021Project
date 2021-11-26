@@ -38,14 +38,14 @@ namespace BlazorApp.Infrastructure
         public async Task<ProjectDetailsDTO> ReadAsync(int projectId)
         {
             return await _context.Projects.Where(p => p.Id == projectId)
-                                            .Select(p => new ProjectDetailsDTO
-                                            (
-                                                p.Id,
-                                                p.Title,
-                                                p.Description,
-                                                p.SupervisorId,
-                                                p.MaxApplications
-                                            )).FirstOrDefaultAsync();
+                                          .Select(p => new ProjectDetailsDTO
+                                          (
+                                            p.Id,
+                                            p.Title,
+                                            p.Description,
+                                            p.SupervisorId,
+                                            p.MaxApplications
+                                          )).FirstOrDefaultAsync();
         }
 
         public async Task<IReadOnlyCollection<ProjectDetailsDTO>> ReadAsync()

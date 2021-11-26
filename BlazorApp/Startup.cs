@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlazorApp.Data;
+using CurrieTechnologies.Razor.SweetAlert2;
 
 namespace BlazorApp
 {
@@ -31,6 +32,7 @@ namespace BlazorApp
             services.AddHttpClient("default_client", client => client.BaseAddress = Api);
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IProjectRemote, ProjectRemote>();
+            services.AddSweetAlert2();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

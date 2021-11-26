@@ -12,12 +12,14 @@ namespace BlazorApp.Core
 
     public record ProjectCreateDTO
     {
+        [Required]
         [StringLength(50)]
         public string Title { get; init; }
 
+        [Required]
         public string Description { get; init; }
 
-        [Required]
+        // [Required]
         public int MaxApplications {get; init; }
         
         [Required]
