@@ -1,0 +1,72 @@
+@page "/RequestProject"
+@using BlazorApp.Core
+@inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService swal
+<h1>Project Title </h1>
+<br> <br />
+
+
+
+<div class="row">
+  <div class="column">
+    <form  >
+        <div class="form-group">
+            <input @bind="Title" @bind:event="oninput" type="text" class="form-control" id="formGroupExampleInput"
+                placeholder="Project Title">
+        </div>
+        <div class="form-group">
+            <input @bind="Supervisor" @bind:event="oninput" type="text" class="form-control" id="formGroupExampleInput"
+                placeholder="Supervisor Name">
+        </div>
+        <div class="form-group">
+            <textarea @bind="Description" @bind:event="oninput" type="text" style="height: 200px;" class="form-control"
+                id="formGroupExampleInput2" placeholder="Project Description" rows="20"></textarea>
+        </div>
+
+        <div class="form-group">
+            <textarea type="text" style="height: 120px;" class="form-control" id="formGroupExampleInput2"
+                placeholder="Additional information" rows="10"></textarea>
+        </div>
+    </form>
+</div>
+  <div class="SupervisorBlock">
+      <h1>Supervisors:</h1>
+      <ul >
+          <li>Paolo</li>
+          <li>Shuja</li>
+          <li>Alaa</li>
+          <li>Paolo igen</li>
+      </ul>
+  </div>
+</div>
+<button class="btn btn-primary" @onclick="() => Request(Title,Description)">Apply</button>
+
+
+@code {
+    private int currentCount = 0;
+    private string Title;
+    private string Description;
+    private string Supervisor;
+
+
+    private async void Request(string Title, string Description)
+    {
+        ProjectCreateDTO projectCreateDTO = new ProjectCreateDTO()
+        {
+            Title = Title,
+            Description = Description
+        };
+        
+        /*
+        if (result)
+        {
+            await swal.FireAsync("Succes", "Request successfully created", Success);
+        }
+        else
+        {
+            await swal.FireAsync("Error", "Couldn't create project", Error);
+        }
+        */
+
+    }
+
+}
