@@ -1,0 +1,121 @@
+@layout MainLayout
+@page "/"
+@inject IProjectRemote ProjectRemote
+@using BlazorApp.Core
+
+<div class="Page" style="justify-content: center; align-items: center;">
+        <form class="form-inline">
+            <div class="search-field">
+                <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
+                placeholder="Search for projects..." aria-label="Search">
+                <button class="btn btn-light my-sm-0" type="button">Search</button>
+            </div>
+        </form>
+
+    <br> <br>
+
+    @foreach (var project in filteredProjects) 
+    {
+        <div class="ProjectView" onclick="">
+
+            <div class="ProjectTitleView">
+                <p class="ProjectTitle">
+                    @project.Title
+                </p>
+            </div>
+            <div class="ProjectDescriptionView">
+                <div class="ProjectDescriptionBox">
+                    <p class="ProjectDescription"> @project.Description </p>
+                </div>
+            </div>
+            <div class="LastRowOuter">
+                <div class="LastRowInner">
+                    <p class="SupervisorName"> @project.SupervisorId </p>
+                    <button type="button" class="ReadMoreButton"> Read more </button>
+                </div>
+            </div>
+        </div>
+        <br /><br>
+
+    }
+
+    <div class="pageButtonsDiv">
+        <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("prev"))"> Previous </button>
+
+        @for (int i = 0; i < totalPages; i++)
+        {
+            var pageNumber = i;
+            <button class="btn btn-info @(currentPage == pageNumber? "btn-dark" : "btn-white")"
+            @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
+        }
+
+        <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("next"))"> Next </button>
+    </div>
+</div>
+    
+
+
+@code
+{
+
+    private IEnumerable<ProjectDetailsDTO> projects = new List<ProjectDetailsDTO>();
+    private IEnumerable<ProjectDetailsDTO> filteredProjects = new List<ProjectDetailsDTO>();
+        
+    private int pageSize = 5;
+    private int totalPages;
+    private int currentPage;
+
+    private string _searchedProject;
+
+    public string searchedProject
+    {
+        get { return _searchedProject; }
+
+        set
+        {
+            _searchedProject = value;
+
+            SearchProjects();
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        projects = await ProjectRemote.GetProjects();
+
+        filteredProjects = projects.Take(pageSize);
+        
+        totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
+    }
+
+    private void SearchProjects()
+    {
+        filteredProjects = projects.Where(p => p.Title
+                                   .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase) 
+                                            || p.SupervisorId.ToString()
+                                   .Contains(_searchedProject,StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void UpdateProjects(int pageNumber) //shows the projects dependeing on which page the user is
+    {
+        filteredProjects = projects.Skip(pageNumber * pageSize).Take(pageSize);
+        currentPage = pageNumber;
+
+    }
+
+    private void NewPage(string buttonType) //this handles the next and previous buttons when these are clicked on
+    {
+        if (buttonType == "next" && currentPage != totalPages - 1) currentPage++;
+
+        if (buttonType == "prev" && currentPage != 0) currentPage--;
+
+        UpdateProjects(currentPage);
+    }
+
+
+
+
+}

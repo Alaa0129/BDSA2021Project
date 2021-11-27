@@ -1,9 +1,10 @@
+@using Infrastructure
 @inherits LayoutComponentBase
 
 <div class="page">
     <div class="main">
         @* TODO: Tjek hvis student eller supervisor *@
-        @if (true)
+        @if (user.Firstname == "Alaa")
         {
             <NavMenuStudent />        
         } else
@@ -16,3 +17,12 @@
         </div>
     </div>
 </div>
+
+
+@code
+{
+    User user = new User()
+    {
+        Firstname = "Alaa"
+    };
+}
