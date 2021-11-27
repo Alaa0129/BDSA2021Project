@@ -1,0 +1,41 @@
+.nav-link:hover {
+    cursor: pointer;
+}
+
+.nav-link {
+    font-size: larger;
+}
+
+.navbar-brand {
+    padding-left: 1.5rem;
+    font-size: x-large;
+    font-style: italic;
+    padding-top: 1rem; 
+}
+
+.nav_bar_home {
+    width: 250%;
+}
+
+.nav-item {
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.nav-profile-img {
+    width: 3rem;
+}
+
+.nav-icon {
+    padding-top: 0rem;
+}
+
+.nav-bar-right-side {
+    justify-content: right;
+}
+
+.navbar {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}

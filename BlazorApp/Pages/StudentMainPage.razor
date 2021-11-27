@@ -1,54 +1,59 @@
-@layout StudentMainPageLayout
-@page "/studentMainPage"
+@layout MainLayout
+@page "/"
 @inject IProjectRemote ProjectRemote
 @using BlazorApp.Core
 
-<form class="form-inline">
-    <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
-        placeholder="Search for projects..." aria-label="Search">
-    <button class="btn btn-light my-sm-0" type="button">Search</button>
-
-</form>
-
-<br /><br>
-
-@foreach (var project in filteredProjects) 
-{
-    <div class="ProjectView" onclick="">
-
-        <div class="ProjectTitleView">
-            <p class="ProjectTitle">
-                @project.Title
-            </p>
-        </div>
-        <div class="ProjectDescriptionView">
-            <div class="ProjectDescriptionBox">
-                <p class="ProjectDescription"> @project.Description </p>
+<div class="Page" style="justify-content: center; align-items: center;">
+        <form class="form-inline">
+            <div class="search-field">
+                <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
+                placeholder="Search for projects..." aria-label="Search">
+                <button class="btn btn-light my-sm-0" type="button">Search</button>
             </div>
-        </div>
-        <div class="LastRowOuter">
-            <div class="LastRowInner">
-                <p class="SupervisorName"> @project.SupervisorId </p>
-                <button type="button" class="ReadMoreButton"> Read more </button>
-            </div>
-        </div>
-    </div>
-    <br /><br>
+        </form>
 
-}
+    <br> <br>
 
-<div class="pageButtonsDiv">
-    <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("prev"))"> Previous </button>
-
-    @for (int i = 0; i < totalPages; i++)
+    @foreach (var project in filteredProjects) 
     {
-        var pageNumber = i;
-        <button class="btn btn-info @(currentPage == pageNumber? "btn-dark" : "btn-white")"
-        @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
+        <div class="ProjectView" onclick="">
+
+            <div class="ProjectTitleView">
+                <p class="ProjectTitle">
+                    @project.Title
+                </p>
+            </div>
+            <div class="ProjectDescriptionView">
+                <div class="ProjectDescriptionBox">
+                    <p class="ProjectDescription"> @project.Description </p>
+                </div>
+            </div>
+            <div class="LastRowOuter">
+                <div class="LastRowInner">
+                    <p class="SupervisorName"> @project.SupervisorId </p>
+                    <button type="button" class="ReadMoreButton"> Read more </button>
+                </div>
+            </div>
+        </div>
+        <br /><br>
+
     }
 
-    <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("next"))"> Next </button>
+    <div class="pageButtonsDiv">
+        <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("prev"))"> Previous </button>
+
+        @for (int i = 0; i < totalPages; i++)
+        {
+            var pageNumber = i;
+            <button class="btn btn-info @(currentPage == pageNumber? "btn-dark" : "btn-white")"
+            @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
+        }
+
+        <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("next"))"> Next </button>
+    </div>
 </div>
+    
+
 
 @code
 {
