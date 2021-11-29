@@ -1,10 +1,8 @@
 @page "/RequestProject"
 @using BlazorApp.Core
 @inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService swal
-<h1>Project Title </h1>
+<h1> Request a project </h1>
 <br> <br />
-
-
 
 <div class="row">
   <div class="column">
@@ -48,7 +46,7 @@
     private string Supervisor;
 
 
-    private async void Request(string Title, string Description)
+    private void Request(string Title, string Description)
     {
         ProjectCreateDTO projectCreateDTO = new ProjectCreateDTO()
         {
