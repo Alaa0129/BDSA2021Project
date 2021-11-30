@@ -49,6 +49,16 @@ namespace BlazorApp.Api
 
                 context.SaveChanges();
             }
+
+            if (!context.Requests.Any())
+            {
+                context.Requests.AddRange(
+                //    new Request {Title = "Request one", Description = "request one description", StudentId = 1},
+                //    new Request {Title = "Request two", Description = "request two description", StudentId = 2}
+                );
+
+                context.SaveChanges();
+            }
         }
     }
 }

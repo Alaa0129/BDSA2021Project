@@ -36,6 +36,7 @@ namespace BlazorApp.Api
             services.AddScoped<IPBankContext, PBankContext>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IRequestRepository, RequestRepository>();
 
             services.AddSwaggerGen(c =>
             {

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorApp.Infrastructure.Migrations
 {
     [DbContext(typeof(PBankContext))]
-    [Migration("20211122173524_05dd34d2-4f2b-451e-a702-37307f1eac4a")]
-    partial class _05dd34d24f2b451ea70237307f1eac4a
+    [Migration("20211130193215_be45c52d-c3ec-4d61-ab02-b74dac98603f")]
+    partial class be45c52dc3ec4d61ab02b74dac98603f
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,6 +47,29 @@ namespace BlazorApp.Infrastructure.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("BlazorApp.Infrastructure.Request", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Requests");
+                });
+
             modelBuilder.Entity("BlazorApp.Infrastructure.User", b =>
                 {
                     b.Property<int>("Id")
@@ -65,9 +88,14 @@ namespace BlazorApp.Infrastructure.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RequestId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("RequestId");
 
                     b.ToTable("Users");
                 });
@@ -77,9 +105,18 @@ namespace BlazorApp.Infrastructure.Migrations
                     b.HasOne("BlazorApp.Infrastructure.Project", null)
                         .WithMany("AppliedStudents")
                         .HasForeignKey("ProjectId");
+
+                    b.HasOne("BlazorApp.Infrastructure.Request", null)
+                        .WithMany("AppliedStudents")
+                        .HasForeignKey("RequestId");
                 });
 
             modelBuilder.Entity("BlazorApp.Infrastructure.Project", b =>
+                {
+                    b.Navigation("AppliedStudents");
+                });
+
+            modelBuilder.Entity("BlazorApp.Infrastructure.Request", b =>
                 {
                     b.Navigation("AppliedStudents");
                 });

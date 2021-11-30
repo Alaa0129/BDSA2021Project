@@ -10,6 +10,7 @@ namespace BlazorApp.Infrastructure
     {
         DbSet<User> Users { get; }
         DbSet<Project> Projects { get; }
+        DbSet<Request> Requests {get; }
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         

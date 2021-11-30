@@ -45,6 +45,29 @@ namespace BlazorApp.Infrastructure.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("BlazorApp.Infrastructure.Request", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Requests");
+                });
+
             modelBuilder.Entity("BlazorApp.Infrastructure.User", b =>
                 {
                     b.Property<int>("Id")
@@ -63,9 +86,14 @@ namespace BlazorApp.Infrastructure.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RequestId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("RequestId");
 
                     b.ToTable("Users");
                 });
@@ -75,9 +103,18 @@ namespace BlazorApp.Infrastructure.Migrations
                     b.HasOne("BlazorApp.Infrastructure.Project", null)
                         .WithMany("AppliedStudents")
                         .HasForeignKey("ProjectId");
+
+                    b.HasOne("BlazorApp.Infrastructure.Request", null)
+                        .WithMany("AppliedStudents")
+                        .HasForeignKey("RequestId");
                 });
 
             modelBuilder.Entity("BlazorApp.Infrastructure.Project", b =>
+                {
+                    b.Navigation("AppliedStudents");
+                });
+
+            modelBuilder.Entity("BlazorApp.Infrastructure.Request", b =>
                 {
                     b.Navigation("AppliedStudents");
                 });

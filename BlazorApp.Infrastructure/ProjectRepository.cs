@@ -1,4 +1,3 @@
-using System;
 using BlazorApp.Core;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +52,7 @@ namespace BlazorApp.Infrastructure
             return (await _context.Projects
                                     .Select(p => new ProjectDetailsDTO
                                     (
-                                         p.Id,
+                                        p.Id,
                                         p.Title,
                                         p.Description,
                                         p.SupervisorId,

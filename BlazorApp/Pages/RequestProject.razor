@@ -1,4 +1,90 @@
 @page "/RequestProject"
+@inject IRequestRemote RequestRemote
+@using BlazorApp.Core
+@inject NavigationManager navManager
+@using static CurrieTechnologies.Razor.SweetAlert2.SweetAlertIcon
+@inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService swal
+
+<h1>Request a project </h1>
+<br> <br />
+
+<form class="MainDiv">
+    <div class="form-group">
+        <input @bind="Title" @bind:event="oninput" type="text" class="form-control" id="formGroupExampleInput"
+            placeholder="Project Title">
+    </div>
+    <div class="form-group">
+        <textarea @bind="Description" @bind:event="oninput" type="text" style="height: 200px;" class="form-control"
+            id="formGroupExampleInput2" placeholder="Project Description" rows="20"></textarea>
+    </div>
+    <div class="form-group">
+        <textarea type="text" style="height: 120px;" class="form-control" id="formGroupExampleInput2"
+            placeholder="Additional information" rows="10"></textarea>
+    </div>
+</form>
+
+<div class="allTags">
+    <div class="preDefinedTags">
+        <button type="button" class="btn btn-info">SWU</button>
+        <button type="button" class="btn btn-info">Data Science</button>
+        <button type="button" class="btn btn-info">DDIT</button>
+        <button type="button" class="btn btn-info">GBI</button>
+    </div>
+</div>
+
+<br> <br />
+
+<div class="Buttons">
+    <button type="button" class="btn btn-success successBtn"
+        @onclick="@(e => Submit(Title, Description))">Submit</button>
+</div>
+
+
+@code
+{
+
+    private string Title;
+    private string Description;
+
+    private async void Submit(string Title, string Description)
+    {
+        RequestCreateDTO requestDTO = new RequestCreateDTO()
+        {
+            Title = Title,
+            Description = Description
+        };
+
+        var result = await RequestRemote.CreateRequest(requestDTO);
+
+        if (result)
+        {
+            await swal.FireAsync("Succes", "Request successfully created", Success);
+            navManager.NavigateTo("/");
+        }
+
+        else
+        {
+            await swal.FireAsync("Error", "Couldn't create request", Error);
+        }
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* @page "/RequestProject"
 @using BlazorApp.Core
 @inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService swal
 <h1> Request a project </h1>
@@ -10,14 +96,14 @@
         <div class="form-group">
             <input @bind="Title" @bind:event="oninput" type="text" class="form-control" id="formGroupExampleInput"
                 placeholder="Project Title">
-        </div>
+            </div>       
         <div class="form-group">
-            <input @bind="Supervisor" @bind:event="oninput" type="text" class="form-control" id="formGroupExampleInput"
+            <input @bind="Supervisor" @bind:event="oninput" type="drop" class="form-control" id="formGroupExampleInput"
                 placeholder="Supervisor Name">
         </div>
         <div class="form-group">
             <textarea @bind="Description" @bind:event="oninput" type="text" style="height: 200px;" class="form-control"
-                id="formGroupExampleInput2" placeholder="Project Description" rows="20"></textarea>
+                id="formGroupExampleInput2" placeholder="Project Description"  rows="20"></textarea>
         </div>
 
         <div class="form-group">
@@ -26,16 +112,16 @@
         </div>
     </form>
 </div>
-  <div class="SupervisorBlock">
-      <h1>Supervisors:</h1>
-      <ul >
-          <li>Paolo</li>
-          <li>Shuja</li>
-          <li>Alaa</li>
-          <li>Paolo igen</li>
-      </ul>
-  </div>
-</div>
+    <div class="SupervisorBlock">
+        <h1>Supervisors:</h1>
+        <ul >
+            <li>Paolo</li>
+            <li>Shuja</li>
+            <li>Alaa</li>
+            <li>Paolo igen</li>
+        </ul>
+    </div>
+</div> 
 <button class="btn btn-primary" @onclick="() => Request(Title,Description)">Apply</button>
 
 
@@ -44,7 +130,6 @@
     private string Title;
     private string Description;
     private string Supervisor;
-
 
     private void Request(string Title, string Description)
     {
@@ -66,5 +151,4 @@
         */
 
     }
-
-}
+} *@
