@@ -12,4 +12,4 @@ start powershell -windowstyle minimized {cd .\BlazorApp; dotnet run; Read-Host}
 
 Start-Sleep -Seconds 1.5
 
-start chrome http://localhost:5000
+start chrome https://localhost:5001

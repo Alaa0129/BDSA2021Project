@@ -33,7 +33,7 @@ namespace BlazorApp.Infrastructure
             return entity.Id;
         }
 
-        public Task<UserDetailsDTO> ReadAsync(int userId)
+        public async Task<UserDetailsDTO> ReadAsync(int userId)
         {
             var users = from u in _context.Users
                         where u.Id == userId
@@ -44,7 +44,7 @@ namespace BlazorApp.Infrastructure
                             u.Lastname
                         );
 
-            return users.FirstOrDefaultAsync();
+            return await users.FirstOrDefaultAsync();
         }
 
         public async Task<IReadOnlyCollection<UserDTO>> ReadAsync() =>

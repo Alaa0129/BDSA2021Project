@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlazorApp.Infrastructure
@@ -12,5 +13,7 @@ namespace BlazorApp.Infrastructure
 
         [StringLength(50)]
         public string Lastname { get; set; }
+
+        public ICollection<Project> projects{ get; set; }
     }
 }

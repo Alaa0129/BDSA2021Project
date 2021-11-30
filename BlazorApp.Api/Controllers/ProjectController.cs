@@ -1,16 +1,16 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using BlazorApp.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace BlazorApp.Api.Controllers
 {
+    [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+    // [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _repository;
@@ -20,17 +20,18 @@ namespace BlazorApp.Api.Controllers
             _repository = repository;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("all")]
         public async Task<IEnumerable<ProjectDetailsDTO>> Get()
         {
             return await _repository.ReadAsync();
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectDetailsDTO>> Get(int id)
         {
-            var project =  await _repository.ReadAsync(id);
+            var project = await _repository.ReadAsync(id);
 
             if (project == null) return NotFound();
 
@@ -43,6 +44,7 @@ namespace BlazorApp.Api.Controllers
             return await _repository.CreateAsync(project);
         }
 
+        // [AllowAnonymous]
         [HttpPut("update")]
         public async Task<ActionResult> Put([FromBody] ProjectUpdateDTO project)
         {

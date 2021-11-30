@@ -1,19 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BlazorApp.Data;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+
 
 namespace BlazorApp
 {
@@ -30,29 +24,21 @@ namespace BlazorApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var initialScopes = Configuration.GetValue<string>("DownstreamApi:Scopes")?.Split(' ');
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
-            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-                .AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"))
-                    .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
-                        .AddMicrosoftGraph(Configuration.GetSection("DownstreamApi"))
-                        .AddInMemoryTokenCaches();
-            services.AddControllersWithViews()
-                .AddMicrosoftIdentityUI();
+            services.AddMicrosoftIdentityWebAppAuthentication(Configuration)
+                .EnableTokenAcquisitionToCallDownstreamApi(new string[] { Configuration["API:APIScope"] })
+                    .AddInMemoryTokenCaches(); ;
 
-            services.AddAuthorization(options =>
-            {
-                // By default, all incoming requests will be authorized according to the default policy
-                // Meaning that the site will on any action from the user redirect to a log-in page
-                options.FallbackPolicy = options.DefaultPolicy;
-            });
+
+            services.AddProjectRemote(Configuration);
+
+            services.AddControllersWithViews().AddMicrosoftIdentityUI();
 
             services.AddRazorPages();
+
             services.AddServerSideBlazor()
                 .AddMicrosoftIdentityConsentHandler();
-            services.AddHttpClient("BlazorApp.Api", client => client.BaseAddress = new Uri("https://localhost:3001"));
-            services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<IProjectRemote, ProjectRemote>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
