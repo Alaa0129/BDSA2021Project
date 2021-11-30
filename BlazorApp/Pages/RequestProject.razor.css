@@ -1,21 +1,3 @@
-/* .row {
-    display: flex;
-  }
-  
-  .column {
-    flex: 75%;
-  }
-
-.SupervisorBlock {
-    flex: 25%;
-    background-color: grey;
-}
-ul {
-  display: table;
-  margin: 0 auto;
-} */
-
-
 .MainDiv
 {
     display: flex;
@@ -83,4 +65,10 @@ ul {
     justify-content: flex-start;
     flex-flow: wrap;
     gap: 5px;
+}
+
+#newtagfield {
+    float: left;
+    width: 60%;
+    margin-right: 10px;
 }
