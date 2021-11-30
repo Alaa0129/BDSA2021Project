@@ -1,16 +1,37 @@
 .row {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   
-  .column {
-    flex: 75%;
-  }
-
-.SupervisorBlock {
-    flex: 25%;
-    background-color: grey;
+.column {
+  width: 650px;
+  
 }
-ul {
-  display: table;
-  margin: 0 auto;
+
+#formGroupExampleInput2 {
+  resize: none;
+}
+.form-control {
+  background-color: lightgrey;
+}
+#DefaultText {
+  color: lightgrey;
+}
+#FormControlSupervisor {
+  width: 40%;
+}
+#newTags {
+  margin-top: 10px;
+}
+#newtagfieldbutton  {
+float: left;
+margin-left: 10px;
+
+}
+#newtagfield {
+float: left;
+width: 60%;
+margin-right: 10px;
 }
