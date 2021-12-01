@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using BlazorApp.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
 
 namespace BlazorApp.Api.Controllers
 {
-    [Authorize]
+
     [ApiController]
     [Route("api/[controller]")]
     // [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
@@ -44,7 +45,7 @@ namespace BlazorApp.Api.Controllers
             return await _repository.CreateAsync(project);
         }
 
-        // [AllowAnonymous]
+        [Authorize(Roles = "Student")]
         [HttpPut("update")]
         public async Task<ActionResult> Put([FromBody] ProjectUpdateDTO project)
         {

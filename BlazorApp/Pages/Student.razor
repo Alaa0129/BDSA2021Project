@@ -1,5 +1,5 @@
 @page "/student"
+@attribute [Authorize(Roles = "Student")]
 
-<AuthorizeView>
-    <h1> You are a student. Hurray</h1>
-</AuthorizeView>
+
+<h1> You are a student. Hurray</h1>

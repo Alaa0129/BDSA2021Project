@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,10 +27,19 @@ namespace BlazorApp
         {
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
-            services.AddMicrosoftIdentityWebAppAuthentication(Configuration)
-                .EnableTokenAcquisitionToCallDownstreamApi(new string[] { Configuration["API:APIScope"] })
-                    .AddInMemoryTokenCaches(); ;
+            // services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            //     .AddMicrosoftIdentityWebApp(Configuration)
+            //         .EnableTokenAcquisitionToCallDownstreamApi(new string[] { Configuration["API:APIScope"] })
+            //             .AddInMemoryTokenCaches(); ;
 
+            services.AddMicrosoftIdentityWebAppAuthentication(Configuration)
+                    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { Configuration["API:APIScope"] })
+                        .AddInMemoryTokenCaches(); ;
+
+            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                options.TokenValidationParameters.RoleClaimType = "roles";
+            });
 
             services.AddProjectRemote(Configuration);
 
@@ -59,6 +69,18 @@ namespace BlazorApp
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+
+            // Redirects, upon logout, to the fron page
+            app.UseRewriter(
+                new RewriteOptions().Add(
+                    context =>
+                    {
+                        if (context.HttpContext.Request.Path == "/MicrosoftIdentity/Account/SignedOut")
+                        {
+                            context.HttpContext.Response.Redirect("/");
+                        }
+                    }));
 
             app.UseEndpoints(endpoints =>
             {

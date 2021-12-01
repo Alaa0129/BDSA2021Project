@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,8 +31,7 @@ namespace BlazorApp.Api
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-
+        {            
             services.AddMicrosoftIdentityWebApiAuthentication(Configuration);
 
             services.AddControllers();
@@ -39,6 +39,11 @@ namespace BlazorApp.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BlazorApp.Api", Version = "v1" });
+            });
+
+            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                options.TokenValidationParameters.RoleClaimType = "roles";
             });
 
             services.AddDbContext<PBankContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PBank")));

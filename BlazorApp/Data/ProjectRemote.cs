@@ -69,7 +69,7 @@ namespace BlazorApp
         private async Task PrepareAuthenticatedClient()
         {
             var accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { _APIScope });
-            // Debug.WriteLine($"access token-{accessToken}");
+            Console.WriteLine($"access token-{accessToken}");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
