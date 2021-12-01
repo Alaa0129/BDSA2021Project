@@ -6,41 +6,38 @@
 <h1>My Requests</h1>
 <br> <br>
 
-<div class="Page">
-        <form class="form-inline">
-            <div class="search-field">
-                <input class="form-control mr-sm-2" @bind-value="searchedRequest" @bind-value:event="oninput"
-                placeholder="Search for requests..." aria-label="Search">
-                <button class="btn btn-light my-sm-0" type="button">Search</button>
-            </div>
-        </form>
-
-    <br> <br>
-
-    @foreach (var request in filteredRequests) 
-    {
-        <div class="RequestView" onclick="" style="justify-content: center;">
-
-            <div class="ProjectTitleView">
-                <p class="ProjectTitle">
-                    @request.Title
-                </p>
-            </div>
-            <div class="ProjectDescriptionView">
-                <div class="ProjectDescriptionBox">
-                    <p class="ProjectDescription"> @request.Description </p>
-                </div>
-            </div>
-            <div class="LastRowOuter">
-                <div class="LastRowInner">
-                    <p class="SupervisorName"> @request.StudentId </p>
-                    <button type="button" class="ReadMoreButton"> Read more </button>
-                </div>
-            </div>
+<div class="row">
+    <div class="column">
+      
+        <div class="mt-3 inputs"> 
+            <i class="fa fa-search"></i> 
+            <input type="text" class="form-control " placeholder="Search Tasks..."> 
         </div>
-        <br /><br>
-
-    }
+      
+        <div class="tag-container">
+            <button class="content-text grid-tag">Alaaaaaaaaa</button>
+            <button class="content-text" id="grid-tag">Shuuuuuuuja</button>
+            <button class="content-text" id="grid-tag">Machine Learning</button>
+            <button class="content-text" id="grid-tag">SWU</button>
+            <button class="content-text" id="grid-tag">Endnu et tag</button>
+            <button class="content-text grid-tag">Hej med dig</button>
+            <button class="content-text" id="grid-tag">AI</button>
+            <button class="content-text" id="grid-tag">DDIT</button>
+            <button class="content-text" id="grid-tag">GBI</button>
+            <button class="content-text" id="grid-tag">Lagkage</button>
+        </div>
+    
+        @foreach (var request in filteredRequests) 
+        {
+            <div class="RequestView">
+                <h3>@request.Title</h3>
+                <div class="ProjectDescriptionView">
+                    <p> @request.Description</p>
+                </div>
+            </div>
+            <br /><br>
+        }     
+    </div>
 
     <div class="pageButtonsDiv">
         <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("prev"))"> Previous </button>
@@ -55,8 +52,6 @@
         <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("next"))"> Next </button>
     </div>
 </div>
-    
-
 
 @code
 {
@@ -118,3 +113,27 @@
         UpdateRequests(currentPage);
     }
 }
+
+
+
+
+@* 
+    <div class="ProjectTitleView">
+                    <p class="ProjectTitle">
+                    @request.Title
+                    </p>
+                </div>
+            
+                <div class="ProjectDescriptionView">
+                    <div class="ProjectDescriptionBox">
+                    <p class="ProjectDescription"> @request.Description </p>
+                    </div>
+                </div>
+            
+                <div class="LastRowOuter">
+                    <div class="LastRowInner">
+                    <p class="SupervisorName"> @request.StudentId </p>
+                    <button type="button" class="ReadMoreButton"> Read more </button>
+                    </div>
+                </div>
+*@

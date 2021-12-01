@@ -1,86 +1,88 @@
-.RequestView
-{
-    background-color: lightgray;
-    width: 600px;
-    height: 200px;
+.active {
+    background: #f6f7fb !important;
+    border-color: #f6f7fb !important;
+    color: #000 !important;
+    font-size: 12px;
+}
+.row {
     display: flex;
     flex-direction: column;
-    cursor: pointer;
-    border-radius: 15px;
-}
-
-.ProjectTitleView 
-{
-    display: flex;
-    justify-content: left;
-    
-}
-
-.ProjectTitle 
-{
-    font-size: 20px;
-    margin-left: 40px;
-    margin-top: 10px;
-}
-
-.ProjectDescriptionView 
-{
-    display: flex;
     justify-content: center;
-
-}
-
-.ProjectDescriptionBox 
-{
-    width: 520px;
-    height: 70px;
-    border: 3px solid black;
-    display: flex;
-    justify-content: left;
-    
-}
-
-.ProjectDescription 
-{
-    margin-left: 5px;
-}
-
-.LastRowOuter 
-{
-    display: flex;
-    justify-content: center;
-    
-}
-
-.LastRowInner 
-{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
     align-items: center;
-    width: 520px;
-    height: 70px;
+  }
+  
+  .column {
+    width: 650px;
+  }
 
+.inputs {
+    position: relative;
+    padding: 2rem;
 }
 
-.ReadMoreButton 
-{
-    border-radius: 15px;
-    background-color: orange;
-    color: white;
-    margin-bottom: 10px;
+.form-control {
+    text-indent: 15px;
+    border: none;
+    height: 45px;
+    border-radius: 0px;
+    border-bottom: 1px solid #eee
 }
 
-.pageButtonsDiv
-{
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #eee;
+    outline: 0;
+    box-shadow: none;
+    border-bottom: 1px solid blue;
+}
+
+.form-control:focus {
+    color: blue;
+}
+
+.content-text {
+    height: fit-content;
+    width: fit-content;
     display: flex;
     justify-content: center;
-    flex-direction: row;
-    gap: 3px;
-    width: 600px;
-    height: 38px;
+    align-items: center;
+    border-radius: 1rem;
+    border: none;
+    background-color: #e2f5fa;
+    color: #6ecce6;
+    font-weight: 700;
+} 
+
+.tag-container
+{
+    max-width: inherit;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: space-between;
+   
+    border-style: solid;
+    border-radius: 1rem;
+    border-top: none;
+    border-color: lightgrey;
+    border-bottom: none;
+    border-color: gray;
+    padding: 2rem;
+    margin-bottom: 2rem;
 }
 
-.search-field {
-    padding-top: 2rem;
+.grid-tag {
+    text-align: center;
+    margin-bottom: 2%;
+  }
+
+.RequestView {
+    border: lightgrey;
+    justify-content: center;
+    border-radius: 1rem;
+    padding: 2rem;
+    background-color: whitesmoke;
+    box-shadow: 0 0px 4px 0px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
