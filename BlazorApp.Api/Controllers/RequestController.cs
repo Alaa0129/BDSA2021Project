@@ -5,7 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using BlazorApp.Core;
 using Microsoft.AspNetCore.Mvc;
-
+using static System.Net.HttpStatusCode;
 
 namespace BlazorApp.Api.Controllers
 {
@@ -43,16 +43,16 @@ namespace BlazorApp.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<HttpStatusCode> Delete(int id)
         {
             var response = await _repo.DeleteAsync(id);
 
-            if (response == HttpStatusCode.OK)
+            if (response == OK)
             {
-                return Ok();
+                return OK;
             }
 
-            return NotFound();
+            return HttpStatusCode.NotFound;
         }
 
     }
