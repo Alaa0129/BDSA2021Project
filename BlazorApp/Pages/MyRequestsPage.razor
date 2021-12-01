@@ -1,43 +1,41 @@
 @layout MainLayout
-@page "/"
-@inject IProjectRemote ProjectRemote
+@page "/MyRequests"
+@inject IRequestRemote RequestRemote
 @using BlazorApp.Core
 
-<h1>Main page</h1>
+<h1>My Requests</h1>
 <br> <br>
 
 <div class="Page">
         <form class="form-inline">
             <div class="search-field">
-                <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
-                placeholder="Search for projects..." aria-label="Search">
+                <input class="form-control mr-sm-2" @bind-value="searchedRequest" @bind-value:event="oninput"
+                placeholder="Search for requests..." aria-label="Search">
                 <button class="btn btn-light my-sm-0" type="button">Search</button>
             </div>
         </form>
 
     <br> <br>
 
-    @foreach (var project in filteredProjects) 
+    @foreach (var request in filteredRequests) 
     {
-        <div class="ProjectView" onclick="">
+        <div class="RequestView" onclick="" style="justify-content: center;">
 
             <div class="ProjectTitleView">
                 <p class="ProjectTitle">
-                    @project.Title
+                    @request.Title
                 </p>
             </div>
             <div class="ProjectDescriptionView">
                 <div class="ProjectDescriptionBox">
-                    <p class="ProjectDescription"> @project.Description </p>
+                    <p class="ProjectDescription"> @request.Description </p>
                 </div>
             </div>
             <div class="LastRowOuter">
                 <div class="LastRowInner">
-                    <p class="SupervisorName"> @project.SupervisorId </p>
+                    <p class="SupervisorName"> @request.StudentId </p>
                     <button type="button" class="ReadMoreButton"> Read more </button>
                 </div>
-
-
             </div>
         </div>
         <br /><br>
@@ -51,7 +49,7 @@
         {
             var pageNumber = i;
             <button class="btn btn-info @(currentPage == pageNumber? "btn-dark" : "btn-white")"
-            @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
+            @onclick="@(e => UpdateRequests(pageNumber))"> @(i+1)</button>
         }
 
         <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("next"))"> Next </button>
@@ -59,24 +57,29 @@
 </div>
     
 
+
 @code
 {
-    private IEnumerable<ProjectDetailsDTO> projects = new List<ProjectDetailsDTO>();
-    private IEnumerable<ProjectDetailsDTO> filteredProjects = new List<ProjectDetailsDTO>();
+
+    private IEnumerable<RequestDetailsDTO> requests= new List<RequestDetailsDTO>();
+    private IEnumerable<RequestDetailsDTO> filteredRequests = new List<RequestDetailsDTO>();
+
+        
     private int pageSize = 5;
     private int totalPages;
     private int currentPage;
-    private string _searchedProject;
 
-    public string searchedProject
+    private string _searchedRequest;
+
+    public string searchedRequest
     {
-        get { return _searchedProject; }
+        get { return _searchedRequest; }
 
         set
         {
-            _searchedProject = value;
+            _searchedRequest = value;
 
-            SearchProjects();
+            SearchRequests();
         }
     }
 
@@ -84,24 +87,24 @@
     {
         await base.OnInitializedAsync();
 
-        projects = await ProjectRemote.GetProjects();
+        requests = await RequestRemote.GetRequests();
 
-        filteredProjects = projects.Take(pageSize);
+        filteredRequests = requests.Take(pageSize);
         
-        totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
+        totalPages = (int)Math.Ceiling(requests.Count() / (decimal)pageSize);
     }
 
-    private void SearchProjects()
+    private void SearchRequests()
     {
-        filteredProjects = projects.Where(p => p.Title
-                                   .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase) 
-                                            || p.SupervisorId.ToString()
-                                   .Contains(_searchedProject,StringComparison.OrdinalIgnoreCase));
+        filteredRequests = requests.Where(p => p.Title
+                                   .Contains(_searchedRequest, StringComparison.OrdinalIgnoreCase) 
+                                            || p.StudentId.ToString()
+                                   .Contains(_searchedRequest,StringComparison.OrdinalIgnoreCase));
     }
 
-    private void UpdateProjects(int pageNumber) //shows the projects dependeing on which page the user is
+    private void UpdateRequests(int pageNumber) //shows the requests dependeing on which page the user is
     {
-        filteredProjects = projects.Skip(pageNumber * pageSize).Take(pageSize);
+        filteredRequests = requests.Skip(pageNumber * pageSize).Take(pageSize);
         currentPage = pageNumber;
 
     }
@@ -112,6 +115,6 @@
 
         if (buttonType == "prev" && currentPage != 0) currentPage--;
 
-        UpdateProjects(currentPage);
+        UpdateRequests(currentPage);
     }
 }
