@@ -17,7 +17,5 @@ namespace BlazorApp.Infrastructure
 
         [Required]
         public int StudentId { get; set; }
-
-        public ICollection<User> AppliedStudents{ get; set; }
     }
 }
