@@ -17,17 +17,17 @@
     width: 250%;
 }
 
-.nav-item {
+/* .nav-item {
     padding-top: 1rem;
     padding-left: 1rem;
     padding-right: 1rem;
-}
+} */
 
 .nav-profile-img {
     width: 3rem;
 }
 
-.nav-icon {
+.nav-profile {
     padding-top: 0rem;
 }
 
@@ -35,7 +35,12 @@
     justify-content: right;
 }
 
-.navbar {
+.nav {
+    background-color: thistle;
+}
+
+/* .navbar {
     padding-left: 2rem;
     padding-right: 2rem;
-}
+    height: 5rem;
+} */

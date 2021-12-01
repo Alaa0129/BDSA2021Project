@@ -1,74 +1,41 @@
-.MainDiv
-{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.form-group
-{
-    width: 650px;
+.column {
+  width: 650px;
 }
 
-.form-control
-{
-    resize: none;
-    background-color: lightgray;
+#formGroupExampleInput2 {
+  resize: none;
 }
 
-::placeholder
-{
-    color: grey;
+.form-control {
+  background-color: lightgrey;
 }
 
-.Buttons
-{
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    gap: 50px;
+#DefaultText {
+  color: lightgrey;
 }
 
-.successBtn
-{
-   background-color: #40DD7F; 
-   transition-duration: 0.4s;
+#FormControlSupervisor {
+  width: 40%;
 }
 
-.uploadBtn
-{
-    background-color: #E59333;
-    transition-duration: 0.4s;
+#newTags {
+  margin-top: 10px;
 }
 
-.successBtn:hover
-{
-    background-color:cyan;
-}
-
-.uploadBtn:hover
-{
-    background-color:cyan;
-}
-
-.allTags
-{
-    display: flex;
-    justify-content: center;
-}
-
-.preDefinedTags
-{
-    width: 650px;
-    display: flex;
-    justify-content: flex-start;
-    flex-flow: wrap;
-    gap: 5px;
+#newtagfieldbutton  {
+  float: left;
+  margin-left: 10px;
 }
 
 #newtagfield {
-    float: left;
-    width: 60%;
-    margin-right: 10px;
+  float: left;
+  width: 60%;
+  margin-right: 10px;
 }
