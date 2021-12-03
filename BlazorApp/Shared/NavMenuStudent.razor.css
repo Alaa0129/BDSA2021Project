@@ -6,6 +6,10 @@
     font-size: larger;
 }
 
+a {
+    color: #808080;
+}
+
 .navbar-brand {
     padding-left: 1.5rem;
     font-size: x-large;
@@ -15,19 +19,15 @@
 
 .nav_bar_home {
     width: 250%;
-}
-
-.nav-item {
-    padding-top: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    filter: invert(50%);
 }
 
 .nav-profile-img {
     width: 3rem;
+    filter: invert(50%);
 }
 
-.nav-icon {
+.nav-profile {
     padding-top: 0rem;
 }
 
@@ -35,7 +35,11 @@
     justify-content: right;
 }
 
+.nav {
+    background-image: linear-gradient(to right, #102060, #3A0647);
+}
+
 .navbar {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    border-bottom: solid;
+    height: 7rem;
 }

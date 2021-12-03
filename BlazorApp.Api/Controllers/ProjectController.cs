@@ -76,6 +76,5 @@ namespace BlazorApp.Api.Controllers
 
             return NotFound();
         }
-
     }
 }

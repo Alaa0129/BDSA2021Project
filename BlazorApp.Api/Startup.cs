@@ -38,6 +38,7 @@ namespace BlazorApp.Api
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<IRequestRepository, RequestRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BlazorApp.Api", Version = "v1" });

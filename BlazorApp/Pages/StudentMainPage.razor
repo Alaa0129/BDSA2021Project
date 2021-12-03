@@ -1,13 +1,16 @@
 @layout MainLayout
 @page "/"
-@inject IProjectRemote ProjectRemote;
+@inject IProjectRemote ProjectRemote
+@using BlazorApp.Core
 @inject ITagRemote TagRemote;
-@using BlazorApp.Core;
 
-<div class="searchFieldDiv">
-    <form class="form-inline">
-        <div class="search-field">
-            <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
+<h1>Main page</h1>
+<br> <br>
+
+<div class="Page">
+        <form class="form-inline">
+            <div class="search-field">
+                <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
                 placeholder="Search for projects..." aria-label="Search">
             <button class="btn btn-light my-sm-0" type="button">Search</button>
         </div>
@@ -52,6 +55,8 @@
                     <p class="SupervisorName"> @project.SupervisorId </p>
                     <button type="button" class="ReadMoreButton"> Read more </button>
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -86,7 +91,6 @@
     private int pageSize = 5;
     private int totalPages;
     private int currentPage;
-
     private string _searchedProject;
 
     public string searchedProject
@@ -100,7 +104,6 @@
             SearchProjects();
         }
     }
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -145,12 +148,8 @@
         UpdateProjects(currentPage);
     }
 
-    private bool tagExists(string tagName) //remove later when handling case in create project
+     private bool tagExists(string tagName) //remove later when handling case in create project
     {
         return tagNames.Contains(tagName);
     }
-
-
-
-
 }

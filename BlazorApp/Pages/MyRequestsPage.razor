@@ -1,0 +1,128 @@
+@layout MainLayout
+@page "/MyRequests"
+@inject IRequestRemote RequestRemote
+@using BlazorApp.Core
+
+<h1>My Requests</h1>
+<br>
+
+<div class="row">
+    <div class="column">
+      
+        <div class="main-search-input fl-wrap inputs">
+            <div class="main-search-input-item"> 
+                <input type="search" @bind="searchedRequest" placeholder="Search Requests..."> 
+            </div> 
+            <button class="main-search-button" onclick="SearchRequests()">Search</button>
+        </div>
+      
+        <div class="tag-container">
+            <button class="tag" >Alaaaaaaaaa</button>
+            <button class="tag" >Shuuuuuuuja</button>
+            <button class="tag" >Machine Learning</button>
+            <button class="tag" >SWU</button>
+            <button class="tag" >Endnu et tag</button>
+            <button class="tag" >Hej med dig</button>
+            <button class="tag" >AI</button>
+            <button class="tag" >DDIT</button>
+            <button class="tag" >GBI</button>
+            <button class="tag" >Lagkage</button>
+            <button class="tag" >Flere tags</button>
+            <button class="tag" >Jeg elsker det</button>
+            <button class="tag" >English</button>
+        </div>
+    
+        @foreach (var request in filteredRequests) 
+        {
+            <div class="RequestView">
+                <h3>@request.Title</h3>
+                <div class="ProjectDescriptionView">
+                    <div class="description">@request.Description</div>
+                </div>
+                <div class="request-bottom">
+                    <div class="student-profile">
+                        <img class="profile-img" src="Resources\profile-icon.svg">
+                        <h5>@request.StudentId</h5>
+                    </div>
+                    <button class="read-more">Read more</button>
+                </div>
+            </div>
+            <br /><br>
+        }     
+        <div class="pageButtonsDiv">
+            <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
+
+            @for (int i = 0; i < totalPages; i++)
+            {
+                var pageNumber = i;
+                <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
+                @onclick="@(e => UpdateRequests(pageNumber))"> @(i+1)</button>
+            }
+
+            <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
+        </div>
+    </div>
+</div>
+
+    
+
+@code
+{
+
+    private IEnumerable<RequestDetailsDTO> requests= new List<RequestDetailsDTO>();
+    private IEnumerable<RequestDetailsDTO> filteredRequests = new List<RequestDetailsDTO>();
+
+        
+    private int pageSize = 5;
+    private int totalPages;
+    private int currentPage;
+
+    private string _searchedRequest;
+
+    public string searchedRequest
+    {
+        get { return _searchedRequest; }
+
+        set
+        {
+            _searchedRequest = value;
+
+            SearchRequests();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        requests = await RequestRemote.GetRequests();
+
+        filteredRequests = requests.Take(pageSize);
+        
+        totalPages = (int)Math.Ceiling(requests.Count() / (decimal)pageSize);
+    }
+
+    private void SearchRequests()
+    {
+        filteredRequests = requests.Where(p => p.Title
+                                   .Contains(_searchedRequest, StringComparison.OrdinalIgnoreCase) 
+                                            || p.StudentId.ToString()
+                                   .Contains(_searchedRequest,StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void UpdateRequests(int pageNumber) //shows the requests dependeing on which page the user is
+    {
+        filteredRequests = requests.Skip(pageNumber * pageSize).Take(pageSize);
+        currentPage = pageNumber;
+
+    }
+
+    private void NewPage(string buttonType) //this handles the next and previous buttons when these are clicked on
+    {
+        if (buttonType == "next" && currentPage != totalPages - 1) currentPage++;
+
+        if (buttonType == "prev" && currentPage != 0) currentPage--;
+
+        UpdateRequests(currentPage);
+    }
+}

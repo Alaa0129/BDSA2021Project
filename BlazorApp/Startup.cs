@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BlazorApp.Data;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Syncfusion.Blazor;
 
@@ -31,9 +30,9 @@ namespace BlazorApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddHttpClient("default_client", client => client.BaseAddress = Api);
-            services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IProjectRemote, ProjectRemote>();
             services.AddScoped<ITagRemote, TagRemote>();
+            services.AddScoped<IRequestRemote, RequestRemote>();
             services.AddSweetAlert2();
             services.AddSyncfusionBlazor();
         }

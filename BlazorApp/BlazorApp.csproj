@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.1.0" />
     <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="19.3.0.56" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
   </ItemGroup>
 
   <PropertyGroup>
