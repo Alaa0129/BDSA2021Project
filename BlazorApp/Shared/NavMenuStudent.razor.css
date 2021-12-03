@@ -7,7 +7,7 @@
 }
 
 a {
-    color: #808080;
+    color: #999999;
 }
 
 .navbar-brand {
@@ -19,12 +19,12 @@ a {
 
 .nav_bar_home {
     width: 250%;
-    filter: invert(50%);
+    filter: invert(60%);
 }
 
 .nav-profile-img {
     width: 3rem;
-    filter: invert(50%);
+    filter: invert(60%);
 }
 
 .nav-profile {
@@ -42,4 +42,12 @@ a {
 .navbar {
     border-bottom: solid;
     height: 7rem;
+}
+
+a:active {
+    color:white;
+}
+
+.navbar-nav li > a {
+    color: yellow;
 }

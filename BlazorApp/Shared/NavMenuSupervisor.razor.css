@@ -6,6 +6,10 @@
     font-size: larger;
 }
 
+a {
+    color: #999999;
+}
+
 .navbar-brand {
     padding-left: 1.5rem;
     font-size: x-large;
@@ -15,16 +19,12 @@
 
 .nav_bar_home {
     width: 250%;
+    filter: invert(60%);
 }
-
-/* .nav-item {
-    padding-top: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-} */
 
 .nav-profile-img {
     width: 3rem;
+    filter: invert(60%);
 }
 
 .nav-profile {
@@ -36,11 +36,10 @@
 }
 
 .nav {
-    background-color: thistle;
+    background-image: linear-gradient(to right, #102060, #3A0647);
 }
 
-/* .navbar {
-    padding-left: 2rem;
-    padding-right: 2rem;
-    height: 5rem;
-} */
+.navbar {
+    border-bottom: solid;
+    height: 7rem;
+}
