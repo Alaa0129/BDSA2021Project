@@ -100,7 +100,7 @@
     position: relative;
     bottom: 0;
     width: 100%;
-    justify-content: center;
+    text-align: center;
     justify-content: space-between;
     align-items: center;
 }
@@ -108,6 +108,7 @@
 .btn
 {
     cursor:pointer;
+    margin: 0.2rem;
 }
 
 .main-search-input {
@@ -168,18 +169,19 @@
 }
 
 .profile-img {
-    width: 3rem;
+    width: 2.5rem;
+    vertical-align: middle;
 }
 
 .student-profile {
-    display: flex; 
-    flex-direction: row;
+   display: flex;
+   align-items: center;
 }
 
 .request-bottom {
     display: flex; 
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     /* bottom: 2.2rem; */
     /* position: absolute; */
     margin-top: 2rem;
@@ -188,6 +190,22 @@
     /* border-style: solid; */
 }
 
-.read-more-button {
-    /* float: right; */
+.read-more {
+    background-color: #ff7400;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 0.7rem;
+}
+
+.read-more:hover {
+    background-color: #FFCA4B;
+    color: black;
 }

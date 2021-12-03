@@ -42,28 +42,29 @@
                 <div class="request-bottom">
                     <div class="student-profile">
                         <img class="profile-img" src="Resources\profile-icon.svg">
-                        <h6>@request.StudentId</h6>
+                        <h5>@request.StudentId</h5>
                     </div>
-                    <button class="read-more-button">Read more</button>
+                    <button class="read-more-button read-more">Read more</button>
                 </div>
             </div>
             <br /><br>
         }     
-    </div>
+        <div class="pageButtonsDiv">
+            <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
 
-    <div class="pageButtonsDiv">
-        <button class="btn btn-secondary" @onclick="@(e => NewPage("prev"))"> Previous </button>
+            @for (int i = 0; i < totalPages; i++)
+            {
+                var pageNumber = i;
+                <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
+                @onclick="@(e => UpdateRequests(pageNumber))"> @(i+1)</button>
+            }
 
-        @for (int i = 0; i < totalPages; i++)
-        {
-            var pageNumber = i;
-            <button class="btn btn-info @(currentPage == pageNumber? "btn-dark" : "btn-white")"
-            @onclick="@(e => UpdateRequests(pageNumber))"> @(i+1)</button>
-        }
-
-        <button class="btn btn-secondary" @onclick="@(e => NewPage("next"))"> Next </button>
+            <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
+        </div>
     </div>
 </div>
+
+    
 
 @code
 {
@@ -125,27 +126,3 @@
         UpdateRequests(currentPage);
     }
 }
-
-
-
-
-@* 
-    <div class="ProjectTitleView">
-                    <p class="ProjectTitle">
-                    @request.Title
-                    </p>
-                </div>
-            
-                <div class="ProjectDescriptionView">
-                    <div class="ProjectDescriptionBox">
-                    <p class="ProjectDescription"> @request.Description </p>
-                    </div>
-                </div>
-            
-                <div class="LastRowOuter">
-                    <div class="LastRowInner">
-                    <p class="SupervisorName"> @request.StudentId </p>
-                    <button type="button" class="ReadMoreButton"> Read more </button>
-                    </div>
-                </div>
-*@
