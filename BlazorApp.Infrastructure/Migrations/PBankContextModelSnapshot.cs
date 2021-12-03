@@ -53,13 +53,15 @@ namespace BlazorApp.Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .IsRequired()
+                        .HasMaxLength(4400)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -86,14 +88,9 @@ namespace BlazorApp.Infrastructure.Migrations
                     b.Property<int?>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RequestId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("RequestId");
 
                     b.ToTable("Users");
                 });
@@ -103,18 +100,9 @@ namespace BlazorApp.Infrastructure.Migrations
                     b.HasOne("BlazorApp.Infrastructure.Project", null)
                         .WithMany("AppliedStudents")
                         .HasForeignKey("ProjectId");
-
-                    b.HasOne("BlazorApp.Infrastructure.Request", null)
-                        .WithMany("AppliedStudents")
-                        .HasForeignKey("RequestId");
                 });
 
             modelBuilder.Entity("BlazorApp.Infrastructure.Project", b =>
-                {
-                    b.Navigation("AppliedStudents");
-                });
-
-            modelBuilder.Entity("BlazorApp.Infrastructure.Request", b =>
                 {
                     b.Navigation("AppliedStudents");
                 });
