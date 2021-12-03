@@ -12,8 +12,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using BlazorApp.Infrastructure;
 using BlazorApp.Core;
+using BlazorApp.Infrastructure;
+using AutoMapper;
 
 namespace BlazorApp.Api
 {
@@ -36,7 +37,7 @@ namespace BlazorApp.Api
             services.AddScoped<IPBankContext, PBankContext>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
-
+            services.AddScoped<ITagRepository, TagRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BlazorApp.Api", Version = "v1" });

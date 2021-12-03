@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BlazorApp.Data;
 using CurrieTechnologies.Razor.SweetAlert2;
+using Syncfusion.Blazor;
 
 namespace BlazorApp
 {
@@ -32,12 +33,15 @@ namespace BlazorApp
             services.AddHttpClient("default_client", client => client.BaseAddress = Api);
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IProjectRemote, ProjectRemote>();
+            services.AddScoped<ITagRemote, TagRemote>();
             services.AddSweetAlert2();
+            services.AddSyncfusionBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTQyOTk1QDMxMzkyZTMzMmUzMFovejRzYVM1M0svUEMwZ1JqckJtKzlrc0hINjJ4cTEwaHJLM0J4M0UrUE09");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

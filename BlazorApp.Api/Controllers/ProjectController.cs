@@ -24,7 +24,7 @@ namespace BlazorApp.Api.Controllers
         [HttpGet("all")]
         public async Task<IEnumerable<ProjectDetailsDTO>> Get()
         {
-            return await _repository.ReadAsync();
+            return await _repository.ReadAsyncAll();
         }
 
         [HttpGet("{id}")]
@@ -36,6 +36,14 @@ namespace BlazorApp.Api.Controllers
 
             return project;
         }
+
+        [HttpGet("{tagName}")]
+        public async Task<IEnumerable<ProjectDetailsDTO>> Get(string tagName)
+        {
+            return await _repository.ReadAsyncAllByTagName(tagName);
+   
+        }
+
 
         [HttpPost]
         public async Task<int> Post([FromBody] ProjectCreateDTO project)

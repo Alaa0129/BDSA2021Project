@@ -56,6 +56,9 @@
 {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap:10px
 }
 
 .preDefinedTags
@@ -66,3 +69,21 @@
     flex-flow: wrap;
     gap: 5px;
 }
+
+
+
+.addDivTag
+{
+    width: 650px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.tagTextField
+{
+    width: 300px;
+}
+
+

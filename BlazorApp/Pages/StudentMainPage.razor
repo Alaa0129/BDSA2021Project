@@ -1,21 +1,40 @@
 @layout MainLayout
 @page "/"
-@inject IProjectRemote ProjectRemote
-@using BlazorApp.Core
+@inject IProjectRemote ProjectRemote;
+@inject ITagRemote TagRemote;
+@using BlazorApp.Core;
 
-<div class="Page" style="justify-content: center; align-items: center;">
-        <form class="form-inline">
-            <div class="search-field">
-                <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
+<div class="searchFieldDiv">
+    <form class="form-inline">
+        <div class="search-field">
+            <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
                 placeholder="Search for projects..." aria-label="Search">
-                <button class="btn btn-light my-sm-0" type="button">Search</button>
-            </div>
-        </form>
+            <button class="btn btn-light my-sm-0" type="button">Search</button>
+        </div>
+    </form>
+</div>
+<br> <br>
 
-    <br> <br>
+<div class="TagsMainView">
+    <div class="tags">
+    @foreach (var tag in tags)
+    { 
+        if(!tagExists(tag.Name))
+        {
+            <button @onclick="@(e => SearchProjectsByTagName(tag.Name))" type="button" class="btn btn-primary">@(tag.Name)</button>
+             tagNames.Add(tag.Name);
+        }
 
-    @foreach (var project in filteredProjects) 
-    {
+    }
+
+    </div>
+</div>
+
+<br> <br>
+
+@foreach (var project in filteredProjects)
+{
+    <div class="MainProjectView">
         <div class="ProjectView" onclick="">
 
             <div class="ProjectTitleView">
@@ -35,10 +54,12 @@
                 </div>
             </div>
         </div>
-        <br /><br>
+    </div>
+    <br /><br>
 
-    }
+}
 
+<div class="MainPageButtonsView">
     <div class="pageButtonsDiv">
         <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("prev"))"> Previous </button>
 
@@ -51,16 +72,17 @@
 
         <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("next"))"> Next </button>
     </div>
-</div>
-    
 
+</div>
 
 @code
 {
 
+    private IEnumerable<TagDetailsDTO> tags = new List<TagDetailsDTO>();    
+    private List<string> tagNames = new List<string>(); 
     private IEnumerable<ProjectDetailsDTO> projects = new List<ProjectDetailsDTO>();
     private IEnumerable<ProjectDetailsDTO> filteredProjects = new List<ProjectDetailsDTO>();
-        
+
     private int pageSize = 5;
     private int totalPages;
     private int currentPage;
@@ -84,22 +106,30 @@
     {
         await base.OnInitializedAsync();
 
+        tags = await TagRemote.GetTags();
+
         projects = await ProjectRemote.GetProjects();
 
         filteredProjects = projects.Take(pageSize);
-        
+
         totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
     }
 
     private void SearchProjects()
     {
         filteredProjects = projects.Where(p => p.Title
-                                   .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase) 
-                                            || p.SupervisorId.ToString()
-                                   .Contains(_searchedProject,StringComparison.OrdinalIgnoreCase));
+        .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase)
+            || p.SupervisorId.ToString()
+        .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase));
     }
 
-    private void UpdateProjects(int pageNumber) //shows the projects dependeing on which page the user is
+    private void SearchProjectsByTagName(string tagName)
+    {
+        filteredProjects = projects.Where(p => p.Tags.Any(t => t == tagName));     
+        
+    }
+
+    private void UpdateProjects(int pageNumber) //shows the projects depending on which page the user is
     {
         filteredProjects = projects.Skip(pageNumber * pageSize).Take(pageSize);
         currentPage = pageNumber;
@@ -113,6 +143,11 @@
         if (buttonType == "prev" && currentPage != 0) currentPage--;
 
         UpdateProjects(currentPage);
+    }
+
+    private bool tagExists(string tagName) //remove later when handling case in create project
+    {
+        return tagNames.Contains(tagName);
     }
 
 

@@ -1,3 +1,35 @@
+.searchFieldDiv
+{
+    display: flex; 
+    justify-content:center; 
+}
+
+.search-field 
+{
+    padding-top: 2rem;
+}
+
+.TagsMainView
+{
+    display: flex;
+    justify-content: center;
+}
+
+.tags
+{
+    width: 600px;
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+    gap: 5px;
+}
+
+.MainProjectView
+{
+    display: flex;
+    justify-content: center;
+}
+
 .ProjectView
 {
     background-color: lightgray;
@@ -70,6 +102,12 @@
     margin-bottom: 10px;
 }
 
+.MainPageButtonsView
+{
+    display: flex; 
+    justify-content: center;
+}
+
 .pageButtonsDiv
 {
     display: flex;
@@ -80,6 +118,3 @@
     height: 38px;
 }
 
-.search-field {
-    padding-top: 2rem;
-}

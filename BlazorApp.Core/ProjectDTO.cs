@@ -1,16 +1,17 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace BlazorApp.Core
 {
     public record ProjectDTO(int Id, string Title, string Description, int SupervisorId);
 
 
-    // student reference?
-    public record ProjectDetailsDTO(int Id, string Title, string Description, int SupervisorId, int MaxApplications);
+    public record ProjectDetailsDTO(int Id, string Title, string Description, int SupervisorId, int MaxApplications, ICollection<string> Tags);
 
-    public record ProjectCreateDTO
+    public record ProjectCreateDTO 
     {
         [Required]
         [StringLength(50)]
@@ -23,7 +24,10 @@ namespace BlazorApp.Core
         public int MaxApplications {get; init; }
         
         [Required]
-        public int SupervisorId {get; init; } 
+        public int SupervisorId {get; init; }
+
+        public ICollection<string> Tags { get; set; }
+
     }
 
     public record ProjectUpdateDTO : ProjectCreateDTO

@@ -43,6 +43,7 @@ namespace BlazorApp.Api.Tests.Controllers
             Assert.IsType<NoContentResult>(result);
         }
 
+        [Fact]
         public async Task Put_given_unkown_id_returns_returns_NotFound()
         {
             //Given

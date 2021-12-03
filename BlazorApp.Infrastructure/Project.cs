@@ -24,7 +24,6 @@ namespace BlazorApp.Infrastructure
 
         public ICollection<User> AppliedStudents{ get; set; }
 
-        // Tag entity need to be set up
-        //public ICollection<Tags> tags { get; set; }
+        public ICollection<Tag> Tags { get; set; }
     }
 }

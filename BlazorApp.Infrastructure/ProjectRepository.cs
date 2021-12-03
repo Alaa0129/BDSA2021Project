@@ -1,10 +1,10 @@
 using System;
-using BlazorApp.Core;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
 using System.Net;
+using BlazorApp.Core;
 using static System.Net.HttpStatusCode;
 
 namespace BlazorApp.Infrastructure
@@ -12,7 +12,6 @@ namespace BlazorApp.Infrastructure
     public class ProjectRepository : IProjectRepository
     {
         private readonly IPBankContext _context;
-
         public ProjectRepository(IPBankContext context)
         {
             _context = context;
@@ -25,8 +24,9 @@ namespace BlazorApp.Infrastructure
                 Title = project.Title,
                 Description = project.Description,
                 MaxApplications = project.MaxApplications,
-                SupervisorId = project.SupervisorId
-            };
+                SupervisorId = project.SupervisorId,
+                Tags = await GetTagsAsync(project.Tags).ToListAsync()
+        };
 
             _context.Projects.Add(entity);
 
@@ -44,22 +44,39 @@ namespace BlazorApp.Infrastructure
                                             p.Title,
                                             p.Description,
                                             p.SupervisorId,
-                                            p.MaxApplications
-                                          )).FirstOrDefaultAsync();
+                                            p.MaxApplications,
+                                            p.Tags.Select(t => t.Name).ToList()
+                                            )).FirstOrDefaultAsync();
         }
 
-        public async Task<IReadOnlyCollection<ProjectDetailsDTO>> ReadAsync()
+        public async Task<IReadOnlyCollection<ProjectDetailsDTO>> ReadAsyncAll()
         {
             return (await _context.Projects
                                     .Select(p => new ProjectDetailsDTO
                                     (
-                                         p.Id,
+                                        p.Id,
                                         p.Title,
                                         p.Description,
                                         p.SupervisorId,
-                                        p.MaxApplications
+                                        p.MaxApplications,
+                                        p.Tags.Select(p => p.Name).ToList()
                                     )).ToListAsync()).AsReadOnly();
         }
+
+        public async Task<IReadOnlyCollection<ProjectDetailsDTO>> ReadAsyncAllByTagName(string tagName)
+        {
+            return (await _context.Projects.Where(p => p.Tags.Any(t => t.Name == tagName))
+                                           .Select(p => new ProjectDetailsDTO
+                                          (
+                                              p.Id,
+                                              p.Title,
+                                              p.Description,
+                                              p.SupervisorId,
+                                              p.MaxApplications,
+                                              p.Tags.Select(t => t.Name).ToList()
+                                          )).ToListAsync()).AsReadOnly();
+        }
+          
 
         public async Task<HttpStatusCode> UpdateAsync(ProjectUpdateDTO project)
         {
@@ -75,7 +92,7 @@ namespace BlazorApp.Infrastructure
             await _context.SaveChangesAsync();
 
             return OK;
-
+            
         }
         public async Task<HttpStatusCode> DeleteAsync(int projectId)
         {
@@ -88,5 +105,16 @@ namespace BlazorApp.Infrastructure
 
             return OK;
         }
+
+        private async IAsyncEnumerable<Tag> GetTagsAsync(IEnumerable<string> tags)
+        {
+            var existing = await _context.Tags.Where(p => tags.Contains(p.Name)).ToDictionaryAsync(p => p.Name);
+
+            foreach (var tag in tags)
+            {
+                yield return existing.TryGetValue(tag, out var p) ? p : new Tag(tag);
+            }
+        }
+
     }
 }
