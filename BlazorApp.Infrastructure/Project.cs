@@ -21,7 +21,7 @@ namespace BlazorApp.Infrastructure
         [Required]
         public int MaxApplications { get; set; }
 
-        public ICollection<User> AppliedStudents{ get; set; }
+        public ICollection<Student> AppliedStudents{ get; set; }
 
         // Tag entity need to be set up
         //public ICollection<Tags> tags { get; set; }

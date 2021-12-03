@@ -12,22 +12,23 @@ using Microsoft.Extensions.Configuration;
 namespace BlazorApp
 {
 
-    public static class ProjectRemoteExtensions
+    public static class StudentRemoteExtensions
     {
-        public static void AddProjectRemote(this IServiceCollection services, IConfiguration configuration)
+        public static void AddStudentRemote(this IServiceCollection services, IConfiguration configuration)
         {
             // https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests
-            services.AddHttpClient<ProjectRemote>();
+            services.AddHttpClient<StudentRemote>();
         }
     }
-    public class ProjectRemote : IProjectRemote
+    public class StudentRemote : IStudentRemote
     {
+
         private readonly HttpClient _httpClient;
         private readonly ITokenAcquisition _tokenAcquisition;
         private readonly string _APIScope = string.Empty;
         private readonly string _APIBaseAddress = string.Empty;
 
-        public ProjectRemote(ITokenAcquisition tokenAcquisition, HttpClient httpClient, IConfiguration configuration)
+        public StudentRemote(ITokenAcquisition tokenAcquisition, HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _tokenAcquisition = tokenAcquisition;
@@ -35,36 +36,30 @@ namespace BlazorApp
             _APIBaseAddress = configuration["API:APIBaseAddress"];
         }
 
-        public async Task<bool> CreateProject(ProjectCreateDTO project)
+        public async Task<bool> CreateStudent(StudentCreateDTO student)
         {
-            var result = await _httpClient.PostAsJsonAsync("Project", project);
+            var result = await _httpClient.PostAsJsonAsync($"{_APIBaseAddress}/api/student", student);
             var statusCode = (int)result.StatusCode;
             if (statusCode >= 200 && statusCode <= 208) return true;
             else return false;
         }
 
-        public async Task<ProjectDetailsDTO> GetProject(int Id)
+        public async Task<StudentDetailsDTO> GetStudent(string Id)
         {
-            return await _httpClient.GetFromJsonAsync<ProjectDetailsDTO>($"{_APIBaseAddress}/api/project/{Id}");
+            return await _httpClient.GetFromJsonAsync<StudentDetailsDTO>($"{_APIBaseAddress}/api/student/{Id}");
         }
 
-        public async Task<ProjectDetailsDTO[]> GetProjects()
+        public async Task<StudentDTO[]> GetStudents()
         {
-            return await _httpClient.GetFromJsonAsync<ProjectDetailsDTO[]>($"{_APIBaseAddress}/api/project/all");
+            return await _httpClient.GetFromJsonAsync<StudentDTO[]>($"{_APIBaseAddress}/api/Student/all");
         }
 
-        public async Task<HttpStatusCode> UpdateProject(ProjectUpdateDTO project)
+        public async Task<HttpStatusCode> UpdateStudent(StudentUpdateDTO student)
         {
-            await PrepareAuthenticatedClient();
-            var result = await _httpClient.PutAsJsonAsync($"{_APIBaseAddress}/api/project/update", project);
+            var result = await _httpClient.PutAsJsonAsync($"{_APIBaseAddress}/api/student/update", student);
             return result.StatusCode;
         }
 
-        /// <summary>
-        /// Retrieves the Access Token for the Web API.
-        /// Sets Authorization and Accept headers for the request.
-        /// </summary>
-        /// <returns></returns>
         private async Task PrepareAuthenticatedClient()
         {
             var accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { _APIScope });
@@ -72,6 +67,5 @@ namespace BlazorApp
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
-
     }
 }

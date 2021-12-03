@@ -12,6 +12,7 @@ namespace BlazorApp.Core
 
     public record ProjectCreateDTO
     {
+        [Required]
         [StringLength(50)]
         public string Title { get; init; }
 

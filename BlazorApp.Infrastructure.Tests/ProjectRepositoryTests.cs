@@ -24,13 +24,13 @@ namespace BlazorApp.Infrastructure.Tests
             _context = new PBankContext(builder.Options);
             _context.Database.EnsureCreated();
 
-            var user1 = new User { Id = 1, Firstname = "User One Firstname", Lastname = "User One Lastname" };
-            var user2 = new User { Id = 2, Firstname = "User Two Firstname", Lastname = "User Two Lastname" };
-            var user3 = new User { Id = 3, Firstname = "User Three Firstname", Lastname = "User Three Lastname" };
+            var student1 = new Student { Id = "1", Name = "Student One Name"};
+            var student2 = new Student { Id = "2", Name = "Student Two Name"};
+            var student3 = new Student { Id = "3", Name = "Student Three Name"};
 
             _context.Projects.AddRange(
-                new Project { Id = 1, Title = "Project One", Description = "This is the first project", SupervisorId = 1, MaxApplications = 4, AppliedStudents = new[] { user1, user2 } },
-                new Project { Id = 2, Title = "Project Two", Description = "This is the second project", SupervisorId = 2, MaxApplications = 1, AppliedStudents = new[] { user3 } }
+                new Project { Id = 1, Title = "Project One", Description = "This is the first project", SupervisorId = 1, MaxApplications = 4, AppliedStudents = new[] { student1, student2 } },
+                new Project { Id = 2, Title = "Project Two", Description = "This is the second project", SupervisorId = 2, MaxApplications = 1, AppliedStudents = new[] { student3 } }
             );
 
             _context.SaveChanges();

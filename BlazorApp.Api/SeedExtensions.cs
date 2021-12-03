@@ -16,21 +16,21 @@ namespace BlazorApp.Api
             {
                 var context = scope.ServiceProvider.GetService<PBankContext>();
 
-                SeedUsers(context);
+                SeedContext(context);
             }
             return host;
         }
 
-        private static void SeedUsers(PBankContext context)
+        private static void SeedContext(PBankContext context)
         {
             context.Database.Migrate();
 
-            if (!context.Users.Any())
+            if (!context.Students.Any())
             {
-                context.Users.AddRange(
-                    new User { Firstname = "John", Lastname = "Smith", },
-                    new User { Firstname = "Lars", Lastname = "Larsen", },
-                    new User { Firstname = "Lenny", Lastname = "Erwin", }
+                context.Students.AddRange(
+                    new Student { Id = "Id1", Name = "John" },
+                    new Student { Id = "Id2", Name = "Lars" },
+                    new Student { Id = "Id3", Name = "Lenny" }
                 );
 
                 context.SaveChanges();
@@ -39,7 +39,7 @@ namespace BlazorApp.Api
             if(!context.Projects.Any())
             {
                 context.Projects.AddRange(
-                    new Project{Title = "Project One", Description = "Project One Description", SupervisorId = 1, MaxApplications = 4, AppliedStudents = new User[] {context.Users.Find(1)}},
+                    new Project{Title = "Project One", Description = "Project One Description", SupervisorId = 1, MaxApplications = 4, AppliedStudents = new Student[] {context.Students.Find("Id1")}},
                     new Project{Title = "Project Two", Description = "Project Two Description", SupervisorId = 1, MaxApplications = 100}
                 );
 

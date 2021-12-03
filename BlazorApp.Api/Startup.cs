@@ -1,21 +1,13 @@
-using System;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using BlazorApp.Infrastructure;
 using BlazorApp.Core;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 
 namespace BlazorApp.Api
@@ -48,7 +40,8 @@ namespace BlazorApp.Api
 
             services.AddDbContext<PBankContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PBank")));
             services.AddScoped<IPBankContext, PBankContext>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<ISupervisorRepository, SupervisorRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
         }
 

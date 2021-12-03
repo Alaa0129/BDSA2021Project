@@ -34,7 +34,7 @@ namespace BlazorApp
 
             services.AddMicrosoftIdentityWebAppAuthentication(Configuration)
                     .EnableTokenAcquisitionToCallDownstreamApi(new string[] { Configuration["API:APIScope"] })
-                        .AddInMemoryTokenCaches(); ;
+                        .AddInMemoryTokenCaches();
 
             services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
             {
@@ -42,8 +42,12 @@ namespace BlazorApp
             });
 
             services.AddProjectRemote(Configuration);
+            services.AddStudentRemote(Configuration);
+            services.AddSupervisorRemote(Configuration);
 
-            services.AddControllersWithViews().AddMicrosoftIdentityUI();
+
+            services.AddControllersWithViews().
+                AddMicrosoftIdentityUI();
 
             services.AddRazorPages();
 

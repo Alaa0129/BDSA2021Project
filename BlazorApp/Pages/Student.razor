@@ -1,5 +1,84 @@
 @page "/student"
 @attribute [Authorize(Roles = "Student")]
 
+@using Core
+@using Microsoft.Identity.Web
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Forms
+@inject StudentRemote StudentRemote
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
 
 <h1> You are a student. Hurray</h1>
+
+@if (students == null)
+{
+    <h1>No students found</h1>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in students)
+            {
+                <tr>
+                    <td>@student.Id</td>
+                    <td>@student.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@if (student == null)
+{
+    <h1>Had trouble finding you in the database</h1>
+}
+else
+{
+    <h3>Your Data:</h3>
+    <h3>@student.Name</h3>
+}
+
+
+
+@code {
+
+    IEnumerable<StudentDTO> students = null;
+
+    StudentDetailsDTO student = null;
+
+    private string value;
+
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await StudentRemote.GetStudents();
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        try
+        {
+            student = await StudentRemote.GetStudent(user.GetObjectId());
+        }
+        catch (System.Net.Http.HttpRequestException)
+        {
+
+        }
+    }
+
+
+}

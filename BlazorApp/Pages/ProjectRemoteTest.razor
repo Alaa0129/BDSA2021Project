@@ -1,9 +1,12 @@
 @page "/ProjectRemoteTest"
+@attribute [Authorize]
 
 
 @using BlazorApp.Core
 @using System.Collections.Generic;
+@using Microsoft.Identity.Web;
 @inject ProjectRemote ProjectRemote
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
 
 
@@ -52,8 +55,16 @@
 
     protected async void UpdateProject()
     {
-        if (projectDetailsDTO.Title.Equals("I Updated")) await ProjectRemote.UpdateProject(projectUpdateDTO2);
-        else await ProjectRemote.UpdateProject(projectUpdateDTO1);
+        try
+        {
+            if (projectDetailsDTO.Title.Equals("I Updated")) await ProjectRemote.UpdateProject(projectUpdateDTO2);
+            else await ProjectRemote.UpdateProject(projectUpdateDTO1);
+        }
+        catch (Exception ex)
+        {
+            ConsentHandler.HandleException(ex);
+        }
+
 
     }
 }
