@@ -2,8 +2,8 @@
 function changeTagColor(id) {
 
     var button = document.getElementById(id);
-    var color = button.style.backgroundColor;
-    color = button.style.backgroundColor = color === 'black' ? '#17a2b8' : 'black';
+    var bgColor = button.style.backgroundColor;
+    bgColor = button.style.backgroundColor = bgColor === 'midnightblue' ? '#e2f5fa' : 'midnightblue';
     
 }
 

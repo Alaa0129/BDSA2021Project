@@ -17,7 +17,11 @@
         </div>
       
         <div class="tag-container">
-            <button class="tag" >Alaaaaaaaaa</button>
+            <label>
+                <input class="tagInput" type="checkbox">
+                <span class="tag">tag that actually works</span>
+            </label>
+            
             <button class="tag" >Shuuuuuuuja</button>
             <button class="tag" >Machine Learning</button>
             <button class="tag" >SWU</button>
@@ -36,19 +40,19 @@
         {
             <div class="RequestView">
                 <h3>@request.Title</h3>
-                <div class="ProjectDescriptionView">
-                    <div class="description">@request.Description</div>
+                <div class="RequestDescriptionView">
+                    <span class="description">@request.Description</span>
                 </div>
                 <div class="request-bottom">
                     <div class="student-profile">
                         <img class="profile-img" src="Resources\profile-icon.svg">
                         <h5>@request.StudentId</h5>
                     </div>
-                    <button class="read-more">Read more</button>
+                    <button class="read-more" onclick="location.href = 'ProjectDetailsPage';">Read more</button>
                 </div>
             </div>
-            <br /><br>
         }     
+        
         <div class="pageButtonsDiv">
             <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
 

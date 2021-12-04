@@ -79,7 +79,7 @@
     margin-bottom: 5rem;
 }
 
-.RequestView {
+.ProjectView {
     height: 20rem;
     width: 50rem;
     border: lightgrey;
@@ -155,7 +155,7 @@
     cursor: pointer
 }
 
-.RequestDescriptionView {
+.ProjectDescriptionView {
     height: 9rem;
     width: 100%;
     padding-top: 0.5rem;
@@ -188,7 +188,7 @@ h3 {
    align-items: center;
 }
 
-.request-bottom {
+.Project-bottom {
     display: flex; 
     flex-direction: row;
     justify-content: space-between;

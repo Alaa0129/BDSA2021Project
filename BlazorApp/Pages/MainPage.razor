@@ -5,80 +5,64 @@
 @inject ITagRemote TagRemote;
 
 <h1>Main page</h1>
-<br> <br>
+<br>
 
-<div class="Page">
-        <form class="form-inline">
-            <div class="search-field">
-                <input class="form-control mr-sm-2" @bind-value="searchedProject" @bind-value:event="oninput"
-                placeholder="Search for projects..." aria-label="Search">
-            <button class="btn btn-light my-sm-0" type="button">Search</button>
+<div class="row">
+    <div class="column">
+      
+        <div class="main-search-input fl-wrap inputs">
+            <div class="main-search-input-item"> 
+                <input type="search" @bind="searchedProject" placeholder="Search Projects..."> 
+            </div> 
+            <button class="main-search-button" onclick="SearchProjects()">Search</button>
         </div>
-    </form>
-</div>
-<br> <br>
 
-<div class="TagsMainView">
-    <div class="tags">
-    @foreach (var tag in tags)
-    { 
-        if(!tagExists(tag.Name))
+        <div class="tag-container">
+            @foreach (var tag in tags)
+            { 
+                if(!tagExists(tag.Name))
+                {
+                    <label>
+                        <input class="tagInput" type="checkbox" @onclick="@(e => SearchProjectsByTagName(tag.Name))">
+                        <span class="tag">@(tag.Name)</span>
+                    </label>
+                    tagNames.Add(tag.Name);
+                }
+            }
+        </div>
+
+        @foreach (var project in filteredProjects) 
         {
-            <button @onclick="@(e => SearchProjectsByTagName(tag.Name))" type="button" class="btn btn-primary">@(tag.Name)</button>
-             tagNames.Add(tag.Name);
-        }
-
-    }
-
-    </div>
-</div>
-
-<br> <br>
-
-@foreach (var project in filteredProjects)
-{
-    <div class="MainProjectView">
-        <div class="ProjectView" onclick="">
-
-            <div class="ProjectTitleView">
-                <p class="ProjectTitle">
-                    @project.Title
-                </p>
-            </div>
-            <div class="ProjectDescriptionView">
-                <div class="ProjectDescriptionBox">
-                    <p class="ProjectDescription"> @project.Description </p>
+            <div class="ProjectView">
+                <h3>@project.Title</h3>
+                <div class="ProjectDescriptionView">
+                    <span class="description">@project.Description</span>
+                </div>
+                <div class="Project-bottom">
+                    <div class="student-profile">
+                        <img class="profile-img" src="Resources\profile-icon.svg">
+                        <h5>@project.SupervisorId</h5>
+                    </div>
+                    <button class="read-more" onclick="location.href = 'ProjectDetailsPage';">Read more</button>
                 </div>
             </div>
-            <div class="LastRowOuter">
-                <div class="LastRowInner">
-                    <p class="SupervisorName"> @project.SupervisorId </p>
-                    <button type="button" class="ReadMoreButton"> Read more </button>
-                </div>
-
-
-            </div>
-        </div>
-    </div>
-    <br /><br>
-
-}
-
-<div class="MainPageButtonsView">
-    <div class="pageButtonsDiv">
-        <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("prev"))"> Previous </button>
-
-        @for (int i = 0; i < totalPages; i++)
-        {
-            var pageNumber = i;
-            <button class="btn btn-info @(currentPage == pageNumber? "btn-dark" : "btn-white")"
-            @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
         }
 
-        <button class="btn btn-secondary" style="cursor:pointer;" @onclick="@(e => NewPage("next"))"> Next </button>
-    </div>
+        <div class="pageButtonsDiv">
+            <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
 
+            @for (int i = 0; i < totalPages; i++)
+            {
+                var pageNumber = i;
+                <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
+                @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
+            }
+
+            <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
+        </div>
+    </div>
 </div>
+
 
 @code
 {

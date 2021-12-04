@@ -2,10 +2,6 @@
     cursor: pointer;
 }
 
-.nav-link {
-    font-size: larger;
-}
-
 a {
     color: #999999;
 }
@@ -40,13 +36,19 @@ a {
 }
 
 .navbar {
-    border-bottom: solid;
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.7);
     height: 7rem;
+    margin-bottom: 1rem;
 }
 
-/* a:active {
-    color:white;
-} */
+.nav-item ::deep a {
+    color: #d7d7d7;
+    font-size: larger;
+    border-radius: 1000px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+} 
 
 .nav-item ::deep a.active {
     background-color: rgba(255,255,255,0.25);

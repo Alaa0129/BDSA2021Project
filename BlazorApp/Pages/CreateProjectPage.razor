@@ -35,7 +35,7 @@
         {
             var tagId = "tag" + tagNr.ToString();
             tagNr++;
-            <button @onclick="@(e => AddTagName(tagId,tag))" id="@tagId" type="button" class="btn btn-info">@tag</button>
+            <button @onclick="@(e => AddTagName(tagId,tag))" id="@tagId" type="button" class="tag">@tag</button>
 
         }
 
@@ -55,9 +55,9 @@
 
 
     <div class="addDivTag">
-        <input @bind="tagName" @bind:event="oninput" id="AddTagTextField" class="form-control tagTextField"
+        <input onkeyup="if(event.keyCode===13){addTag.click()}" @bind="tagName" @bind:event="oninput" id="AddTagTextField" class="form-control tagTextField"
             placeholder="Enter Tag">
-        <button @onclick="@(e => AddTag(tagName))" type="button" class="btn btn-primary btn-rounded">Add Tag</button>
+        <button id="addTag" @onclick="@(e => AddTag(tagName))" type="button" class="btn btn-primary btn-rounded">Add Tag</button>
     </div>
 </div>
 
@@ -66,8 +66,6 @@
 <div class="Buttons">
     <button type="button" class="btn btn-success successBtn"
         @onclick="@(e => Submit(Title, Description))">Submit</button>
-    <button type="button" class="btn btn-success uploadBtn">Upload File</button>
-
 </div>
 
 
@@ -151,8 +149,5 @@
     {
 
         AddTag(args.ItemData.Name);
-
     }
-
-
 }
