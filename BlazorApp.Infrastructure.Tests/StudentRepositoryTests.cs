@@ -173,6 +173,24 @@ namespace BlazorApp.Infrastructure.Tests
             Assert.Equal(_context.Projects.Find(2).Title, updatedStudent.Project.Title);
         }
 
+
+        [Fact]
+        public async Task UpdateProject_given_valid_ids_add_project_to_student_and_returns_OK()
+        {
+            // Given
+            var studentId = "StudentId1";
+            var projectId = 2;
+
+            // When
+            var response = await _repository.UpdateProjectAsync(studentId, projectId);
+
+            var updatedStudent = await _repository.ReadAsync(studentId);
+
+            // Then
+            Assert.Equal(OK, response);
+            Assert.Equal(_context.Projects.Find(2).Title, updatedStudent.Project.Title);
+        }
+
         [Fact]
         public async Task UpdateProject_given_non_valid_project_id_returns_BadRequest()
         {
