@@ -23,11 +23,18 @@ namespace BlazorApp.Infrastructure.Tests
             _context = new PBankContext(builder.Options);
             _context.Database.EnsureCreated();
 
+            var supervisor1 = new Supervisor { Id = "SupervisorId1", Name = "Supervisor One Name" };
+
+            var project1 = new Project { Id = 1, Title = "Project One", Description = "This is the first project", Supervisor = supervisor1 };
+
+
             _context.Students.AddRange(
-                new Student { Id = "1", Name = "Student One Name" },
-                new Student { Id = "2", Name = "Student Two Name" },
-                new Student { Id = "3", Name = "Student Three Name" }
+                new Student { Id = "StudentId1", Name = "Student One Name" },
+                new Student { Id = "StudentId2", Name = "Student Two Name" },
+                new Student { Id = "StudentId3", Name = "Student Three Name", Project = project1 }
             );
+
+            _context.Projects.Add(new Project { Id = 2, Title = "Project Two", Description = "This is the second project", Supervisor = supervisor1 });
 
             _context.SaveChanges();
 
@@ -36,98 +43,166 @@ namespace BlazorApp.Infrastructure.Tests
 
 
         [Fact]
-        public async Task Create_create_student_with_valid_data()
+        public async Task Create_creates_student_with_correct_data()
         {
             //Given
             var student = new StudentCreateDTO
             {
-                Id = "Student Id 1",
-                Name = "Test Student"
+                Id = "StudentId4",
+                Name = "Student Fourth Name"
             };
 
             //When
             var createdId = await _repository.CreateAsync(student);
 
-            var actualStudent = await _context.Students.Where(p => p.Id == createdId).FirstOrDefaultAsync();
+            var actualStudent = await _context.Students.FindAsync(student.Id);
 
             //Then
-            Assert.Equal(actualStudent.Id, createdId);
-            Assert.Equal("Test Student", actualStudent.Name);
-            Assert.Null(actualStudent.project);
+            Assert.Equal("StudentId4", createdId);
+            Assert.Equal("Student Fourth Name", actualStudent.Name);
+            Assert.Null(actualStudent.Project);
+            Assert.Empty(actualStudent.Requests);
+        }
+
+        [Fact]
+        public async Task Create_with_already_used_id_throws_error()
+        {
+            //Given
+            var student = new StudentCreateDTO
+            {
+                Id = "StudentId3",
+                Name = "Student Fourth Name"
+            };
+
+            //Then
+            await Assert.ThrowsAsync<Exception>(async () => await _repository.CreateAsync(student));
         }
 
 
         [Fact]
         public async Task Read_given_valid_id_returns_correct_student()
         {
-            //Given
-            var student = await _repository.ReadAsync("1");
+            // Given
+            var student = await _repository.ReadAsync("StudentId1");
 
-            //Then
-            Assert.Equal("1", student.Id);
+            // Then
+            Assert.Equal("StudentId1", student.Id);
             Assert.Equal("Student One Name", student.Name);
+            Assert.Null(student.Project);
+            Assert.Empty(student.Requests);
         }
 
         [Fact]
         public async Task Read_given_non_valid_id_returns_null()
         {
-            //Given
-            var student = await _repository.ReadAsync("133333");
+            // Given
+            var student = await _repository.ReadAsync("StudentId10000");
 
-            //Then
+            // Then
             Assert.Null(student);
         }
 
         [Fact]
         public async Task Read_returns_all_students()
         {
-            //Given
+            // Given
             var students = await _repository.ReadAsync();
 
-            //Then
+            // Then
             Assert.Collection(students,
-                student => Assert.Equal(new StudentDTO("1", "Student One Name"), student),
-                student => Assert.Equal(new StudentDTO("2", "Student Two Name"), student),
-                student => Assert.Equal(new StudentDTO("3", "Student Three Name"), student)
+                student => Assert.Equal(new StudentDTO("StudentId1", "Student One Name"), student),
+                student => Assert.Equal(new StudentDTO("StudentId2", "Student Two Name"), student),
+                student => Assert.Equal(new StudentDTO("StudentId3", "Student Three Name"), student)
                 );
-
         }
+
+
 
         [Fact]
         public async Task Update_given_non_valid_id_returns_NotFound()
         {
-            //Given
+            // Given
             var student = new StudentUpdateDTO
             {
-                Id = "122",
+                Id = "StudentId10000",
                 Name = "Student Update Name"
             };
 
-            //When
+            // When
             var response = await _repository.UpdateAsync(student);
 
-            //Then
+            // Then
             Assert.Equal(NotFound, response);
         }
 
         [Fact]
         public async Task Update_given_valid_id_updates_student_and_returns_OK()
         {
-            //Given
+            // Given
             var student = new StudentUpdateDTO
             {
-                Id = "1",
+                Id = "StudentId3",
                 Name = "Student Update Name"
             };
 
-            //When
+            // When
             var response = await _repository.UpdateAsync(student);
 
-            var updatedStudent = await _repository.ReadAsync("1");
+            var updatedStudent = await _repository.ReadAsync("StudentId3");
 
-            //Then
+            // Then
             Assert.Equal(OK, response);
             Assert.Equal("Student Update Name", updatedStudent.Name);
+            Assert.Equal(_context.Projects.Find(1).Title, updatedStudent.Project.Title);
+        }
+
+        [Fact]
+        public async Task UpdateProject_given_valid_ids_replaces_project_on_student_and_returns_OK()
+        {
+            // Given
+            var studentId = "StudentId3";
+            var projectId = 2;
+
+            // When
+            var response = await _repository.UpdateProjectAsync(studentId, projectId);
+
+            var updatedStudent = await _repository.ReadAsync(studentId);
+
+            // Then
+            Assert.Equal(OK, response);
+            Assert.Equal(_context.Projects.Find(2).Title, updatedStudent.Project.Title);
+        }
+
+        [Fact]
+        public async Task UpdateProject_given_non_valid_project_id_returns_BadRequest()
+        {
+            // Given
+            var studentId = "StudentId3";
+            var projectId = 10000000;
+
+            // When
+            var response = await _repository.UpdateProjectAsync(studentId, projectId);
+
+            var updatedStudent = await _repository.ReadAsync(studentId);
+
+            // Then
+            Assert.Equal(BadRequest, response);
+        }
+
+        [Fact]
+        public async Task UpdateProject_given_non_valid_student_id_returns_BadRequest()
+        {
+            // Given
+            var studentId = "StudentId10000";
+            var projectId = 2;
+
+            // When
+            var response = await _repository.UpdateProjectAsync(studentId, projectId);
+
+            var updatedStudent = await _repository.ReadAsync(studentId);
+
+            // Then
+            Assert.Equal(BadRequest, response);
         }
 
 

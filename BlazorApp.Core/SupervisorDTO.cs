@@ -6,7 +6,7 @@ namespace BlazorApp.Core
 {
     public record SupervisorDTO(string Id, string Name);
 
-    public record SupervisorDetailsDTO(string Id, string Name, ICollection<ProjectDetailsDTO> projects);
+    public record SupervisorDetailsDTO(string Id, string Name, ICollection<ProjectDTO> Projects, ICollection<RequestDTO> Requests);
 
     public record SupervisorCreateDTO
     {
@@ -17,6 +17,9 @@ namespace BlazorApp.Core
         public string Name { get; init; }
     }
 
-    public record SupervisorUpdateDTO : SupervisorCreateDTO {}
+    public record SupervisorUpdateDTO : SupervisorCreateDTO
+    {
+
+    }
 
 }

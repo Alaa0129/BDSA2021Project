@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BlazorApp.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web.Resource;
 
 namespace BlazorApp.Api.Controllers
@@ -14,21 +15,23 @@ namespace BlazorApp.Api.Controllers
     // [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class ProjectController : ControllerBase
     {
+        private readonly ILogger<ProjectController> _logger;
         private readonly IProjectRepository _repository;
 
-        public ProjectController(IProjectRepository repository)
+        public ProjectController(ILogger<ProjectController> logger, IProjectRepository repository)
         {
+            _logger = logger;
             _repository = repository;
         }
 
-        [AllowAnonymous]
+        // [AllowAnonymous]
         [HttpGet("all")]
-        public async Task<IEnumerable<ProjectDetailsDTO>> Get()
+        public async Task<IEnumerable<ProjectDTO>> Get()
         {
             return await _repository.ReadAsync();
         }
 
-        [AllowAnonymous]
+        // [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectDetailsDTO>> Get(int id)
         {
@@ -45,7 +48,7 @@ namespace BlazorApp.Api.Controllers
             return await _repository.CreateAsync(project);
         }
 
-        [Authorize(Roles = "Student")]
+        // [Authorize(Roles = "Student")]
         [HttpPut("update")]
         public async Task<ActionResult> Put([FromBody] ProjectUpdateDTO project)
         {

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
 using System.Net;
+using static System.Net.HttpStatusCode;
 
 namespace BlazorApp.Infrastructure
 {
@@ -20,6 +21,9 @@ namespace BlazorApp.Infrastructure
 
         public async Task<string> CreateAsync(StudentCreateDTO student)
         {
+
+            if (_context.Students.Find(student.Id) != null) throw new Exception("This Student already exists in the database");
+
             var entity = new Student
             {
                 Id = student.Id,
@@ -41,12 +45,11 @@ namespace BlazorApp.Infrastructure
                            (
                             s.Id,
                             s.Name,
-                            s.project == null ? null : new ProjectDetailsDTO(s.project.Id, s.project.Title, s.project.Description, s.project.SupervisorId, s.project.MaxApplications)
+                            s.Project == null ? null : new ProjectDTO(s.Project.Id, s.Project.Title, s.Project.Description, s.Project.Supervisor.Id),
+                            s.Requests == null ? null : s.Requests.Select(s => new RequestDTO(s.Id, s.Title, s.Description, s.Student.Id, s.Supervisor.Id)).ToList()
                            );
 
-            var studente = await students.FirstOrDefaultAsync();
-
-            return studente;
+            return await students.FirstOrDefaultAsync();
         }
 
         public async Task<IReadOnlyCollection<StudentDTO>> ReadAsync() =>
@@ -59,13 +62,27 @@ namespace BlazorApp.Infrastructure
         {
             var entity = await _context.Students.Where(u => u.Id == student.Id).FirstOrDefaultAsync();
 
-            if (entity == null) return HttpStatusCode.NotFound;
+            if (entity == null) return NotFound;
 
             entity.Name = student.Name;
 
             await _context.SaveChangesAsync();
 
             return HttpStatusCode.OK;
+        }
+
+
+        public async Task<HttpStatusCode> UpdateProjectAsync(string studentId, int projectId)
+        {
+            var studentEntity = await _context.Students.FindAsync(studentId);
+            var projectEntity = await _context.Projects.FindAsync(projectId);
+
+            if (projectEntity == null || studentEntity == null) return BadRequest;
+
+            studentEntity.Project = projectEntity;
+
+            await _context.SaveChangesAsync();
+            return OK;
         }
     }
 }

@@ -13,8 +13,8 @@ namespace BlazorApp.Infrastructure
         [Required]
         public string Name { get; set; }
 
-        public ICollection<Project> projects { get; set; }
+        public ICollection<Project> Projects { get; set; } = new List<Project>();
 
-        // public ICollection<Request> requests { get; set; }
+        public ICollection<Request> Requests { get; set; } = new List<Request>();
     }
 }

@@ -41,7 +41,8 @@ namespace BlazorApp.Infrastructure
                            (
                                s.Id,
                                s.Name,
-                               s.projects.Select(c => new ProjectDetailsDTO(c.Id, c.Title, c.Description, c.SupervisorId, c.MaxApplications)).ToList()
+                               s.Projects == null ? null : s.Projects.Select(c => new ProjectDTO(c.Id, c.Title, c.Description, c.Supervisor.Id)).ToList(),
+                               s.Requests == null ? null : s.Requests.Select(r => new RequestDTO(r.Id, r.Title, r.Description, r.Student.Id, r.Supervisor.Id)).ToList()
                            );
 
             return await Supervisors.FirstOrDefaultAsync();

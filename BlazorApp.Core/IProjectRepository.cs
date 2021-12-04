@@ -9,7 +9,7 @@ namespace BlazorApp.Core
     {
         Task<int> CreateAsync(ProjectCreateDTO project);
         Task<ProjectDetailsDTO> ReadAsync(int projectId);
-        Task<IReadOnlyCollection<ProjectDetailsDTO>> ReadAsync();
+        Task<IReadOnlyCollection<ProjectDTO>> ReadAsync();
         Task<HttpStatusCode> UpdateAsync(ProjectUpdateDTO project);
         Task<HttpStatusCode> DeleteAsync(int projectId);
     }

@@ -11,6 +11,8 @@ namespace BlazorApp.Infrastructure
         DbSet<Student> Students { get; }
         DbSet<Supervisor> Supervisors { get; }
         DbSet<Project> Projects { get; }
+        DbSet<Request> Requests { get; }
+        DbSet<Tag> Tags { get; }
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

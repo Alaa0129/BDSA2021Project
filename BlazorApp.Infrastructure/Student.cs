@@ -13,9 +13,9 @@ namespace BlazorApp.Infrastructure
         [Required]
         public string Name { get; set; }
 
-        public Project? project { get; set; }
+        public Project Project { get; set; }
 
-        // public ICollection<Request> requests { get; set; }
+        public ICollection<Request> Requests { get; set; } = new List<Request>();
 
     }
 }

@@ -24,9 +24,9 @@ namespace BlazorApp.Infrastructure.Tests
             _context.Database.EnsureCreated();
 
             _context.Supervisors.AddRange(
-                new Supervisor { Id = "1", Name = "Supervisor One Name" },
-                new Supervisor { Id = "2", Name = "Supervisor Two Name" },
-                new Supervisor { Id = "3", Name = "Supervisor Three Name" }
+                new Supervisor { Id = "SupervisorId1", Name = "Supervisor One Name" },
+                new Supervisor { Id = "SupervisorId2", Name = "Supervisor Two Name" },
+                new Supervisor { Id = "SupervisorId3", Name = "Supervisor Three Name" }
             );
 
             _context.SaveChanges();
@@ -39,21 +39,22 @@ namespace BlazorApp.Infrastructure.Tests
         public async Task Create_create_Supervisor_with_valid_data()
         {
             //Given
-            var Supervisor = new SupervisorCreateDTO
+            var supervisor = new SupervisorCreateDTO
             {
-                Id = "Supervisor Id 1",
-                Name = "Test Supervisor"
+                Id = "SupervisorId4",
+                Name = "Supervisor Fourth Name"
             };
 
             //When
-            var createdId = await _repository.CreateAsync(Supervisor);
+            var createdId = await _repository.CreateAsync(supervisor);
 
             var actualSupervisor = await _context.Supervisors.Where(p => p.Id == createdId).FirstOrDefaultAsync();
 
             //Then
             Assert.Equal(actualSupervisor.Id, createdId);
-            Assert.Equal("Test Supervisor", actualSupervisor.Name);
-            Assert.Null(actualSupervisor.projects);
+            Assert.Equal("Supervisor Fourth Name", actualSupervisor.Name);
+            Assert.Empty(actualSupervisor.Projects);
+            Assert.Empty(actualSupervisor.Requests);
         }
 
 
@@ -61,34 +62,36 @@ namespace BlazorApp.Infrastructure.Tests
         public async Task Read_given_valid_id_returns_correct_Supervisor()
         {
             //Given
-            var Supervisor = await _repository.ReadAsync("1");
+            var supervisor = await _repository.ReadAsync("SupervisorId1");
 
             //Then
-            Assert.Equal("1", Supervisor.Id);
-            Assert.Equal("Supervisor One Name", Supervisor.Name);
+            Assert.Equal("SupervisorId1", supervisor.Id);
+            Assert.Equal("Supervisor One Name", supervisor.Name);
+            Assert.Empty(supervisor.Projects);
+            Assert.Empty(supervisor.Requests);
         }
 
         [Fact]
         public async Task Read_given_non_valid_id_returns_null()
         {
             //Given
-            var Supervisor = await _repository.ReadAsync("133333");
+            var supervisor = await _repository.ReadAsync("133333");
 
             //Then
-            Assert.Null(Supervisor);
+            Assert.Null(supervisor);
         }
 
         [Fact]
         public async Task Read_returns_all_Supervisors()
         {
             //Given
-            var Supervisors = await _repository.ReadAsync();
+            var supervisors = await _repository.ReadAsync();
 
             //Then
-            Assert.Collection(Supervisors,
-                Supervisor => Assert.Equal(new SupervisorDTO("1", "Supervisor One Name"), Supervisor),
-                Supervisor => Assert.Equal(new SupervisorDTO("2", "Supervisor Two Name"), Supervisor),
-                Supervisor => Assert.Equal(new SupervisorDTO("3", "Supervisor Three Name"), Supervisor)
+            Assert.Collection(supervisors,
+                Supervisor => Assert.Equal(new SupervisorDTO("SupervisorId1", "Supervisor One Name"), Supervisor),
+                Supervisor => Assert.Equal(new SupervisorDTO("SupervisorId2", "Supervisor Two Name"), Supervisor),
+                Supervisor => Assert.Equal(new SupervisorDTO("SupervisorId3", "Supervisor Three Name"), Supervisor)
                 );
 
         }
@@ -99,7 +102,7 @@ namespace BlazorApp.Infrastructure.Tests
             //Given
             var Supervisor = new SupervisorUpdateDTO
             {
-                Id = "122",
+                Id = "SupervisorId10000",
                 Name = "Supervisor Update Name"
             };
 
@@ -114,20 +117,20 @@ namespace BlazorApp.Infrastructure.Tests
         public async Task Update_given_valid_id_updates_Supervisor_and_returns_OK()
         {
             //Given
-            var Supervisor = new SupervisorUpdateDTO
+            var supervisor = new SupervisorUpdateDTO
             {
-                Id = "1",
+                Id = "SupervisorId1",
                 Name = "Supervisor Update Name"
             };
 
             //When
-            var response = await _repository.UpdateAsync(Supervisor);
+            var response = await _repository.UpdateAsync(supervisor);
 
-            var updatedProject = await _repository.ReadAsync("1");
+            var updatedSupervisor = await _repository.ReadAsync("SupervisorId1");
 
             //Then
             Assert.Equal(OK, response);
-            Assert.Equal("Supervisor Update Name", updatedProject.Name);
+            Assert.Equal("Supervisor Update Name", updatedSupervisor.Name);
         }
 
 

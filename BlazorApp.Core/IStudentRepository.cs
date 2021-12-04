@@ -14,5 +14,7 @@ namespace BlazorApp.Core
         Task<IReadOnlyCollection<StudentDTO>> ReadAsync();
 
         Task<HttpStatusCode> UpdateAsync(StudentUpdateDTO user);
+
+        Task<HttpStatusCode> UpdateProjectAsync(string studentId, int projectId);
     }
 }

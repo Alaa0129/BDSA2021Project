@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace BlazorApp.Core
 {
-    public record ProjectDTO(int Id, string Title, string Description, int SupervisorId);
+    public record ProjectDTO(int Id, string Title, string Description, string SupervisorId);
 
 
     // student reference?
-    public record ProjectDetailsDTO(int Id, string Title, string Description, int SupervisorId, int MaxApplications);
+    public record ProjectDetailsDTO(int Id, string Title, string Description, SupervisorDTO Supervisor, ICollection<StudentDTO> AppliedStudents, ICollection<string> Tags);
 
     public record ProjectCreateDTO
     {
@@ -16,18 +16,22 @@ namespace BlazorApp.Core
         [StringLength(50)]
         public string Title { get; init; }
 
-        public string Description { get; init; }
+        public string Description { get; set; }
 
         [Required]
-        public int MaxApplications {get; init; }
-        
+        public string SupervisorId { get; set; }
+
         [Required]
-        public int SupervisorId {get; init; } 
+        public ICollection<string> Tags { get; set; } = new List<string>();
     }
 
-    public record ProjectUpdateDTO : ProjectCreateDTO
+    public record ProjectUpdateDTO
     {
-        public int Id {get; init; }
+        public int Id { get; set; }
+
+        public string Title { get; set; }
+
+        public string Description { get; set; }
     }
 
 

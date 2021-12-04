@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlazorApp.Api.Controllers;
 using BlazorApp.Core;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -9,14 +12,15 @@ namespace BlazorApp.Api.Tests.Controllers
     public class ProjectControllerTests
     {
         [Fact]
-        public async Task Get_returns_projects_from_repository()
+        public async Task Get_returns_projects()
         {
             //Given
-            var expected = new ProjectDetailsDTO[0];
-
+            var logger = new Mock<ILogger<ProjectController>>();
             var repository = new Mock<IProjectRepository>();
+
+            var expected = Array.Empty<ProjectDTO>();
             repository.Setup(m => m.ReadAsync()).ReturnsAsync(expected);
-            var controller = new ProjectController(repository.Object);
+            var controller = new ProjectController(logger.Object, repository.Object);
 
             //When
             var actual = await controller.Get();
@@ -26,14 +30,15 @@ namespace BlazorApp.Api.Tests.Controllers
         }
 
         [Fact]
-        public async Task Get_given_valid_id_returns_project_from_repository()
+        public async Task Get_given_valid_id_returns_project()
         {
             //Given
-            var expected = new ProjectDetailsDTO(1, "Project One", "Project One Description", 1, 4);
-
+            var logger = new Mock<ILogger<ProjectController>>();
             var repository = new Mock<IProjectRepository>();
+
+            var expected = new ProjectDetailsDTO(1, "Project One", "Project One Description", new SupervisorDTO("SupervisorId", "Supervisor Name"), new[] {new StudentDTO("StudentId", "Student Name")}, new[] {"Tag1"});
             repository.Setup(m => m.ReadAsync(1)).ReturnsAsync(expected);
-            var controller = new ProjectController(repository.Object);
+            var controller = new ProjectController(logger.Object, repository.Object);
             //When
             var actual = await controller.Get(1);
             //Then

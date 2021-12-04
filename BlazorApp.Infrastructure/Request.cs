@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlazorApp.Infrastructure
 {
-    public class Project
+    public class Request
     {
         [Key]
         public int Id { get; set; }
@@ -13,16 +13,13 @@ namespace BlazorApp.Infrastructure
         public string Title { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(4400)]
         public string Description { get; set; }
 
         [Required]
-        public Supervisor Supervisor { get; set; } 
+        public Student Student { get; set; }
 
         [Required]
-        public IList<Student> AppliedStudents{ get; set; } = new List<Student>();
-        
-        [Required]
-        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
+        public Supervisor Supervisor { get; set; }
     }
 }

@@ -61,5 +61,18 @@ namespace BlazorApp.Api.Controllers
 
             return NotFound();
         }
+
+        [HttpPut("updateProject/{projectId}")]
+        public async Task<ActionResult> Put([FromBody] string studentId, int projectId)
+        {
+            var response = await _repository.UpdateProjectAsync(studentId, projectId);
+
+            if (response == HttpStatusCode.OK)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
     }
 }

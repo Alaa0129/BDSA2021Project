@@ -6,7 +6,7 @@ namespace BlazorApp.Core
 {
     public record StudentDTO(string Id, string Name);
 
-    public record StudentDetailsDTO(string Id, string Name, ProjectDetailsDTO? Project);
+    public record StudentDetailsDTO(string Id, string Name, ProjectDTO Project, ICollection<RequestDTO> Requests);
 
     public record StudentCreateDTO
     {
@@ -17,6 +17,9 @@ namespace BlazorApp.Core
         public string Name { get; init; }
     }
 
-    public record StudentUpdateDTO : StudentCreateDTO {}
+    public record StudentUpdateDTO : StudentCreateDTO
+    {
+
+    }
 
 }

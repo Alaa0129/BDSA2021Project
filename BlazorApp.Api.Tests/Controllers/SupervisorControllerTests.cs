@@ -46,17 +46,17 @@ namespace BlazorApp.Api.Tests.Controllers
         }
 
         [Fact]
-        public async Task Get_giving_valid_id_returns_NotFound()
+        public async Task Get_giving_valid_id_returns_supervisor()
         {
             //Given
             var logger = new Mock<ILogger<SupervisorController>>();
             var repository = new Mock<ISupervisorRepository>();
 
-            var supervisor = new SupervisorDetailsDTO("Id", "John", new[] {new ProjectDetailsDTO(1, "Title", "Desc", 1, 2)});
-            repository.Setup(m => m.ReadAsync("Id")).ReturnsAsync(supervisor);
+            var supervisor = new SupervisorDetailsDTO("SupervisorId", "John", new[] {new ProjectDTO(1, "Title", "Desc", "SupervisorId")}, new[] {new RequestDTO(1, "Title", "Desc", "StudentId", "SupervisorId")} );
+            repository.Setup(m => m.ReadAsync("SupervisorId")).ReturnsAsync(supervisor);
             var controller = new SupervisorController(logger.Object, repository.Object);
             //When
-            var actual = await controller.Get("Id");
+            var actual = await controller.Get("SupervisorId");
 
             //Then
             Assert.Equal(supervisor ,actual.Value);
