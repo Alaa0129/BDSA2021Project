@@ -14,7 +14,7 @@ namespace BlazorApp
 
     public static class TagRemoteExtensions
     {
-        public static void AddRequestRemote(this IServiceCollection services, IConfiguration configuration)
+        public static void AddTagRemote(this IServiceCollection services, IConfiguration configuration)
         {
             // https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests
             services.AddHttpClient<TagRemote>();

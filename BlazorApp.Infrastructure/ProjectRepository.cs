@@ -49,15 +49,17 @@ namespace BlazorApp.Infrastructure
                                             )).FirstOrDefaultAsync();
         }
 
-        public async Task<IReadOnlyCollection<ProjectDTO>> ReadAsync()
+        public async Task<IReadOnlyCollection<ProjectDetailsDTO>> ReadAsync()
         {
             return (await _context.Projects
-                                    .Select(p => new ProjectDTO
+                                    .Select(p => new ProjectDetailsDTO
                                     (
                                             p.Id,
                                             p.Title,
                                             p.Description,
-                                            p.Supervisor.Id
+                                            new SupervisorDTO(p.Supervisor.Id, p.Supervisor.Name),
+                                            p.AppliedStudents == null ? null : p.AppliedStudents.Select(p => new StudentDTO(p.Id, p.Name)).ToList(),
+                                            p.Tags.Select(t => t.Name).ToList()
                                     )).ToListAsync()).AsReadOnly();
         }
 

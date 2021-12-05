@@ -26,7 +26,7 @@ namespace BlazorApp.Api.Controllers
 
         // [AllowAnonymous]
         [HttpGet("all")]
-        public async Task<IEnumerable<ProjectDTO>> Get()
+        public async Task<IEnumerable<ProjectDetailsDTO>> Get()
         {
             return await _repository.ReadAsync();
         }

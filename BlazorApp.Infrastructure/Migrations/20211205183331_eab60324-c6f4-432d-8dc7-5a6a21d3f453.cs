@@ -2,7 +2,7 @@
 
 namespace BlazorApp.Infrastructure.Migrations
 {
-    public partial class _2e0e5b6882c4415f82adb5007f7a47ac : Migration
+    public partial class eab60324c6f4432d8dc75a6a21d3f453 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

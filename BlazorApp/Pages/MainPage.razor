@@ -1,0 +1,198 @@
+@page "/"
+@layout MainLayout
+
+@using Core
+@using Microsoft.Identity.Web
+@using System.Security.Claims
+
+@inject ProjectRemote ProjectRemote
+@inject TagRemote TagRemote
+@inject SupervisorRemote SupervisorRemote
+@inject StudentRemote StudentRemote
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h1>Main page</h1>
+<br>
+
+<div class="row">
+    <div class="column">
+    <h3>@message</h3>
+      
+        <div class="main-search-input fl-wrap inputs">
+            <div class="main-search-input-item"> 
+                <input type="search" @bind="searchedProject" placeholder="Search Projects..."> 
+            </div> 
+            <button class="main-search-button" onclick="SearchProjects()">Search</button>
+        </div>
+
+        <div class="tag-container">
+            @if (tags != null)
+            { 
+                @foreach (var tag in tags)
+                { 
+                    if(!tagExists(tag.Name))
+                    {
+                        <label>
+                            <input class="tagInput" type="checkbox" @onclick="@(e => SearchProjectsByTagName(tag.Name))">
+                            <span class="tag">@(tag.Name)</span>
+                        </label>
+                        tagNames.Add(tag.Name);
+                    }
+                }
+            }
+        </div>
+        @if (projects != null)
+        {
+            @foreach (var project in filteredProjects) 
+            {
+                <div class="ProjectView">
+                    <h3>@project.Title</h3>
+                    <div class="ProjectDescriptionView">
+                        <span class="description">@project.Description</span>
+                    </div>
+                    <div class="Project-bottom">
+                        <div class="student-profile">
+                            <img class="profile-img" src="Resources\profile-icon.svg">
+                            <h5>@project.Supervisor.Name</h5>
+                        </div>
+                        <button class="read-more" onclick="location.href = 'ProjectDetailsPage';">Read more</button>
+                    </div>
+                </div>
+            } 
+        }
+
+        <div class="pageButtonsDiv">
+            <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
+
+            @for (int i = 0; i < totalPages; i++)
+            {
+                var pageNumber = i;
+                <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
+                @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
+            }
+
+            <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+
+    private IEnumerable<TagDetailsDTO> tags = new List<TagDetailsDTO>();    
+    private List<string> tagNames = new List<string>(); 
+    private IEnumerable<ProjectDetailsDTO> projects;
+    private IEnumerable<ProjectDetailsDTO> filteredProjects;
+
+    private int pageSize = 5;
+    private int totalPages;
+    private int currentPage;
+    private string _searchedProject;
+
+    private ClaimsPrincipal user;
+    private string message;
+
+    public string searchedProject
+    {
+        get { return _searchedProject; }
+
+        set
+        {
+            _searchedProject = value;
+
+            SearchProjects();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        tags = await TagRemote.GetTags();
+        projects = await ProjectRemote.GetProjects();
+        filteredProjects = projects.Take(pageSize);
+        user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        await RegisterUserToDB(user);
+
+        totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
+    }
+
+    private void SearchProjects()
+    {
+        filteredProjects = projects.Where(p => p.Title
+        .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase)
+            || p.Supervisor.Id
+        .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void SearchProjectsByTagName(string tagName)
+    {
+        filteredProjects = projects.Where(p => p.Tags.Any(t => t == tagName));     
+        
+    }
+
+    private void UpdateProjects(int pageNumber) //shows the projects depending on which page the user is
+    {
+        filteredProjects = projects.Skip(pageNumber * pageSize).Take(pageSize);
+        currentPage = pageNumber;
+
+    }
+
+    private void NewPage(string buttonType) //this handles the next and previous buttons when these are clicked on
+    {
+        if (buttonType == "next" && currentPage != totalPages - 1) currentPage++;
+
+        if (buttonType == "prev" && currentPage != 0) currentPage--;
+
+        UpdateProjects(currentPage);
+    }
+
+     private bool tagExists(string tagName) //remove later when handling case in create project
+    {
+        return tagNames.Contains(tagName);
+    }
+
+    protected async Task RegisterUserToDB(System.Security.Claims.ClaimsPrincipal user)
+    {
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            message = $"Hello, {user.Identity.Name}, you are logged in";
+            
+            if (user.IsInRole("Student"))
+            {
+                try
+                {
+                    await StudentRemote.GetStudent(user.GetObjectId());
+                }
+                catch (System.Net.Http.HttpRequestException)
+                {
+                    await StudentRemote.CreateStudent(new StudentCreateDTO
+                    {
+                        Id = user.GetObjectId(),
+                        Name = user.GetDisplayName()
+                    });
+                }
+            }
+            if (user.IsInRole("Supervisor"))
+            {
+                try
+                {
+                    await SupervisorRemote.GetSupervisor(user.GetObjectId());
+                }
+                catch (System.Net.Http.HttpRequestException)
+                {
+                    await SupervisorRemote.CreateSupervisor(new SupervisorCreateDTO
+                    {
+                        Id = user.GetObjectId(),
+                        Name = user.GetDisplayName()
+                    });
+                }
+            }
+        }
+        else
+        {
+            message = "You are not logged in, please login to access all features";
+        }
+    }
+}

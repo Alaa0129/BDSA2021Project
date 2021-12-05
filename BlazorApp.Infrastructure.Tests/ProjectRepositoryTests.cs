@@ -106,11 +106,12 @@ namespace BlazorApp.Infrastructure.Tests
             //Then
 
             var project1 = projects.First();
+            var project2 = projects.Last();
 
-            Assert.Collection(projects,
-                project => Assert.Equal(new ProjectDTO(1, "Project One", "This is the first project", "SupervisorId1"), project),
-                project => Assert.Equal(new ProjectDTO(2, "Project Two", "This is the second project", "SupervisorId2"), project)
-            );
+
+            Assert.Equal(2, projects.Count);
+            Assert.Equal( "First Tag", project1.Tags.First());
+            Assert.Equal(2, project1.AppliedStudents.Count);
         }
 
         [Fact]

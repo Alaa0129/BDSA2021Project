@@ -46,6 +46,8 @@ namespace BlazorApp
             services.AddProjectRemote(Configuration);
             services.AddStudentRemote(Configuration);
             services.AddSupervisorRemote(Configuration);
+            services.AddRequestRemote(Configuration);
+            services.AddTagRemote(Configuration);
 
 
             services.AddControllersWithViews().

@@ -1,0 +1,96 @@
+@page "/Requests/create"
+@attribute [Authorize(Roles = "Student")]
+
+@using Core
+@using static CurrieTechnologies.Razor.SweetAlert2.SweetAlertIcon
+@using Microsoft.Identity.Web
+@using System.Security.Claims
+
+@inject RequestRemote RequestRemote
+@inject SupervisorRemote SupervisorRemote
+@inject NavigationManager navManager
+@inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService swal
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h1>Request a project </h1>
+<br> <br />
+
+<div class="row">
+  <div class="column">
+    <form  >
+        <div class="form-group">
+            <input @bind="Title" @bind:event="oninput" type="text" class="form-control" id="formGroupExampleInput"
+                placeholder="Project Title">
+            </div>       
+        <div class="form-group">
+            <select class="form-control" @bind="Supervisor" @bind:event="oninput" id="FormControlSupervisor">
+                <option hidden disabled selected value>Choose Supervisor</option>
+                @if (Supervisors != null)
+                {
+                    @foreach (var Supervisor in Supervisors)
+                    {
+                        <option value=@Supervisor.Id>@Supervisor.Name </option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <textarea @bind="Description" @bind:event="oninput" type="text" style="height: 200px;" class="form-control"
+                id="formGroupExampleInput2" placeholder="Project Description"  rows="20"></textarea>
+        </div>
+
+        <div class="form-group">
+            <textarea type="text" style="height: 120px;" class="form-control" id="formGroupExampleInput2"
+                placeholder="Additional information" rows="10"></textarea>
+        </div>
+     </form>
+
+    <br>
+
+        <div class="Buttons">
+            <button type="button" class="btn btn-success successBtn" @onclick="@(e => Request(Title, Description))">Request</button>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+
+    private ICollection<SupervisorDTO> Supervisors;
+    private string Title;
+    private string Description;
+    private string Supervisor;
+    private ClaimsPrincipal user;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Supervisors = await SupervisorRemote.GetSupervisors();
+        user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+
+    }
+
+    private async void Request(string Title, string Description)
+    {
+        RequestCreateDTO requestDTO = new RequestCreateDTO()
+        {
+            Title = Title,
+            Description = Description,
+            StudentId = user.GetObjectId(),
+            SupervisorId = Supervisor
+        };
+
+        var result = await RequestRemote.CreateRequest(requestDTO);
+
+        if (result)
+        {
+            await swal.FireAsync("Succes", "Request successfully created", Success);
+            navManager.NavigateTo("/Requests");
+        }
+        else
+        {
+            await swal.FireAsync("Error", "Couldn't create request", Error);
+        }
+    }
+}

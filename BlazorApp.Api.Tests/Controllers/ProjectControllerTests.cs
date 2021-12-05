@@ -18,7 +18,7 @@ namespace BlazorApp.Api.Tests.Controllers
             var logger = new Mock<ILogger<ProjectController>>();
             var repository = new Mock<IProjectRepository>();
 
-            var expected = Array.Empty<ProjectDTO>();
+            var expected = Array.Empty<ProjectDetailsDTO>();
             repository.Setup(m => m.ReadAsync()).ReturnsAsync(expected);
             var controller = new ProjectController(logger.Object, repository.Object);
 
