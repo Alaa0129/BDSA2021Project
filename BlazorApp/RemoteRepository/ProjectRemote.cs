@@ -40,7 +40,6 @@ namespace BlazorApp
         public async Task<IEnumerable<ProjectDetailsDTO>> GetProjectsByTagName(string tagName)
         {
             return await _httpClient.GetFromJsonAsync<IEnumerable<ProjectDetailsDTO>>($"project/{tagName}");
-
         }
 
         public async Task<HttpStatusCode> UpdateProject(ProjectUpdateDTO project)

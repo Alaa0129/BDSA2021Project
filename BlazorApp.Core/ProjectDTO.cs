@@ -8,7 +8,6 @@ namespace BlazorApp.Core
 {
     public record ProjectDTO(int Id, string Title, string Description, int SupervisorId);
 
-
     public record ProjectDetailsDTO(int Id, string Title, string Description, int SupervisorId, int MaxApplications, ICollection<string> Tags);
 
     public record ProjectCreateDTO 
