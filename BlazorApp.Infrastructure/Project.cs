@@ -13,7 +13,7 @@ namespace BlazorApp.Infrastructure
         public string Title { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(4400)]
         public string Description { get; set; }
 
         [Required]
