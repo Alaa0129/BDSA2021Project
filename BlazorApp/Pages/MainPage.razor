@@ -20,14 +20,13 @@
         <div class="tag-container">
             @foreach (var tag in tags)
             { 
-                if(!tagExists(tag.Name))
-                {
+                
                     <label>
                         <input class="tagInput" type="checkbox" @onclick="@(e => SearchProjectsByTagName(tag.Name))">
                         <span class="tag">@(tag.Name)</span>
                     </label>
                     tagNames.Add(tag.Name);
-                }
+                
             }
         </div>
 
