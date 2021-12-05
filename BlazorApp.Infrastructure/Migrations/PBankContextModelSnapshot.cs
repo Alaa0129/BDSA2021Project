@@ -27,8 +27,9 @@ namespace BlazorApp.Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(4400)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MaxApplications")
                         .HasColumnType("int");

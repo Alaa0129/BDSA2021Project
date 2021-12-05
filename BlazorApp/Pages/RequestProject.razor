@@ -1,57 +1,50 @@
 @page "/RequestProject"
 @inject IRequestRemote RequestRemote
-@using BlazorApp.Core
+@inject ITagRemote TagRemote
+@using BlazorApp.Infrastructure
 @inject NavigationManager navManager
 @using static CurrieTechnologies.Razor.SweetAlert2.SweetAlertIcon
 @inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService swal
+@inject IJSRuntime js
+@using BlazorApp.Core
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data;
 
 <h1>Request a project </h1>
 <br> <br />
 
 <div class="row">
-  <div class="column">
-    <form  >
-        <div class="form-group">
-            <input @bind="Title" @bind:event="oninput" type="text" class="form-control" id="formGroupExampleInput"
-                placeholder="Project Title">
+    <div class="column">
+        <form>
+            <div class="form-group">
+                <input @bind="Title" @bind:event="oninput" type="text" class="form-control" id="formGroupExampleInput"
+                    placeholder="Project Title">
             </div>       
-        <div class="form-group">
-            <select class="form-control" @bind="Supervisor" @bind:event="oninput" aria-placeholder="Choose Supervisor" id="FormControlSupervisor">
-                <option>Choose Supervisor </option>
-                <option>Shuja</option>
-                <option>Alaa</option>
-                <option>Din</option>
-                <option>far</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <textarea @bind="Description" @bind:event="oninput" type="text" style="height: 200px;" class="form-control"
-                id="formGroupExampleInput2" placeholder="Project Description"  rows="20"></textarea>
-        </div>
+            <div class="form-group">
+                <select class="form-control" @bind="Supervisor" @bind:event="oninput" aria-placeholder="Choose Supervisor" id="FormControlSupervisor">
+                    <option>Choose Supervisor </option>
+                    <option>Shuja</option>
+                    <option>Alaa</option>
+                    <option>Din</option>
+                    <option>far</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <textarea type="text" style="height: 120px;" class="form-control" id="formGroupExampleInput2"
-                placeholder="Additional information" rows="10"></textarea>
-        </div>
-     </form>
-     <div class="allTags">
-        <div class="preDefinedTags">
-            <button type="button" class="btn btn-info">SWU</button>
-            <button type="button" class="btn btn-info">Data Science</button>
-            <button type="button" class="btn btn-info">DDIT</button>
-            <button type="button" class="btn btn-info">GBI</button>
-        </div>
-    </div>
-    <div class="form-group" id="newTags">
-        <input type="text" class="form-control" id="newtagfield"placeholder="Extra tag">
-        <div class="preDefinedTags">
-            <button type="button" class="btn btn-info" id="newtagfieldbutton">Add Tag</button>
-        </div>
-    </div>
-    <br> <br />
+            <div class="form-group">
+                <textarea @bind="Description" @bind:event="oninput" type="text" style="height: 200px;" class="form-control"
+                    id="formGroupExampleInput2" placeholder="Project Description"  rows="20"></textarea>
+            </div>
+
+            <div class="form-group">
+                <textarea type="text" style="height: 120px;" class="form-control" id="formGroupExampleInput2"
+                    placeholder="Additional information" rows="10"></textarea>
+            </div>
+        </form>
+        
+        <br>
 
         <div class="Buttons">
-            <button type="button" class="btn btn-success successBtn" @onclick="@(e => Request(Title, Description))">Request</button>
+            <button class="btn btn-success successBtn" @onclick="@(e => Request(Title, Description))">Submit</button>
         </div>
     </div>
 </div>

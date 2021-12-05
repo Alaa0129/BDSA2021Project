@@ -2,7 +2,7 @@
 
 namespace BlazorApp.Infrastructure.Migrations
 {
-    public partial class _91516f886c004578950a2edfce9e1ac0 : Migration
+    public partial class _116267e330da4584a26b794a90fbc714 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace BlazorApp.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 4400, nullable: false),
                     SupervisorId = table.Column<int>(type: "int", nullable: false),
                     MaxApplications = table.Column<int>(type: "int", nullable: false)
                 },

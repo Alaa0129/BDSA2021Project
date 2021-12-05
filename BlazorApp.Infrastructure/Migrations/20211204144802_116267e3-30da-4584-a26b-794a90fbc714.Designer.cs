@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorApp.Infrastructure.Migrations
 {
     [DbContext(typeof(PBankContext))]
-    [Migration("20211203162355_91516f88-6c00-4578-950a-2edfce9e1ac0")]
-    partial class _91516f886c004578950a2edfce9e1ac0
+    [Migration("20211204144802_116267e3-30da-4584-a26b-794a90fbc714")]
+    partial class _116267e330da4584a26b794a90fbc714
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,8 +29,9 @@ namespace BlazorApp.Infrastructure.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(4400)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MaxApplications")
                         .HasColumnType("int");

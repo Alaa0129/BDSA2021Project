@@ -18,6 +18,7 @@ namespace BlazorApp.Core
         public string Title { get; init; }
 
         [Required]
+        [StringLength(4400)]
         public string Description { get; init; }
 
         // [Required]

@@ -34,23 +34,26 @@
 {
    background-color: #40DD7F; 
    transition-duration: 0.4s;
+   border-radius: 1000px;
+   width: 15%;
 }
 
-.uploadBtn
-{
-    background-color: #E59333;
-    transition-duration: 0.4s;
+.successBtn:hover {
+    background-color: #25a244;
 }
 
-.successBtn:hover
-{
-    background-color:cyan;
+.form-control {
+    background-color: lightgrey;
 }
 
-.uploadBtn:hover
-{
-    background-color:cyan;
+.or {
+    width: 40rem;
 }
+
+#FormControlTag {
+    width: 40%;
+  }
+
 
 .allTags
 {
@@ -70,8 +73,6 @@
     gap: 5px;
 }
 
-
-
 .addDivTag
 {
     width: 650px;
@@ -84,4 +85,21 @@
 .tagTextField
 {
     width: 300px;
+}
+
+.tag {
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    border: none;
+    background-color: #e2f5fa;
+    color: #6ecce6;
+    font-weight: 700;
+    font-size: large;
+    text-align: center;
+    margin-bottom: 2%;
+    padding: 5px;
 }

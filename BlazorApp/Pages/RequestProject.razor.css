@@ -13,6 +13,18 @@
   resize: none;
 }
 
+.successBtn
+{
+   background-color: #40DD7F; 
+   transition-duration: 0.4s;
+   border-radius: 1000px;
+   width: 30%;
+}
+
+.successBtn:hover {
+  background-color: #25a244;
+}
+
 .form-control {
   background-color: lightgrey;
 }
@@ -38,4 +50,12 @@
   float: left;
   width: 60%;
   margin-right: 10px;
+}
+
+.Buttons
+{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 50px;
 }
