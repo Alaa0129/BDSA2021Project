@@ -60,6 +60,11 @@ namespace BlazorApp
             return result.StatusCode;
         }
 
+        /// <summary>
+        /// Retrieves the Access Token for the Web API.
+        /// Sets Authorization and Accept headers for the request.
+        /// </summary>
+        /// <returns></returns>
         private async Task PrepareAuthenticatedClient()
         {
             var accessToken = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { _APIScope });

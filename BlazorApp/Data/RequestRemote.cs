@@ -1,34 +1,34 @@
 using System.Threading.Tasks;
 using BlazorApp.Core;
-using System.Net.Http.Json;
-using System;
 using System.Net;
 using System.Net.Http;
-using Microsoft.Identity.Web;
-using System.Net.Http.Headers;
+using System.Collections.Generic;
+using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Web;
+using System.Net.Http.Headers;
+using System;
 
 namespace BlazorApp
 {
-
-    public static class StudentRemoteExtensions
+    public static class RequestRemoteExtensions
     {
-        public static void AddStudentRemote(this IServiceCollection services, IConfiguration configuration)
+        public static void AddRequestRemote(this IServiceCollection services, IConfiguration configuration)
         {
             // https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests
-            services.AddHttpClient<StudentRemote>();
+            services.AddHttpClient<RequestRemote>();
         }
     }
-    public class StudentRemote : IStudentRemote
-    {
 
+    public class RequestRemote : IRequestRemote
+    {
         private readonly HttpClient _httpClient;
         private readonly ITokenAcquisition _tokenAcquisition;
         private readonly string _APIScope = string.Empty;
         private readonly string _APIBaseAddress = string.Empty;
 
-        public StudentRemote(ITokenAcquisition tokenAcquisition, HttpClient httpClient, IConfiguration configuration)
+        public RequestRemote(ITokenAcquisition tokenAcquisition, HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _tokenAcquisition = tokenAcquisition;
@@ -36,34 +36,28 @@ namespace BlazorApp
             _APIBaseAddress = configuration["API:APIBaseAddress"];
         }
 
-        public async Task<bool> CreateStudent(StudentCreateDTO student)
+        public async Task<bool> CreateRequest(RequestCreateDTO request)
         {
-            var result = await _httpClient.PostAsJsonAsync($"{_APIBaseAddress}/api/student", student);
+            var result = await _httpClient.PostAsJsonAsync($"{_APIBaseAddress}/api/request", request);
             var statusCode = (int)result.StatusCode;
             if (statusCode >= 200 && statusCode <= 208) return true;
             else return false;
         }
 
-        public async Task<StudentDetailsDTO> GetStudent(string Id)
+
+        public async Task<RequestDetailsDTO> GetRequest(int Id)
         {
-            return await _httpClient.GetFromJsonAsync<StudentDetailsDTO>($"{_APIBaseAddress}/api/student/{Id}");
+            return await _httpClient.GetFromJsonAsync<RequestDetailsDTO>($"{_APIBaseAddress}/api/request/{Id}");
         }
 
-        public async Task<StudentDTO[]> GetStudents()
+        public async Task<IEnumerable<RequestDTO>> GetRequests()
         {
-            return await _httpClient.GetFromJsonAsync<StudentDTO[]>($"{_APIBaseAddress}/api/Student/all");
+            return await _httpClient.GetFromJsonAsync<IEnumerable<RequestDTO>>($"{_APIBaseAddress}/api/request/all");
         }
-
-        public async Task<HttpStatusCode> UpdateProject(int projectId, string studentId)
+        public async Task<HttpStatusCode> DeleteRequest(int Id)
         {
-            var result = await _httpClient.PutAsJsonAsync($"{_APIBaseAddress}/api/student/updateProject/{projectId}", studentId);
-            return result.StatusCode;
-        }
-
-        public async Task<HttpStatusCode> UpdateStudent(StudentUpdateDTO student)
-        {
-            var result = await _httpClient.PutAsJsonAsync($"{_APIBaseAddress}/api/student/update", student);
-            return result.StatusCode;
+            var response = await _httpClient.PostAsJsonAsync($"{_APIBaseAddress}/api/request/delete", Id);
+            return response.StatusCode;
         }
 
         /// <summary>

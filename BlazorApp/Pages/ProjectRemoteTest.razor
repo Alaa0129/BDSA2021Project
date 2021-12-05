@@ -17,8 +17,9 @@
 {
     <li> Title: @projectDetailsDTO.Title </li>
     <li> Description: @projectDetailsDTO.Description </li>
-    <li> MaxApplications: @projectDetailsDTO.MaxApplications </li>
-    <li> SupervisorId: @projectDetailsDTO.SupervisorId </li>
+    <li> Amount of Applied Students: @projectDetailsDTO.AppliedStudents.Count </li>
+    <li> Supervisor Name: @projectDetailsDTO.Supervisor.Name </li>
+    <li> Supervisor Id: @projectDetailsDTO.Supervisor.Id </li>
 }
 
 @if (@projectDetails != null)
@@ -43,8 +44,8 @@
     ProjectDetailsDTO projectDetailsDTO = null;
     IEnumerable<ProjectDetailsDTO> projectDetails = null;
 
-    ProjectUpdateDTO projectUpdateDTO1 = new ProjectUpdateDTO{Id = 1, Title = "I Updated", Description = "This also updated", MaxApplications = 100, SupervisorId = 10};
-    ProjectUpdateDTO projectUpdateDTO2 = new ProjectUpdateDTO{Id = 1, Title = "I Updated Again", Description = "This is also updated again", MaxApplications = 5, SupervisorId = 100};
+    ProjectUpdateDTO projectUpdateDTO1 = new ProjectUpdateDTO{Id = 1, Title = "I Updated", Description = "This also updated"};
+    ProjectUpdateDTO projectUpdateDTO2 = new ProjectUpdateDTO{Id = 1, Title = "I Updated Again", Description = "This is also updated again"};
 
 
     protected override async Task OnInitializedAsync()

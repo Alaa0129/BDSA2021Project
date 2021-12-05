@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using System.IdentityModel.Tokens.Jwt;
+using CurrieTechnologies.Razor.SweetAlert2;
+using Syncfusion.Blazor;
 
 
 namespace BlazorApp
@@ -53,6 +55,9 @@ namespace BlazorApp
 
             services.AddServerSideBlazor()
                 .AddMicrosoftIdentityConsentHandler();
+
+            services.AddSweetAlert2();
+            services.AddSyncfusionBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

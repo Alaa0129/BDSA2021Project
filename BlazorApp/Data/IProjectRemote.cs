@@ -11,5 +11,6 @@ namespace BlazorApp
         Task<ProjectDetailsDTO> GetProject(int Id);
         Task<ProjectDetailsDTO[]> GetProjects();
 
+
     }
 }
