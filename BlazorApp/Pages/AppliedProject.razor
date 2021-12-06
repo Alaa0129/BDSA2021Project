@@ -1,0 +1,56 @@
+@page "/AppliedProject"
+@layout MainLayout
+@attribute [Authorize(Roles = "Student")]
+
+@using Core
+@using Microsoft.Identity.Web
+@using System.Security.Claims
+
+@inject ProjectRemote ProjectRemote
+@inject StudentRemote StudentRemote
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="row">
+    <div class="column">
+        @if (myProject != null)
+        {
+            <div class="ProjectView">
+                <h3>@myProject.Title</h3>
+                <div class="ProjectDescriptionView">
+                    <span class="description">@myProject.Description</span>
+                </div>
+                <div class="Project-bottom">
+                    <div class="student-profile">
+                        <img class="profile-img" src="Resources\profile-icon.svg">
+                        <h5>@myProject.Supervisor.Name</h5>
+                    </div>
+                    <button class="read-more" onclick="location.href = 'ProjectDetailsPage';">Read more</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <h1> Hello @user.Identity.Name, you you haven't applied to any projects as of yet</h1>
+        }
+    </div>
+</div>
+
+@code
+{
+
+    private ProjectDetailsDTO myProject;
+    private ClaimsPrincipal user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        var myStudentData = await StudentRemote.GetStudent(user.GetObjectId());
+        if (myStudentData.Project != null)
+        {
+            var myProjectId = myStudentData.Project.Id;
+            myProject = (await ProjectRemote.GetProject(myProjectId));
+        }
+
+    }
+
+}

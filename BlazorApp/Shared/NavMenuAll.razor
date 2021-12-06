@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-lg nav" style="color: #999999;">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+        aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="active">
+                <a class="nav-link nav-icon" href="#">
+                    <img class="nav_bar_home" src="Resources\house-door-fill.svg" alt="logo">
+                </a>
+            </li>
+            <a class="navbar-brand" href="">Iphone4</a>
+        </ul>
+        <div class="nav-bar-right-side">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <AuthorizeView Roles="Student">
+                    <li class="nav-item">
+                        <NavLink class="nav-link nav-bar-item" href="AppliedProject" Match="NavLinkMatch.All">
+                            My Applied Project
+                        </NavLink>
+                    </li>
+                </AuthorizeView>
+                <AuthorizeView Roles="Student, Supervisor">
+                    <li class="nav-item">
+                        <NavLink class="nav-link nav-bar-item" href="MyProjects" Match="NavLinkMatch.All">
+                            My Projects
+                        </NavLink>
+                    </li>
+                </AuthorizeView>
+                <AuthorizeView Roles="Supervisor">
+                    <li class="nav-item">
+                        <NavLink class="nav-link nav-bar-item" href="Projects/create" Match="NavLinkMatch.All">
+                            New Project
+                        </NavLink>
+                    </li>
+                </AuthorizeView>
+                <AuthorizeView Roles="Student, Supervisors">
+                    <li class="nav-item">
+                        <NavLink class="nav-link nav-bar-item" href="Requests" Match="NavLinkMatch.All">
+                            My Requests
+                        </NavLink>
+                    </li>
+                </AuthorizeView>
+                @*
+                    Kan dette ikke flyttes ind under My Requests?
+                    Virker lidt redundant/underligt at have en underfunktion
+                    relateret til requests i navbaren og ikke i request siden
+                *@
+                <AuthorizeView Roles="Student">
+                    <li class="nav-item">
+                        <NavLink class="nav-link nav-bar-item" href="Requests/create" Match="NavLinkMatch.All">
+                            New Request
+                        </NavLink>
+                    </li>
+                </AuthorizeView>
+                <li class="nav-item">
+                    <NavLink class="nav-link nav-icon nav-profile" href="ProfilePage" Match="NavLinkMatch.All">
+                        <img class="nav-profile-img" src="Resources\profile-icon.svg">
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <AuthorizeView>
+                        <Authorized>
+                            <a href="MicrosoftIdentity/Account/SignOut">Log out</a>
+                        </Authorized>
+                        <NotAuthorized>
+                            <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

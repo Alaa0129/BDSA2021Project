@@ -1,0 +1,61 @@
+.nav-link:hover {
+    cursor: pointer;
+}
+
+a {
+    color: #999999;
+}
+
+.navbar-brand {
+    padding-left: 1.5rem;
+    font-size: x-large;
+    font-style: italic;
+    padding-top: 1rem; 
+}
+
+.nav_bar_home {
+    width: 250%;
+    filter: invert(60%);
+}
+
+.nav-profile-img {
+    width: 3rem;
+    filter: invert(60%);
+}
+
+.nav-profile {
+    padding-top: 0rem;
+}
+
+.nav-bar-right-side {
+    justify-content: right;
+}
+
+.nav {
+    background-image: linear-gradient(to right, #102060, #3A0647);
+}
+
+.navbar {
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.7);
+    height: 7rem;
+    margin-bottom: 1rem;
+}
+
+.nav-item ::deep a {
+    color: #d7d7d7;
+    font-size: larger;
+    border-radius: 1000px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+} 
+
+.nav-item ::deep a.active {
+    background-color: rgba(255,255,255,0.25);
+    color: white;
+}
+
+.nav-item ::deep a:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+}

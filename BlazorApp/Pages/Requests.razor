@@ -1,0 +1,118 @@
+@layout MainLayout
+@page "/Requests"
+
+@attribute [Authorize]
+@using Core
+@using System.Security.Claims
+@using Microsoft.Identity.Web
+@inject RequestRemote RequestRemote
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h1>My Requests</h1>
+<br>
+
+<div class="row">
+    <div class="column">
+      
+        <div class="main-search-input fl-wrap inputs">
+            <div class="main-search-input-item"> 
+                <input type="search" @bind="searchedRequest" placeholder="Search Requests..."> 
+            </div> 
+            <button class="main-search-button" onclick="SearchRequests()">Search</button>
+        </div>
+    
+        @foreach (var request in filteredRequests) 
+        {
+            <div class="RequestView">
+                <h3>@request.Title</h3>
+                <div class="RequestDescriptionView">
+                    <span class="description">@request.Description</span>
+                </div>
+                <div class="request-bottom">
+                    <div class="student-profile">
+                        <img class="profile-img" src="Resources\profile-icon.svg">
+                        <h5>@request.StudentId</h5> @* Burde ændres eller fjernes. Måske mere relevant bare at have når man går ind under 'Read more' *@
+                    </div>
+                    <button class="read-more" onclick="location.href = 'ProjectDetailsPage';">Read more</button>
+                </div>
+            </div>
+        }     
+        
+        <div class="pageButtonsDiv">
+            <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
+
+            @for (int i = 0; i < totalPages; i++)
+            {
+                var pageNumber = i;
+                <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
+                @onclick="@(e => UpdateRequests(pageNumber))"> @(i+1)</button>
+            }
+
+            <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
+        </div>
+    </div>
+</div>
+
+    
+
+@code
+{
+
+    private IEnumerable<RequestDTO> requests = new List<RequestDTO>();
+    private IEnumerable<RequestDTO> filteredRequests = new List<RequestDTO>();
+
+        
+    private int pageSize = 5;
+    private int totalPages;
+    private int currentPage;
+    private string _searchedRequest;
+    private ClaimsPrincipal user;
+
+    public string searchedRequest
+    {
+        get { return _searchedRequest; }
+
+        set
+        {
+            _searchedRequest = value;
+            SearchRequests();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        
+        requests = (await RequestRemote.GetRequests()).Where(r => user.IsInRole("Student") == true ? r.StudentId == user.GetObjectId() : r.SupervisorId == user.GetObjectId());
+
+        filteredRequests = requests.Take(pageSize);
+        
+        totalPages = (int)Math.Ceiling(requests.Count() / (decimal)pageSize);
+    }
+
+    private void SearchRequests()
+    {
+        filteredRequests = requests.Where(p => p.Title
+                                   .Contains(_searchedRequest, StringComparison.OrdinalIgnoreCase) 
+                                            || p.StudentId.ToString()
+                                   .Contains(_searchedRequest,StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void UpdateRequests(int pageNumber) //shows the requests dependeing on which page the user is
+    {
+        filteredRequests = requests.Skip(pageNumber * pageSize).Take(pageSize);
+        currentPage = pageNumber;
+
+    }
+
+    private void NewPage(string buttonType) //this handles the next and previous buttons when these are clicked on
+    {
+        if (buttonType == "next" && currentPage != totalPages - 1) currentPage++;
+
+        if (buttonType == "prev" && currentPage != 0) currentPage--;
+
+        UpdateRequests(currentPage);
+    }
+}

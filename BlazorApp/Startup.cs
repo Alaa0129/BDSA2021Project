@@ -1,14 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BlazorApp.Data;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using System.IdentityModel.Tokens.Jwt;
+using CurrieTechnologies.Razor.SweetAlert2;
+using Syncfusion.Blazor;
+
 
 namespace BlazorApp
 {
@@ -25,9 +27,39 @@ namespace BlazorApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+            // services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            //     .AddMicrosoftIdentityWebApp(Configuration)
+            //         .EnableTokenAcquisitionToCallDownstreamApi(new string[] { Configuration["API:APIScope"] })
+            //             .AddInMemoryTokenCaches(); ;
+
+            services.AddMicrosoftIdentityWebAppAuthentication(Configuration)
+                    .EnableTokenAcquisitionToCallDownstreamApi(new string[] { Configuration["API:APIScope"] })
+                        .AddInMemoryTokenCaches();
+
+            services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                options.TokenValidationParameters.RoleClaimType = "roles";
+            });
+
+            services.AddProjectRemote(Configuration);
+            services.AddStudentRemote(Configuration);
+            services.AddSupervisorRemote(Configuration);
+            services.AddRequestRemote(Configuration);
+            services.AddTagRemote(Configuration);
+
+
+            services.AddControllersWithViews().
+                AddMicrosoftIdentityUI();
+
             services.AddRazorPages();
-            services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+
+            services.AddServerSideBlazor()
+                .AddMicrosoftIdentityConsentHandler();
+
+            services.AddSweetAlert2();
+            services.AddSyncfusionBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,8 +78,24 @@ namespace BlazorApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+
+            // Redirects, upon logout, to the fron page
+            app.UseRewriter(
+                new RewriteOptions().Add(
+                    context =>
+                    {
+                        if (context.HttpContext.Request.Path == "/MicrosoftIdentity/Account/SignedOut")
+                        {
+                            context.HttpContext.Response.Redirect("/");
+                        }
+                    }));
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

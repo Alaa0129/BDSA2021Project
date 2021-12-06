@@ -1,0 +1,96 @@
+@page "/MyProjects"
+@layout MainLayout
+@attribute [Authorize(Roles = "Supervisor")]
+
+@using Core
+@using Microsoft.Identity.Web
+@using System.Security.Claims
+
+@inject ProjectRemote ProjectRemote
+@inject SupervisorRemote SupervisorRemote
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="row">
+    <div class="column">
+
+        @if (projects != null && projects.Count() > 0)
+        {
+
+            @foreach (var project in projects) 
+            {
+
+                <div class="ProjectView">
+                    <h3>@project.Title</h3>
+                    <div class="ProjectDescriptionView">
+                        <span class="description">@project.Description</span>
+                    </div>
+                    <div class="Project-bottom">
+                        <div class="student-profile">
+                            <img class="profile-img" src="Resources\profile-icon.svg">
+                            <h5>@project.Supervisor.Name</h5>
+                        </div>
+                        <button class="read-more" onclick="location.href = 'ProjectDetailsPage';">Read more</button>
+                    </div>
+                </div>
+            } 
+        }
+        else
+        {
+            <h1> Hello @user.Identity.Name, you aren't supervising any projects as of yet</h1>
+        }
+
+    @if (projects != null && projects.Count() > 5)
+    {
+        <div class="pageButtonsDiv">
+            <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
+
+            @for (int i = 0; i < totalPages; i++)
+            {
+                var pageNumber = i;
+                <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
+                @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
+            }
+
+            <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
+        </div>
+    }
+    </div>
+</div>
+
+
+@code 
+{
+
+    private int pageSize = 5;
+    private int totalPages;
+    private int currentPage;
+    private IEnumerable<ProjectDetailsDTO> projects;
+    private ClaimsPrincipal user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        
+        projects = (await ProjectRemote.GetProjects()).Where(p => p.Supervisor.Id == user.GetObjectId());
+
+        totalPages = (int)Math.Ceiling(projects.Count() / (decimal)pageSize);
+    }
+
+    private void UpdateProjects(int pageNumber) //shows the projects depending on which page the user is
+    {
+        projects = projects.Skip(pageNumber * pageSize).Take(pageSize);
+        currentPage = pageNumber;
+
+    }
+
+    private void NewPage(string buttonType) //this handles the next and previous buttons when these are clicked on
+    {
+        if (buttonType == "next" && currentPage != totalPages - 1) currentPage++;
+
+        if (buttonType == "prev" && currentPage != 0) currentPage--;
+
+        UpdateProjects(currentPage);
+    }
+}

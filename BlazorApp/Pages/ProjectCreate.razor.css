@@ -1,0 +1,87 @@
+.MainDiv
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-group
+{
+    width: 650px;
+}
+
+.form-control
+{
+    resize: none;
+    background-color: lightgray;
+}
+
+::placeholder
+{
+    color: grey;
+}
+
+.Buttons
+{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.successBtn
+{
+   background-color: #40DD7F; 
+   transition-duration: 0.4s;
+}
+
+.uploadBtn
+{
+    background-color: #E59333;
+    transition-duration: 0.4s;
+}
+
+.successBtn:hover
+{
+    background-color:cyan;
+}
+
+.uploadBtn:hover
+{
+    background-color:cyan;
+}
+
+.allTags
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap:10px
+}
+
+.preDefinedTags
+{
+    width: 650px;
+    display: flex;
+    justify-content: flex-start;
+    flex-flow: wrap;
+    gap: 5px;
+}
+
+
+
+.addDivTag
+{
+    width: 650px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.tagTextField
+{
+    width: 300px;
+}

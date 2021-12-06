@@ -1,0 +1,45 @@
+@page "/ProjectDetails"
+@layout MainLayout
+
+@using Core
+
+@inject ProjectRemote ProjectRemote
+@inject TagRemote TagRemote;
+
+<h1>Project details</h1>
+<br> <br>
+
+<div class="page">
+
+    <div class="left-side-container">
+        <h1>Project Title</h1>
+    </div>
+
+    <div class="right-side-container">
+        
+    </div>
+
+</div>
+
+
+@code
+{
+    private IEnumerable<TagDetailsDTO> tags = new List<TagDetailsDTO>();    
+    private IEnumerable<ProjectDetailsDTO> projects = new List<ProjectDetailsDTO>();
+
+    private int projectId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        tags = await TagRemote.GetTags();
+
+        projects = await ProjectRemote.GetProjects();
+    }
+
+    @* protected async void GetProject()
+    {
+        await ProjectRemote.
+    } *@
+}
