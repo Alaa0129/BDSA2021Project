@@ -22,7 +22,7 @@
                         </NavLink>
                     </li>
                 </AuthorizeView>
-                <AuthorizeView Roles="Student, Supervisor">
+                <AuthorizeView Roles="Supervisor">
                     <li class="nav-item">
                         <NavLink class="nav-link nav-bar-item" href="MyProjects" Match="NavLinkMatch.All">
                             My Projects
@@ -43,11 +43,7 @@
                         </NavLink>
                     </li>
                 </AuthorizeView>
-                @*
-                    Kan dette ikke flyttes ind under My Requests?
-                    Virker lidt redundant/underligt at have en underfunktion
-                    relateret til requests i navbaren og ikke i request siden
-                *@
+
                 <AuthorizeView Roles="Student">
                     <li class="nav-item">
                         <NavLink class="nav-link nav-bar-item" href="Requests/create" Match="NavLinkMatch.All">
@@ -63,10 +59,10 @@
                 <li class="nav-item">
                     <AuthorizeView>
                         <Authorized>
-                            <a href="MicrosoftIdentity/Account/SignOut">Log out</a>
+                            <a class="nav-link nav-bar-item" href="MicrosoftIdentity/Account/SignOut">Log out</a>
                         </Authorized>
                         <NotAuthorized>
-                            <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
+                            <a class="nav-link nav-bar-item" href="MicrosoftIdentity/Account/SignIn">Log in</a>
                         </NotAuthorized>
                     </AuthorizeView>
                 </li>
