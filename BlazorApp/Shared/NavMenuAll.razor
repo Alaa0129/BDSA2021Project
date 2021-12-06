@@ -43,11 +43,7 @@
                         </NavLink>
                     </li>
                 </AuthorizeView>
-                @*
-                    Kan dette ikke flyttes ind under My Requests?
-                    Virker lidt redundant/underligt at have en underfunktion
-                    relateret til requests i navbaren og ikke i request siden
-                *@
+
                 <AuthorizeView Roles="Student">
                     <li class="nav-item">
                         <NavLink class="nav-link nav-bar-item" href="Requests/create" Match="NavLinkMatch.All">
