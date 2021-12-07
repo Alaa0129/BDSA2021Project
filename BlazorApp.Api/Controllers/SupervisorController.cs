@@ -49,7 +49,7 @@ namespace BlazorApp.Api.Controllers
             return await _repository.CreateAsync(Supervisor);
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<ActionResult> Put([FromBody] SupervisorUpdateDTO Supervisor)
         {
             var response = await _repository.UpdateAsync(Supervisor);

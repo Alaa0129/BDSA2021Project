@@ -54,10 +54,10 @@ namespace BlazorApp
             return await _httpClient.GetFromJsonAsync<SupervisorDTO[]>($"{_APIBaseAddress}/api/Supervisor/all");
         }
 
-        public async Task<HttpStatusCode> UpdateSupervisor(SupervisorUpdateDTO Supervisor)
+        public async Task<HttpResponseMessage > UpdateSupervisor(SupervisorUpdateDTO Supervisor)
         {
             var result = await _httpClient.PutAsJsonAsync($"{_APIBaseAddress}/api/Supervisor/update", Supervisor);
-            return result.StatusCode;
+            return result;
         }
 
         /// <summary>

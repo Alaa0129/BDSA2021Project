@@ -1,3 +1,8 @@
+@using Microsoft.Identity.Web
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 <nav class="navbar navbar-expand-lg nav" style="color: #999999;">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
         aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +61,7 @@
                     </li>
                 </AuthorizeView>
                 <li class="nav-item">
-                    <NavLink class="nav-link nav-icon nav-profile" href="ProfilePage" Match="NavLinkMatch.All">
+                    <NavLink class="nav-link nav-icon nav-profile" href=@($"profile/{userId}") >
                         <img class="nav-profile-img" src="Resources\profile-icon.svg">
                     </NavLink>
                 </li>
@@ -74,3 +79,12 @@
         </div>
     </div>
 </nav>
+
+@code
+{
+    private string userId;
+    protected override async Task OnInitializedAsync()
+    {
+        userId = ((await AuthenticationStateProvider.GetAuthenticationStateAsync()).User).GetObjectId();
+    }
+}

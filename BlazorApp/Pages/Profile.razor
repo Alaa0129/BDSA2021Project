@@ -1,0 +1,116 @@
+@page "/profile/{userId}"
+@attribute [Authorize]
+
+@using Core
+@using Microsoft.Identity.Web
+@using System.Security.Claims
+
+@inject StudentRemote StudentRemote
+@inject SupervisorRemote SupervisorRemote
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+
+<div class="row justify-content-md-center">
+
+    <div class="col-md-auto">
+        @if (studentDetails != null)
+        {
+            <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
+                <div class="card p-4">
+                    @if (bothRoles)
+                    {
+                        <h1>Student Profile</h1>
+                    }
+                    <div class=" image d-flex flex-column justify-content-center align-items-center">
+                        <div class="pp"> <img src="Resources\profile-icon.svg" height="100" width="100" /> </div>
+                        <span class="name mt-3">@studentDetails.Name</span> <span class="idd">@studentDetails.Id</span> <br>
+                        @if (authUser.GetObjectId() == studentDetails.Id)
+                        {
+                            <div class=" d-flex mt-2"> <a role="button" href=@($"profile/{userId}/edit") class="btn btn-dark" >Edit Profile</a> </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-md-auto">
+        @if (supervisorDetails != null)
+        {
+            <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
+                <div class="card p-4">
+                    @if (bothRoles)
+                    {
+                        <h1>Supervisor Profile</h1>
+                    }
+                    <div class=" image d-flex flex-column justify-content-center align-items-center">
+                        <div class="pp"> <img src="Resources\profile-icon.svg" height="100" width="100" /> </div>
+                        <span class="name mt-3">@supervisorDetails.Name</span> <span class="idd">@supervisorDetails.Id</span> <br>
+                        @if (authUser.GetObjectId() == supervisorDetails.Id)
+                        {
+                            <div class=" d-flex mt-2"> <a role="button" href=@($"profile/{userId}/edit") class="btn btn-dark" >Edit Profile</a> </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+
+@code
+{
+    [Parameter]
+    public string userId { get; set; }
+    private ClaimsPrincipal authUser;
+    private StudentDetailsDTO studentDetails = null;
+    private SupervisorDetailsDTO supervisorDetails = null;
+    private bool bothRoles = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authUser = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        bothRoles = false;
+        supervisorDetails = null;
+        studentDetails = null;
+        await GetDetails();
+        if (studentDetails != null && supervisorDetails != null) bothRoles = true;
+    }
+
+
+    private async Task GetMyDetails(ClaimsPrincipal user)
+    {
+        if (user.IsInRole("Student")) studentDetails = await StudentRemote.GetStudent(userId);
+        if (user.IsInRole("Supervisor")) supervisorDetails = await SupervisorRemote.GetSupervisor(userId);
+    }
+
+    private async Task GetDetails()
+    {
+        try
+        {
+            studentDetails = await StudentRemote.GetStudent(userId);
+        }
+        catch (System.Exception)
+        {
+            Console.WriteLine("User was not a student");
+        }
+        try
+        {
+            supervisorDetails = await SupervisorRemote.GetSupervisor(userId);
+        }
+        catch (System.Exception)
+        {
+            Console.WriteLine("User was not a supervisor");
+        }
+
+    }
+
+}

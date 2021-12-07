@@ -82,7 +82,7 @@ namespace BlazorApp.Api.Tests.Controllers
         }
 
         [Fact]
-        public async Task Put_given_unkown_student_returns_returns_NotFound()
+        public async Task Put_given_unknown_student_returns_returns_NotFound()
         {
             //Given
             var logger = new Mock<ILogger<StudentController>>();

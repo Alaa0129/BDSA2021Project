@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using BlazorApp.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using static Microsoft.AspNetCore.Http.StatusCodes;
@@ -49,7 +50,7 @@ namespace BlazorApp.Api.Controllers
             return await _repository.CreateAsync(student);
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<ActionResult> Put([FromBody] StudentUpdateDTO student)
         {
             var response = await _repository.UpdateAsync(student);
