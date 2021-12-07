@@ -6,17 +6,43 @@
 @inject ProjectRemote ProjectRemote
 @inject TagRemote TagRemote;
 
-<h1>Project details</h1>
-<br> <br>
-
 <div class="page">
 
     <div class="left-side-container">
-        <h1>Project Title</h1>
+        <section class="title-section">
+            <h1>Project Title</h1>
+        </section>
+
+        <section class="description-section">
+           <p>This is a long description</p> 
+
+        </section>
+
+        <section class="apply-section edit-section">
+
+            <AuthorizeView Roles="Student">
+                <button class="btn btn-success successBtn apply-button">Apply</button>
+            </AuthorizeView>
+
+            <AuthorizeView Roles="Supervisor">
+                <button class="btn btn-success successBtn edit-button">Edit</button>
+            </AuthorizeView>
+            
+        </section>
+
     </div>
 
     <div class="right-side-container">
-        
+        <h3>Supervisor Name</h3>
+        <h6>Supervisor E-mail</h6>
+        <p class="Large">Tags</p>
+        <div class="TagsBox">
+            <ul>
+            <li>Coffee</li>
+            <li>Tea</li>
+            <li>Milk</li>
+            </ul>
+        </div>
     </div>
 
 </div>
@@ -26,8 +52,9 @@
 {
     private IEnumerable<TagDetailsDTO> tags = new List<TagDetailsDTO>();    
     private IEnumerable<ProjectDetailsDTO> projects = new List<ProjectDetailsDTO>();
-
     private int projectId;
+    
+    SupervisorDTO supervisor = new SupervisorDTO("1", "Shuuuuuja");
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,9 +64,4 @@
 
         projects = await ProjectRemote.GetProjects();
     }
-
-    @* protected async void GetProject()
-    {
-        await ProjectRemote.
-    } *@
 }

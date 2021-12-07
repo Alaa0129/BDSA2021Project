@@ -6,7 +6,7 @@ body{
 	background-color: rgba(0,0,0,.3);
     width:40%;
 	float:left;
-	height:100rem;
+	height:50rem;
     box-shadow: 0 0px 4px 0px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     box-sizing: border-box;
     margin:0;
@@ -16,8 +16,38 @@ body{
 .left-side-container{
 	width:60%;
 	float:left;
-	height:100rem;
+	height:50rem;
 	margin:0;
 	padding:0;
     box-sizing: border-box;
+	padding-right: 3.5rem;
+}
+
+.desciption-section {
+	height: fit-content;
+	width: fit-content;
+	padding: 2rem;
+	font-size: large;
+}
+
+h1 {
+	font-weight: bold;
+}
+
+.apply-section {
+	border: solid 1px;
+	border-color: #ff7400;
+	border-left: none;
+	border-bottom: none;
+	border-right: none;
+	padding: 2rem;
+}
+
+.edit-button {
+	background-color: #ff7400;
+	border-color: white;
+}
+
+.apply-button {
+
 }
