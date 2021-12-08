@@ -1,11 +1,9 @@
-@page "/ProjectDetails"
+@page "/Requestdetails"
 @layout MainLayout
 
 @using Core
 
 @inject ProjectRemote ProjectRemote
-@inject TagRemote TagRemote;
-
 <div class="page">
 
     <div class="left-side-container">
@@ -19,15 +17,9 @@
         </section>
 
         <section class="apply-section edit-section">
-
-            <AuthorizeView Roles="Student">
-                <button class="btn btn-success successBtn apply-button">Apply</button>
-            </AuthorizeView>
-
             <AuthorizeView Roles="Supervisor">
                 <button class="btn btn-success successBtn edit-button">Edit</button>
             </AuthorizeView>
-            
         </section>
 
     </div>
@@ -35,15 +27,6 @@
     <div class="right-side-container">
         <h3>@supervisor.Name</h3>
         <h6>Supervisor E-mail</h6>
-        <div class="TagsBox">
-            <p>Tags</p>
-            <ul id="TagsBox">
-        @foreach (var tag in Faketags)
-        {
-            <li>@tag</li>
-        }
-            </ul>
-        </div>
     </div>
 
 </div>
@@ -51,22 +34,7 @@
 
 @code
 {
-    private IEnumerable<TagDetailsDTO> tags = new List<TagDetailsDTO>();    
     private IEnumerable<ProjectDetailsDTO> projects = new List<ProjectDetailsDTO>();
-    private int projectId;
-    List<string> displayTags = new List<string>();
-
-    private IEnumerable<String> Faketags = new List<String>{"Milk","Honey","Tea"};    
-
-    
+    private int projectId;    
     SupervisorDTO supervisor = new SupervisorDTO("1", "Shuuuuuuja Larsen Andreas");
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-
-        tags = await TagRemote.GetTags();
-
-        projects = await ProjectRemote.GetProjects();
-    }
 }
