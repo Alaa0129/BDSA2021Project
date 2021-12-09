@@ -83,13 +83,13 @@
     List<string> tagNames = new List<string>(); //responsible for holding tag names which are clicked on
 
 
-    @* protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
         tags = await TagRemote.GetTags();
 
-    } *@
+    }
 
     private async void Submit(string Title, string Description)
     {
@@ -97,6 +97,7 @@
         {
             Title = Title,
             Description = Description,
+            SupervisorId = "SupervisorId1",
             Tags = tagNames
 
         };

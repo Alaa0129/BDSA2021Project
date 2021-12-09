@@ -30,14 +30,13 @@
             { 
                 @foreach (var tag in tags)
                 { 
-                    if(!tagExists(tag.Name))
-                    {
-                        <label>
-                            <input class="tagInput" type="checkbox" @onclick="@(e => SearchProjectsByTagName(tag.Name))">
-                            <span class="tag">@(tag.Name)</span>
-                        </label>
-                        tagNames.Add(tag.Name);
-                    }
+                    
+                    <label>
+                        <input class="tagInput" type="checkbox" @onclick="@(e => SearchProjectsByTagName(tag.Name))">
+                        <span class="tag">@(tag.Name)</span>
+                    </label>
+                    tagNames.Add(tag.Name);
+                    
                 }
             }
         </div>
@@ -146,11 +145,6 @@
         if (buttonType == "prev" && currentPage != 0) currentPage--;
 
         UpdateProjects(currentPage);
-    }
-
-     private bool tagExists(string tagName) //remove later when handling case in create project
-    {
-        return tagNames.Contains(tagName);
     }
 
     protected async Task RegisterUserToDB(System.Security.Claims.ClaimsPrincipal user)

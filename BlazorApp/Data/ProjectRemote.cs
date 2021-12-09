@@ -37,7 +37,7 @@ namespace BlazorApp
 
         public async Task<bool> CreateProject(ProjectCreateDTO project)
         {
-            var result = await _httpClient.PostAsJsonAsync($"{_APIBaseAddress}/Projects/create", project);
+            var result = await _httpClient.PostAsJsonAsync($"{_APIBaseAddress}/api/project", project);
             var statusCode = (int)result.StatusCode;
             if (statusCode >= 200 && statusCode <= 208) return true;
             else return false;

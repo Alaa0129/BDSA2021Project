@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorApp.Infrastructure.Migrations
 {
     [DbContext(typeof(PBankContext))]
-    [Migration("20211206153016_39ac3f8a-08ab-4470-9ca6-459b2328c7e9")]
-    partial class _39ac3f8a08ab44709ca6459b2328c7e9
+    [Migration("20211209022102_560b6df8-5302-45bc-a3f0-30e959d17ede")]
+    partial class _560b6df8530245bca3f030e959d17ede
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
