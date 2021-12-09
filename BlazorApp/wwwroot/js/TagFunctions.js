@@ -3,7 +3,7 @@ function changeTagColor(id) {
 
     var button = document.getElementById(id);
     var bgColor = button.style.backgroundColor;
-    bgColor = button.style.backgroundColor = bgColor === 'midnightblue' ? '#e2f5fa' : 'midnightblue';
+    bgColor = button.style.backgroundColor = bgColor === 'black' ? '#1861ac' : 'black';
     
 }
 

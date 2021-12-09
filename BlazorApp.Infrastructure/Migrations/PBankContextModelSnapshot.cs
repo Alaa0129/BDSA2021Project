@@ -28,8 +28,8 @@ namespace BlazorApp.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(4400)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupervisorId")
                         .IsRequired()

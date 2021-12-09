@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorApp.Infrastructure.Migrations
 {
     [DbContext(typeof(PBankContext))]
-    [Migration("20211205183331_eab60324-c6f4-432d-8dc7-5a6a21d3f453")]
-    partial class eab60324c6f4432d8dc75a6a21d3f453
+    [Migration("20211206153016_39ac3f8a-08ab-4470-9ca6-459b2328c7e9")]
+    partial class _39ac3f8a08ab44709ca6459b2328c7e9
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,8 +30,8 @@ namespace BlazorApp.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(4400)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupervisorId")
                         .IsRequired()

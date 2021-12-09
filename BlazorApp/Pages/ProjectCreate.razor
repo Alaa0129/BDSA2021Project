@@ -1,11 +1,9 @@
 @page "/Projects/create"
 @attribute [Authorize(Roles = "Supervisor")]
-
 @using BlazorApp.Core
 @* @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Data; *@
 @using static CurrieTechnologies.Razor.SweetAlert2.SweetAlertIcon
-
 @inject ProjectRemote ProjectRemote
 @inject TagRemote TagRemote
 @inject NavigationManager navManager
@@ -37,7 +35,7 @@
         {
             var tagId = "tag" + tagNr.ToString();
             tagNr++;
-            <button @onclick="@(e => AddTagName(tagId,tag))" id="@tagId" type="button" class="tag">@tag</button>
+            <button @onclick="@(e => AddTagName(tagId,tag))" id="@tagId" type="button" class="btn btn-primary">@tag</button>
 
         }
 
@@ -85,13 +83,13 @@
     List<string> tagNames = new List<string>(); //responsible for holding tag names which are clicked on
 
 
-    protected override async Task OnInitializedAsync()
+    @* protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
         tags = await TagRemote.GetTags();
 
-    }
+    } *@
 
     private async void Submit(string Title, string Description)
     {
@@ -141,7 +139,6 @@
 
             tagNames.Remove(tagName);
         
-
     }
 
     @* private void OnValueSelecthandler(SelectEventArgs<TagDetailsDTO> args)

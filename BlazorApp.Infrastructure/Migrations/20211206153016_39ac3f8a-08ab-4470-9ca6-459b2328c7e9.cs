@@ -2,13 +2,10 @@
 
 namespace BlazorApp.Infrastructure.Migrations
 {
-    public partial class eab60324c6f4432d8dc75a6a21d3f453 : Migration
+    public partial class _39ac3f8a08ab44709ca6459b2328c7e9 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Users");
-
             migrationBuilder.CreateTable(
                 name: "Supervisors",
                 columns: table => new
@@ -41,7 +38,7 @@ namespace BlazorApp.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 4400, nullable: false),
                     SupervisorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -171,20 +168,6 @@ namespace BlazorApp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Supervisors");
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Firstname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Lastname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
         }
     }
 }
