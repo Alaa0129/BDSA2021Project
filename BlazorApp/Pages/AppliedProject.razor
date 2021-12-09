@@ -24,7 +24,7 @@
                         <img class="profile-img" src="Resources\profile-icon.svg">
                         <h5>@myProject.Supervisor.Name</h5>
                     </div>
-                    <button class="read-more" onclick="location.href = 'ProjectDetailsPage';">Read more</button>
+                    <a class="read-more" href="@($"projects/{myProject.Id}")">Read more</a>
                 </div>
             </div>
         }
