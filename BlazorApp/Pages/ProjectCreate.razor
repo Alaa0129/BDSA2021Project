@@ -2,11 +2,13 @@
 @attribute [Authorize(Roles = "Supervisor")]
 
 @using BlazorApp.Core
-@* @using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Data; *@
 @using static CurrieTechnologies.Razor.SweetAlert2.SweetAlertIcon
+@using Microsoft.Identity.Web
+@using System.Security.Claims
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ProjectRemote ProjectRemote
+@inject RequestRemote RequestRemote
 @inject TagRemote TagRemote
 @inject NavigationManager navManager
 @inject CurrieTechnologies.Razor.SweetAlert2.SweetAlertService swal
@@ -37,29 +39,18 @@
         {
             var tagId = "tag" + tagNr.ToString();
             tagNr++;
-            <button @onclick="@(e => AddTagName(tagId,tag))" id="@tagId" type="button" class="tag">@tag</button>
+            <button @onclick="@(e => AddTagName(tagId,tag))" id="@tagId" type="button" class="btn btn-primary">@tag</button>
 
         }
 
     </div>
 
-    @* <SfDropDownList TValue="string" TItem="TagDetailsDTO" Width="400px" Placeholder="Select a tag" DataSource="tags"
-        AllowFiltering="true" Query="@LocalDataQuery" PopupHeight="130px" EnableVirtualization="true">
-        <DropDownListTemplates TItem="TagDetailsDTO">
-            <NoRecordsTemplate>
-                <span class='norecord'> NO TAGS AVAILABLE</span>
-            </NoRecordsTemplate>
-        </DropDownListTemplates>
-        <DropDownListEvents TItem="TagDetailsDTO" TValue="string" OnValueSelect="OnValueSelecthandler">
-        </DropDownListEvents>
-        <DropDownListFieldSettings Text="Name" Value="ID"></DropDownListFieldSettings>
-    </SfDropDownList> *@
-
 
     <div class="addDivTag">
-        <input onkeyup="if(event.keyCode===13){addTag.click()}" @bind="tagName" @bind:event="oninput" id="AddTagTextField" class="form-control tagTextField"
-            placeholder="Enter Tag">
-        <button id="addTag" @onclick="@(e => AddTag(tagName))" type="button" class="btn btn-primary btn-rounded">Add Tag</button>
+        <input onkeyup="if(event.keyCode===13){addTag.click()}" @bind="tagName" @bind:event="oninput"
+            id="AddTagTextField" class="form-control tagTextField" placeholder="Enter Tag">
+        <button id="addTag" @onclick="@(e => AddTag(tagName))" type="button" class="btn btn-primary btn-rounded">Add
+            Tag</button>
     </div>
 </div>
 
@@ -73,11 +64,10 @@
 
 @code
 {
-    @* private Query LocalDataQuery = new Query().Take(6); //small query to enable scrollbar for tags dropdown *@
-
     private string Title;
     private string Description;
     private string tagName;
+    private ClaimsPrincipal authUser;
 
     [Parameter]
     public int? requestId { get; set; }
@@ -92,6 +82,8 @@
     {
         await base.OnInitializedAsync();
 
+        authUser = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User; 
+
         tags = await TagRemote.GetTags();
     }
 
@@ -100,11 +92,21 @@
     // As the parameter is nullable this only happens if a parameter is passed to the url
     protected override async Task OnParametersSetAsync()
     {
-        if (requestId != null)
+        try
         {
-            Title = "Received";
+            var requestDetails = await RequestRemote.GetRequest((int)requestId);
+            if (requestId != null)
+            {
+                Title = requestDetails.Title;
+                Description = requestDetails.Description;
+            }
         }
-        StateHasChanged();
+        catch (System.Exception)
+        {
+
+        }
+
+
     }
 
     private async void Submit(string Title, string Description)
@@ -113,7 +115,7 @@
         {
             Title = Title,
             Description = Description,
-            SupervisorId = "SupervisorId1",
+            SupervisorId = authUser.GetObjectId(),
             Tags = tagNames
 
         };
@@ -134,7 +136,7 @@
         }
 
     }
-    
+
     private async void AddTag(string tagName)
     {
         if (string.IsNullOrEmpty(tagName)) return;
@@ -146,23 +148,16 @@
     private async void AddTagName(string id, string tagName)
     {
         await js.InvokeVoidAsync("changeTagColor", id); //Changes color of tag upon click
-        
-            var foundTag = tagNames.Where(t => t == tagName).FirstOrDefault();
 
-            if (foundTag == null)
-            {
-                tagNames.Add(tagName);
-                return;
-            }
+        var foundTag = tagNames.Where(t => t == tagName).FirstOrDefault();
 
-            tagNames.Remove(tagName);
-        
+        if (foundTag == null)
+        {
+            tagNames.Add(tagName);
+            return;
+        }
+
+        tagNames.Remove(tagName);
 
     }
-
-    @* private void OnValueSelecthandler(SelectEventArgs<TagDetailsDTO> args)
-    {
-
-        AddTag(args.ItemData.Name);
-    } *@
 }

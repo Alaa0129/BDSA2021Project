@@ -29,15 +29,12 @@
             @if (tags != null)
             {
                 @foreach (var tag in tags)
-                {
-                    if (!tagExists(tag.Name))
-                    {
-                        <label>
-                            <input class="tagInput" type="checkbox" @onclick="@(e => SearchProjectsByTagName(tag.Name))">
-                            <span class="tag">@(tag.Name)</span>
-                        </label>
-                        tagNames.Add(tag.Name);
-                    }
+                { 
+                    <label>
+                        <input class="tagInput" type="checkbox" @onclick="@(e => SearchProjectsByTagName(tag.Name))">
+                        <span class="tag">@(tag.Name)</span>
+                    </label>
+                    tagNames.Add(tag.Name);
                 }
             }
         </div>
@@ -151,12 +148,6 @@
         UpdateProjects(currentPage);
     }
 
-    private bool tagExists(string tagName) //remove later when handling case in create project
-    {
-        return tagNames.Contains(tagName);
-    }
-
-    // Upon login, checks if a user with the Id matching the Id of the Azure AD user is in the local database and if not adds them to it
     protected async Task RegisterUserToDB(System.Security.Claims.ClaimsPrincipal user)
     {
         if (user.Identity?.IsAuthenticated == true)

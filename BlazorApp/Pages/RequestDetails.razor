@@ -28,7 +28,7 @@
 
             <section class="apply-section edit-section">
                 <AuthorizeView Roles="Supervisor">
-                    <button class="btn btn-success successBtn edit-button">Approve</button>
+                    <a class="btn btn-success successBtn edit-button" href="@($"project/create/{requestDetails.Id}")">Approve</a>
                 </AuthorizeView>
                 <AuthorizeView Roles="Student">
                     <button class="btn btn-success successBtn edit-button">Edit</button>
