@@ -1,0 +1,120 @@
+@page "/profile/{userId}/edit"
+@attribute [Authorize]
+
+@using Core
+@using Microsoft.Identity.Web
+@using System.Security.Claims
+
+@inject StudentRemote StudentRemote
+@inject SupervisorRemote SupervisorRemote
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<div class="row justify-content-md-center">
+    <div class="col-md-auto">
+        @if (studentUpdate != null)
+        {
+            <div class="card p-4">
+                @if (bothRoles)
+                {
+                    <h1>Student profile</h1>
+                }
+                <EditForm Model="@studentUpdate" OnValidSubmit="@HandleValidSubmitStudent">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group" style="text-align: left;">
+                        <label class="text" for="Name">Full name</label>
+                        <InputText id="Name" @bind-Value="studentUpdate.Name" class="form-control" />
+                    </div>
+                    <div class="form-group d-flex" style="justify-content: center;">
+                        <br />
+                        <button type="submit" class="btn btn-success" style="margin-right: 5px;">Update</button>
+                        <a role="button" href=@($"profile/{userId}") class="btn btn-dark"
+                        style="margin-left: 5px;">Cancel</a>
+                    </div>
+                </EditForm>
+            </div>
+        }
+    </div>
+    <div class="col-md-auto">
+        @if (supervisorUpdate != null)
+        {
+            <div class="card p-4">
+                @if (bothRoles)
+                {
+                    <h1>Supervisor profile</h1>
+                }
+                <EditForm Model="@supervisorUpdate" OnValidSubmit="@HandleValidSubmitSupervisor">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="form-group" style="text-align: left;">
+                        <label class="text" for="Name">Full name</label>
+                        <InputText id="Name" @bind-Value="supervisorUpdate.Name" class="form-control" />
+                    </div>
+                    <div class="form-group d-flex" style="justify-content: center;">
+                        <br />
+                        <button type="submit" class="btn btn-success" style="margin-right: 5px;">Update</button>
+                        <a role="button" href=@($"profile/{userId}") class="btn btn-dark"
+                        style="margin-left: 5px;">Cancel</a>
+                    </div>
+                </EditForm>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public string userId { get; set; }
+    private ClaimsPrincipal authUser;
+
+    private StudentUpdateDTO studentUpdate;
+    private SupervisorUpdateDTO supervisorUpdate;
+
+    private bool bothRoles = false;
+
+
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        bothRoles = false;
+        studentUpdate = null;
+        supervisorUpdate = null;
+
+        authUser = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+
+        if (authUser.GetObjectId() != userId) NavigationManager.NavigateTo("/");
+
+        if (authUser.IsInRole("Student")) studentUpdate = new StudentUpdateDTO { Id = userId };
+        if (authUser.IsInRole("Supervisor")) supervisorUpdate = new SupervisorUpdateDTO { Id = userId };
+        if (studentUpdate != null && supervisorUpdate != null) bothRoles = true;
+
+
+    }
+
+    private async Task HandleValidSubmitStudent()
+    {
+        var response = await StudentRemote.UpdateStudent(studentUpdate);
+        Console.WriteLine(((int)response.StatusCode));
+        if (response.IsSuccessStatusCode)
+        {
+            var uri = $"profile/{userId}";
+            NavigationManager.NavigateTo(uri);
+        }
+
+    }
+
+    private async Task HandleValidSubmitSupervisor()
+    {
+        var response = await SupervisorRemote.UpdateSupervisor(supervisorUpdate);
+        if (response.IsSuccessStatusCode)
+        {
+            var uri = $"profile/{userId}";
+            NavigationManager.NavigateTo(uri);
+        }
+    }
+
+}

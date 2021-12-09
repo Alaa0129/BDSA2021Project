@@ -47,10 +47,5 @@ h1 {
 }
 .TagsBox {
 	list-style: none;
-	border: solid 1px #000000;
-}
-
-.cancel-button {
-    background-color: #d11a2a;
-    border-color: white;
+	border-top: solid 1px #000000;
 }

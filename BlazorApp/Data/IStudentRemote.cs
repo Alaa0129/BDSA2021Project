@@ -1,5 +1,6 @@
 using BlazorApp.Core;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BlazorApp
@@ -9,7 +10,7 @@ namespace BlazorApp
         Task<bool> CreateStudent(StudentCreateDTO student);
         Task<StudentDetailsDTO> GetStudent(string Id);
         Task<StudentDTO[]> GetStudents();
-        Task<HttpStatusCode> UpdateStudent(StudentUpdateDTO student);
+        Task<HttpResponseMessage> UpdateStudent(StudentUpdateDTO student);
 
         Task<HttpStatusCode> UpdateProject(int projectId, string studentId);
     }

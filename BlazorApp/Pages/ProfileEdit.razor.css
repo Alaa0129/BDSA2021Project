@@ -1,0 +1,13 @@
+.card {
+    background-color: #efefef;
+    border: solid 2px gray;
+    transition: all 0.5s;
+    text-align: center;
+    display: flex;   
+}
+
+
+.text {
+    font-size: 20px;
+    font-weight: bold;
+}

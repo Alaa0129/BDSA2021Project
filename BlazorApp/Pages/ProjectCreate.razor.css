@@ -30,28 +30,6 @@
     gap: 50px;
 }
 
-.successBtn
-{
-   background-color: #40DD7F; 
-   transition-duration: 0.4s;
-}
-
-.uploadBtn
-{
-    background-color: #E59333;
-    transition-duration: 0.4s;
-}
-
-.successBtn:hover
-{
-    background-color:cyan;
-}
-
-.uploadBtn:hover
-{
-    background-color:cyan;
-}
-
 .allTags
 {
     display: flex;
@@ -69,8 +47,6 @@
     flex-flow: wrap;
     gap: 5px;
 }
-
-
 
 .addDivTag
 {

@@ -1,0 +1,86 @@
+@page "/requests/{requestId:int}"
+@layout MainLayout
+@attribute [Authorize]
+
+@using Core
+@using Microsoft.Identity.Web
+@using System.Security.Claims
+
+@inject RequestRemote RequestRemote
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<div class="page">
+
+    @if (requestDetails != null)
+    {
+
+
+        <div class="left-side-container">
+            <section class="title-section">
+                <h1>@requestDetails.Title</h1>
+            </section>
+
+            <section class="description-section">
+                <p>@requestDetails.Description</p>
+
+            </section>
+
+            <section class="apply-section edit-section">
+                <AuthorizeView Roles="Supervisor">
+                    <a class="btn btn-success successBtn edit-button" href="@($"project/create/{requestDetails.Id}")">Approve</a>
+                </AuthorizeView>
+                <AuthorizeView Roles="Student">
+                    <button class="btn btn-success successBtn edit-button">Edit</button>
+                </AuthorizeView>
+            </section>
+
+        </div>
+
+        <div class="right-side-container">
+            <h3>@requestDetails.Supervisor.Name</h3>
+            <h6>@requestDetails.Supervisor.Id</h6>
+        </div>
+    }
+
+</div>
+
+
+@code
+{
+    [Parameter]
+    public int requestId { get; set; }
+    private RequestDetailsDTO requestDetails;
+    private ClaimsPrincipal authUser;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        authUser = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // should check the auth users id against the requests id
+
+        if (requestId != 0)
+        {
+            try
+            {
+                requestDetails = await RequestRemote.GetRequest(requestId);
+            }
+            catch (System.Exception)
+            {
+
+                requestDetails = null;
+            }
+        }
+        
+        // If the user is not either the student who created the request or the supervisor who received the request redirect to frontpage
+        if (authUser.GetObjectId() != requestDetails.Student.Id && authUser.GetObjectId() != requestDetails.Supervisor.Id)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

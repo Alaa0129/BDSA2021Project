@@ -16,34 +16,31 @@
 
 <div class="row">
     <div class="column">
-    <h3>@message</h3>
-      
+        <h3 style="text-align: center;">@message</h3> <br>
+
         <div class="main-search-input fl-wrap inputs">
-            <div class="main-search-input-item"> 
-                <input type="search" @bind="searchedProject" placeholder="Search Projects..."> 
-            </div> 
+            <div class="main-search-input-item">
+                <input type="search" @bind="searchedProject" placeholder="Search Projects...">
+            </div>
             <button class="main-search-button" onclick="SearchProjects()">Search</button>
         </div>
 
         <div class="tag-container">
             @if (tags != null)
-            { 
+            {
                 @foreach (var tag in tags)
                 { 
-                    if(!tagExists(tag.Name))
-                    {
-                        <label>
-                            <input class="tagInput" type="checkbox" @onclick="@(e => SearchProjectsByTagName(tag.Name))">
-                            <span class="tag">@(tag.Name)</span>
-                        </label>
-                        tagNames.Add(tag.Name);
-                    }
+                    <label>
+                        <input class="tagInput" type="checkbox" @onclick="@(e => SearchProjectsByTagName(tag.Name))">
+                        <span class="tag">@(tag.Name)</span>
+                    </label>
+                    tagNames.Add(tag.Name);
                 }
             }
         </div>
         @if (projects != null)
         {
-            @foreach (var project in filteredProjects) 
+            @foreach (var project in filteredProjects)
             {
                 <div class="ProjectView">
                     <h3>@project.Title</h3>
@@ -55,24 +52,27 @@
                             <img class="profile-img" src="Resources\profile-icon.svg">
                             <h5>@project.Supervisor.Name</h5>
                         </div>
-                        <button class="read-more" onclick="location.href = 'ProjectDetailsPage';">Read more</button>
+                        <a class="read-more" href=@($"projects/{project.Id}")>Read more</a>
                     </div>
                 </div>
-            } 
+            }
         }
 
-        <div class="pageButtonsDiv">
-            <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
+        @if (projects != null && projects.Count() > 5)
+        {
+            <div class="pageButtonsDiv">
+                <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
 
-            @for (int i = 0; i < totalPages; i++)
-            {
-                var pageNumber = i;
-                <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
+                @for (int i = 0; i < totalPages; i++)
+                {
+                    var pageNumber = i;
+                    <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
                 @onclick="@(e => UpdateProjects(pageNumber))"> @(i+1)</button>
-            }
+                }
 
-            <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
-        </div>
+                <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
+            </div>
+        }
     </div>
 </div>
 
@@ -80,8 +80,8 @@
 @code
 {
 
-    private IEnumerable<TagDetailsDTO> tags = new List<TagDetailsDTO>();    
-    private List<string> tagNames = new List<string>(); 
+    private IEnumerable<TagDetailsDTO> tags = new List<TagDetailsDTO>();
+    private List<string> tagNames = new List<string>();
     private IEnumerable<ProjectDetailsDTO> projects;
     private IEnumerable<ProjectDetailsDTO> filteredProjects;
 
@@ -122,14 +122,14 @@
     {
         filteredProjects = projects.Where(p => p.Title
         .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase)
-            || p.Supervisor.Id
+        || p.Supervisor.Id
         .Contains(_searchedProject, StringComparison.OrdinalIgnoreCase));
     }
 
     private void SearchProjectsByTagName(string tagName)
     {
-        filteredProjects = projects.Where(p => p.Tags.Any(t => t == tagName));     
-        
+        filteredProjects = projects.Where(p => p.Tags.Any(t => t == tagName));
+
     }
 
     private void UpdateProjects(int pageNumber) //shows the projects depending on which page the user is
@@ -148,17 +148,12 @@
         UpdateProjects(currentPage);
     }
 
-     private bool tagExists(string tagName) //remove later when handling case in create project
-    {
-        return tagNames.Contains(tagName);
-    }
-
     protected async Task RegisterUserToDB(System.Security.Claims.ClaimsPrincipal user)
     {
         if (user.Identity?.IsAuthenticated == true)
         {
             message = $"Hello, {user.Identity.Name}, you are logged in";
-            
+
             if (user.IsInRole("Student"))
             {
                 try

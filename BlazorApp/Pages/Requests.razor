@@ -1,5 +1,5 @@
 @layout MainLayout
-@page "/Requests"
+@page "/requests"
 
 @attribute [Authorize]
 @using Core
@@ -13,15 +13,15 @@
 
 <div class="row">
     <div class="column">
-      
+
         <div class="main-search-input fl-wrap inputs">
-            <div class="main-search-input-item"> 
-                <input type="search" @bind="searchedRequest" placeholder="Search Requests..."> 
-            </div> 
+            <div class="main-search-input-item">
+                <input type="search" @bind="searchedRequest" placeholder="Search Requests...">
+            </div>
             <button class="main-search-button" onclick="SearchRequests()">Search</button>
         </div>
-    
-        @foreach (var request in filteredRequests) 
+
+        @foreach (var request in filteredRequests)
         {
             <div class="RequestView">
                 <h3>@request.Title</h3>
@@ -31,29 +31,31 @@
                 <div class="request-bottom">
                     <div class="student-profile">
                         <img class="profile-img" src="Resources\profile-icon.svg">
-                        <h5>@request.StudentId</h5> @* Burde ændres eller fjernes. Måske mere relevant bare at have når man går ind under 'Read more' *@
+                        <h5>@request.StudentId (Change me to name)</h5> @* Burde ændres eller fjernes. Måske mere relevant bare at have når man
+                            går ind under 'Read more' *@
                     </div>
-                    <button class="read-more" onclick="location.href = 'ProjectDetailsPage';">Read more</button>
+                    <a class="read-more" href=@($"requests/{request.Id}")>Read more</a>
                 </div>
             </div>
-        }     
-        
-        <div class="pageButtonsDiv">
-            <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
+        }
 
-            @for (int i = 0; i < totalPages; i++)
-            {
-                var pageNumber = i;
-                <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
+        @if (filteredRequests != null && filteredRequests.Count() > 5)
+        {
+            <div class="pageButtonsDiv">
+                <button class="btn btn-dark" @onclick="@(e => NewPage("prev"))"> Previous </button>
+                @for (int i = 0; i < totalPages; i++)
+                {
+                    var pageNumber = i;
+                    <button class="btn btn-info @(currentPage == pageNumber? "btn-white" : "btn-dark")"
                 @onclick="@(e => UpdateRequests(pageNumber))"> @(i+1)</button>
-            }
-
-            <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
-        </div>
+                }
+                <button class="btn btn-dark" @onclick="@(e => NewPage("next"))"> Next </button>
+            </div>
+        }
     </div>
 </div>
 
-    
+
 
 @code
 {
@@ -61,7 +63,6 @@
     private IEnumerable<RequestDTO> requests = new List<RequestDTO>();
     private IEnumerable<RequestDTO> filteredRequests = new List<RequestDTO>();
 
-        
     private int pageSize = 5;
     private int totalPages;
     private int currentPage;
@@ -84,20 +85,21 @@
         await base.OnInitializedAsync();
 
         user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
-        
-        requests = (await RequestRemote.GetRequests()).Where(r => user.IsInRole("Student") == true ? r.StudentId == user.GetObjectId() : r.SupervisorId == user.GetObjectId());
+
+        requests = (await RequestRemote.GetRequests()).Where(r => user.IsInRole("Student") == true ? r.StudentId ==
+        user.GetObjectId() : r.SupervisorId == user.GetObjectId());
 
         filteredRequests = requests.Take(pageSize);
-        
+
         totalPages = (int)Math.Ceiling(requests.Count() / (decimal)pageSize);
     }
 
     private void SearchRequests()
     {
         filteredRequests = requests.Where(p => p.Title
-                                   .Contains(_searchedRequest, StringComparison.OrdinalIgnoreCase) 
-                                            || p.StudentId.ToString()
-                                   .Contains(_searchedRequest,StringComparison.OrdinalIgnoreCase));
+        .Contains(_searchedRequest, StringComparison.OrdinalIgnoreCase)
+        || p.StudentId.ToString()
+        .Contains(_searchedRequest, StringComparison.OrdinalIgnoreCase));
     }
 
     private void UpdateRequests(int pageNumber) //shows the requests dependeing on which page the user is

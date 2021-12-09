@@ -53,6 +53,11 @@ namespace BlazorApp
         {
             return await _httpClient.GetFromJsonAsync<StudentDTO[]>($"{_APIBaseAddress}/api/Student/all");
         }
+        public async Task<HttpResponseMessage > UpdateStudent(StudentUpdateDTO student)
+        {
+            var result = await _httpClient.PutAsJsonAsync($"{_APIBaseAddress}/api/Student/update", student);
+            return result;
+        }
 
         public async Task<HttpStatusCode> UpdateProject(int projectId, string studentId)
         {
@@ -60,11 +65,6 @@ namespace BlazorApp
             return result.StatusCode;
         }
 
-        public async Task<HttpStatusCode> UpdateStudent(StudentUpdateDTO student)
-        {
-            var result = await _httpClient.PutAsJsonAsync($"{_APIBaseAddress}/api/student/update", student);
-            return result.StatusCode;
-        }
 
         /// <summary>
         /// Retrieves the Access Token for the Web API.

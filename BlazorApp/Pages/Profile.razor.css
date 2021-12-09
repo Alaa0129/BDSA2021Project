@@ -1,0 +1,36 @@
+.card {
+    background-color: #efefef;
+    border: solid 2px gray;
+    transition: all 0.5s;
+    text-align: center;
+    display: flex;
+    
+}
+
+.pp {
+    height: 140px;
+    width: 140px;
+    border-radius: 50%;
+    background-color: rgb(228, 228, 248);
+    border: #000 1px solid;
+    text-align: top;
+    vertical-align: middle;
+    line-height: 140px;
+}
+
+.name {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.idd {
+    font-size: 14px;
+    font-weight: 600
+}
+
+
+.text span {
+    font-size: 13px;
+    color: #545454;
+    font-weight: 500
+}

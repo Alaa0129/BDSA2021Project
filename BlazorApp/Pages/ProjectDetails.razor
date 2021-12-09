@@ -1,45 +1,146 @@
-@page "/ProjectDetails"
+@page "/projects/{projectId:int}"
 @layout MainLayout
+@attribute [Authorize]
 
 @using Core
+@using Microsoft.Identity.Web
+@using System.Security.Claims
 
 @inject ProjectRemote ProjectRemote
-@inject TagRemote TagRemote;
-
-<h1>Project details</h1>
-<br> <br>
+@inject StudentRemote StudentRemote
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
 
 <div class="page">
+    @if (projectDetails != null)
+    {
 
-    <div class="left-side-container">
-        <h1>Project Title</h1>
-    </div>
+        <div class="left-side-container">
+            <section class="title-section">
+                <h1>@projectDetails.Title</h1>
+            </section>
 
-    <div class="right-side-container">
-        
-    </div>
+            <section class="description-section">
+                <p>@projectDetails.Description</p>
+            </section>
 
+            <section class="apply-section edit-section">
+
+                <AuthorizeView Roles="Student">
+                    @if (isApplied)
+                    {
+                        <button class="btn btn-success successBtn apply-button">Cancel application</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-success successBtn apply-button" @onclick="Apply">Apply</button>
+                    }
+                </AuthorizeView>
+
+                <AuthorizeView Roles="Supervisor">
+                    @if (isSupervisor)
+                    {
+                        <button class="btn btn-success successBtn edit-button">Edit</button>
+                    }
+                </AuthorizeView>
+
+            </section>
+
+        </div>
+
+        <div class="right-side-container">
+            <h3>@projectDetails.Supervisor.Name</h3>
+            <h6>@projectDetails.Supervisor.Id</h6>
+            <div class="TagsBox">
+                <h3 style="justify-content: left;">Tags</h3>
+                <ul style="text-align: left;">
+                    @foreach (var tag in projectDetails.Tags)
+                    {
+                        <li>@tag</li>
+                    }
+                </ul>
+            </div>
+            <br>
+            <div class="TagsBox">
+                <h3 style="justify-content: left;">Applied Students</h3>
+                <ul style="text-align: left;">
+
+                    @if (projectDetails.AppliedStudents.Count != 0)
+                    {
+                        @foreach (var student in projectDetails.AppliedStudents)
+                        {
+                            <li>@student.Name</li>
+                        }
+
+                    }
+                    else
+                    {
+                        <h3>No one has applied to this project yet</h3>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+                <h1> No project found at that address</h1>
+            </div>
+        </div>
+    }
 </div>
 
 
 @code
 {
-    private IEnumerable<TagDetailsDTO> tags = new List<TagDetailsDTO>();    
-    private IEnumerable<ProjectDetailsDTO> projects = new List<ProjectDetailsDTO>();
+    [Parameter]
+    public int projectId { get; set; }
+    private ProjectDetailsDTO projectDetails;
+    private ClaimsPrincipal authUser;
+    private bool isApplied = false;
+    private bool isSupervisor = false;
 
-    private int projectId;
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
+        authUser = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
 
-        tags = await TagRemote.GetTags();
-
-        projects = await ProjectRemote.GetProjects();
     }
 
-    @* protected async void GetProject()
+
+    protected override async Task OnParametersSetAsync()
     {
-        await ProjectRemote.
-    } *@
+        // should check the auth users id against the requests id
+        if (projectId != 0)
+        {
+            try
+            {
+                projectDetails = await ProjectRemote.GetProject(projectId);
+
+                if (projectDetails.AppliedStudents.Where(s => s.Id == authUser.GetObjectId()).Count() != 0)
+                {
+                    isApplied = true;
+                }
+                if (projectDetails.Supervisor.Id == authUser.GetObjectId())
+                {
+                    isSupervisor = true;
+                }
+            }
+            catch (System.Exception)
+            {
+                projectDetails = null;
+            }
+        }
+
+    }
+
+
+    private async Task Apply()
+    {
+        var response = await StudentRemote.UpdateProject(projectId, authUser.GetObjectId());
+        Console.WriteLine(((int)response));
+        NavigationManager.NavigateTo("AppliedProject");
+    }
 }

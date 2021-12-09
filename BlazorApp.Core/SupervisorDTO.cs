@@ -11,10 +11,12 @@ namespace BlazorApp.Core
     public record SupervisorCreateDTO
     {
         [Required]
-        public string Id { get; init; }
+        public string Id { get; set; }
 
+        [Required]
         [StringLength(50)]
-        public string Name { get; init; }
+        [MinLength(10)]
+        public string Name { get; set; }
     }
 
     public record SupervisorUpdateDTO : SupervisorCreateDTO
