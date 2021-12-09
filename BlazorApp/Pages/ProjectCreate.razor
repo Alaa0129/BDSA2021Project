@@ -1,4 +1,4 @@
-@page "/Projects/create"
+@page "/Projects/create/{requestId:int?}"
 @attribute [Authorize(Roles = "Supervisor")]
 
 @using BlazorApp.Core
@@ -79,6 +79,9 @@
     private string Description;
     private string tagName;
 
+    [Parameter]
+    public int? requestId { get; set; }
+
     private int tagNr = 5; //to keep track of tag IDs
     IEnumerable<TagDetailsDTO> tags = new List<TagDetailsDTO>(); //tags fetched from API
     List<string> displayTags = new List<string>(); //the tags to display on the page
@@ -90,7 +93,18 @@
         await base.OnInitializedAsync();
 
         tags = await TagRemote.GetTags();
+    }
 
+    // Is used when a supervisor will create a project from a request
+    // Passing said request's Id in the url and then automatically setting predefined values to the inputs.
+    // As the parameter is nullable this only happens if a parameter is passed to the url
+    protected override async Task OnParametersSetAsync()
+    {
+        if (requestId != null)
+        {
+            Title = "Received";
+        }
+        StateHasChanged();
     }
 
     private async void Submit(string Title, string Description)
