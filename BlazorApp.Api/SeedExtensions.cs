@@ -84,7 +84,11 @@ namespace BlazorApp.Api
 
                 context.Projects.AddRange(
                     new Project { Title = "Project One", Description = "Project One Description", Supervisor = context.Supervisors.Find("SupervisorId1"), AppliedStudents = new Student[] { context.Students.Find("StudentId1"), context.Students.Find("StudentId2") }, Tags = new[] { tag1, tag2 } },
-                    new Project { Title = "Project Two", Description = "Project Two Description", Supervisor = context.Supervisors.Find("SupervisorId2"), AppliedStudents = new Student[] { context.Students.Find("StudentId3") }, Tags = new[] { tag3 } }
+                    new Project { Title = "Project Two", Description = "Project Two Description", Supervisor = context.Supervisors.Find("SupervisorId2"), AppliedStudents = new Student[] { context.Students.Find("StudentId3") }, Tags = new[] { tag3 } },
+                    new Project { Title = "Project Three", Description = "Project Three Description", Supervisor = context.Supervisors.Find("SupervisorId3"), AppliedStudents = new Student[] { }, Tags = new[] { tag1, tag2 } },
+                    new Project { Title = "Project Four", Description = "Project Four Description", Supervisor = context.Supervisors.Find("SupervisorId2"), AppliedStudents = new Student[] { }, Tags = new[] { tag3 } },
+                    new Project { Title = "Project Five", Description = "Project Five Description", Supervisor = context.Supervisors.Find("SupervisorId2"), AppliedStudents = new Student[] { }, Tags = new[] { tag1, tag2 } },
+                    new Project { Title = "Project Six", Description = "Project Six Description", Supervisor = context.Supervisors.Find("SupervisorId3"), AppliedStudents = new Student[] { }, Tags = new[] { tag3 } }
                 );
 
                 context.SaveChanges();
@@ -93,8 +97,8 @@ namespace BlazorApp.Api
             if (!context.Requests.Any())
             {
                 context.Requests.AddRange(
-                    new Request { Title = "Request One", Description = "Request One Description", Student = context.Students.Find("StudentId1"), Supervisor = context.Supervisors.Find("SupervisorId1")},
-                    new Request { Title = "Request Two", Description = "Request Two Description", Student = context.Students.Find("StudentId1"), Supervisor = context.Supervisors.Find("SupervisorId2")}
+                    new Request { Title = "Request One", Description = "Request One Description", Student = context.Students.Find("StudentId1"), Supervisor = context.Supervisors.Find("SupervisorId1") },
+                    new Request { Title = "Request Two", Description = "Request Two Description", Student = context.Students.Find("StudentId1"), Supervisor = context.Supervisors.Find("SupervisorId2") }
                 );
 
                 context.SaveChanges();
