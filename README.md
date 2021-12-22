@@ -10,12 +10,14 @@ A user of the supervisor role has the ability to browse the projects in the bank
 We have assigned you to both roles to showcase all the features, but keep in mind that the product is made with the idea that a user is only asigned to one or the other role. Below are provided some test users which you can use to log-in to get the true experience for how the finalized product show function or if you are having troubles logging-in.
 
 1. Student Tester
-Email: Student@iphone4projectbank.onmicrosoft.com
-Password: 15febe9e-b1b8-420a-b778-2afd6394ae7e
+
+- Email: Student@iphone4projectbank.onmicrosoft.com
+- Password: 15febe9e-b1b8-420a-b778-2afd6394ae7e
 
 2. Supervisor Tester
-Email: Supervisor@iphone4projectbank.onmicrosoft.com
-Password: 378531bf-ed83-458d-bc87-d87667469232
+
+- Email: Supervisor@iphone4projectbank.onmicrosoft.com
+- Password: 378531bf-ed83-458d-bc87-d87667469232
 
 ## Set-up
 
