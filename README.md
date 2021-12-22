@@ -1,38 +1,45 @@
-# BDSA2021Project
+# BDSA2021Project IPhone4
 
-Project bank. Providing awareness of project ideas on the one side and supervision needs on the other is a challenge that affects teachers and students
-every semester. The lack of a software technology able to provide a usefull yet
-intuitive and seamless platform to connect supervisors and interested students
-around a topic of interest cannot be suistained any longer.
-The goal of this project is to create a matching service to connect student(s)
-with potential supervisors for projects and theses. The site will allow supervisors
-to post details of project ideas available and students to apply. This project
-will create a database-driven mobile-friendly service to encourage supervisors
-and students to engage in semester-long collaborations.
+## Introduction
 
-The system should support two different types of users: the supervisors, which
-can post new project and thesis ideas; and the students, which can apply for
-projects and theses as well as make unsolicited supervision requests. Both students and supervisors should be able to team up around a given project or
-thesis. This bare core can be extended in several directions, some of which are
-hereafter briefly listed.
-• The service could allow users to create private or public threads around
-projects and theses with the goal of supporting a buzzing environemnt;
-• The descriptions of projects and theses could be augmented either manually – by the creator – or automatically by including keywords describing
-the project. This would allow to include powerful searching features;
-• The system should allow the inspection of classical statictics (e.g., the
-number of visits that a project or theses had in the last week/month).
-• The service should allow users to subscribe to specific keywords to receive
-notifications once a project or thesis with the given keyword is uploaded
-or once students express their interest in specific topics.
-• The service should allow users to describe themselves in terms of interests
-allowing other types of focused searches.
+Hello and welcome to our project bank application. This application allows users (Students and Supervisors) to log-in using Azure Active Directory with there credentials (An invite to join our directory should be send to you ITU emails). Upon the first log-in their information will be stored in the local database for use in the application. Depending on which roles you are delecated in AAD you level of access/features are different.
+A user without any roles will only have access to browse the projects.
+A user of the student role has the ability to browse the projects in the bank, apply for a project, create a request, browse their sent requests and change their profile name.
+A user of the supervisor role has the ability to browse the projects in the bank, create a new project, browse the requests they have received, create a project from the information in a received request and change their profile name.
 
+We have assigned you to both roles to showcase all the features, but keep in mind that the product is made with the idea that a user is only asigned to one or the other role. Below are provided some test users which you can use to log-in to get the true experience for how the finalized product will function or if you are having troubles logging-in with you credentials.
 
+1. Student Tester
 
-$password = New-Guid
+- Email: Student@iphone4projectbank.onmicrosoft.com
+- Password: 15febe9e-b1b8-420a-b778-2afd6394ae7e
+
+2. Supervisor Tester
+
+- Email: Supervisor@iphone4projectbank.onmicrosoft.com
+- Password: 378531bf-ed83-458d-bc87-d87667469232
+
+## Set-up
+
+1. Before running the application we would like you to setup and run an SQL server in container using the following commands
+
+```powershell
+$ password = New-Guid
 docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=$password" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-latest
-$database = "PBank"
-$connectionString = "Server=localhost;Database=$database;User Id=sa;Password=$password"
+$ database = "PBank"
+$ connectionString = "Server=localhost;Database=$database;User Id=sa;Password=$password"
+```
 
+2. And then add the user-secrets to the BlazorApp.API using the following commands
 
+```powershell
+cd BlazorApp.API
 dotnet user-secrets set "ConnectionStrings:PBank" "$connectionString"
+```
+
+3. And finally add a migration using the database.ps1 script in the project root folder and run the application using run.ps1:
+
+```powershell
+database.ps1
+run.ps1
+```
