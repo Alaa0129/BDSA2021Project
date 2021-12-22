@@ -2,12 +2,12 @@
 
 ## Introduction
 
-Hello and welcome to our project bank application. This application allows users (Students and Supervisors) to log-in using Azure Active Directory with there credentials. Upon the first log-in their information will be stored in the local database for use in the application. Depending on which roles you are delecated in AAD you level of access/features are different.
+Hello and welcome to our project bank application. This application allows users (Students and Supervisors) to log-in using Azure Active Directory with there credentials (An invite to join our directory should be send to you ITU emails). Upon the first log-in their information will be stored in the local database for use in the application. Depending on which roles you are delecated in AAD you level of access/features are different.
 A user without any roles will only have access to browse the projects.
 A user of the student role has the ability to browse the projects in the bank, apply for a project, create a request, browse their sent requests and change their profile name.
 A user of the supervisor role has the ability to browse the projects in the bank, create a new project, browse the requests they have received, create a project from the information in a received request and change their profile name.
 
-We have assigned you to both roles to showcase all the features, but keep in mind that the product is made with the idea that a user is only asigned to one or the other role. Below are provided some test users which you can use to log-in to get the true experience for how the finalized product show function or if you are having troubles logging-in.
+We have assigned you to both roles to showcase all the features, but keep in mind that the product is made with the idea that a user is only asigned to one or the other role. Below are provided some test users which you can use to log-in to get the true experience for how the finalized product will function or if you are having troubles logging-in with you credentials.
 
 1. Student Tester
 
