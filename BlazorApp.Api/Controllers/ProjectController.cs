@@ -15,7 +15,7 @@ namespace BlazorApp.Api.Controllers
     // [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class ProjectController : ControllerBase
     {
-        private readonly ILogger<ProjectController> _logger;
+        private readonly ILogger<ProjectController> _logger; //Remove this?
         private readonly IProjectRepository _repository;
 
         public ProjectController(ILogger<ProjectController> logger, IProjectRepository repository)

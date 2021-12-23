@@ -53,7 +53,7 @@ namespace BlazorApp.Infrastructure
         }
 
         public async Task<IReadOnlyCollection<StudentDTO>> ReadAsync() =>
-            (await _context.Students
+            (await _context.Students    
                             .Select(u => new StudentDTO(u.Id, u.Name))
                             .ToListAsync())
                             .AsReadOnly();
