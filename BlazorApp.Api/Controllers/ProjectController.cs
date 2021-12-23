@@ -23,15 +23,19 @@ namespace BlazorApp.Api.Controllers
             _logger = logger;
             _repository = repository;
         }
-
-        // [AllowAnonymous]
+        /* 
+        This method returns every entry in the repository with projects through a GET request. 
+        [AllowAnonymous]
+        */
         [HttpGet("all")]
         public async Task<IEnumerable<ProjectDetailsDTO>> Get()
         {
             return await _repository.ReadAsync();
         }
-
-        // [AllowAnonymous]
+        /*
+        This method returns a specific project in the repository using an id through a GET request
+        [AllowAnonymous]    
+        */
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectDetailsDTO>> Get(int id)
         {
@@ -41,14 +45,18 @@ namespace BlazorApp.Api.Controllers
 
             return project;
         }
-
+        /*
+        This method is used when to create a project HTTP POST request. 
+        */
         [HttpPost]
         public async Task<int> Post([FromBody] ProjectCreateDTO project)
         {
             return await _repository.CreateAsync(project);
         }
-
+        /*
+        This method creates a PUT request for updating projects
         // [Authorize(Roles = "Student")]
+        */
         [HttpPut("update")]
         public async Task<ActionResult> Put([FromBody] ProjectUpdateDTO project)
         {
@@ -62,6 +70,10 @@ namespace BlazorApp.Api.Controllers
             return NotFound();
         }
 
+
+        /*
+        This method deletes a project through DELETE request.
+        */
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

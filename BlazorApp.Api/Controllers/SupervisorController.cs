@@ -23,14 +23,17 @@ namespace BlazorApp.Api.Controllers
             _logger = logger;
             _repository = repository;
         }
-
+               /* 
+        This method returns every entry in the repository with supervisor through a GET request. 
+        */
         [HttpGet("all")]
         public async Task<IEnumerable<SupervisorDTO>> Get()
         {
             return await _repository.ReadAsync();
         }
-
-
+        /*
+        This method returns a specific supervisor in the repository using an id through a GET request.
+        */
         [HttpGet("{id}")]
         [ProducesResponseType(Status200OK)]
         [ProducesResponseType(Status404NotFound)]
@@ -42,13 +45,16 @@ namespace BlazorApp.Api.Controllers
 
             else return Supervisor;
         }
-
+        /*
+        This method is used when to create a supervisor with a HTTP POST request. 
+        */
         [HttpPost]
         public async Task<string> Post([FromBody] SupervisorCreateDTO Supervisor)
         {
             return await _repository.CreateAsync(Supervisor);
         }
 
+        /* updates supervisor through a PUT request */
         [HttpPut("update")]
         public async Task<ActionResult> Put([FromBody] SupervisorUpdateDTO Supervisor)
         {

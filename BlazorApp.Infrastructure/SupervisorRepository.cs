@@ -18,6 +18,7 @@ namespace BlazorApp.Infrastructure
             _context = context;
         }
 
+        //Creates a supervisor and adds it to the database if it does not exist
         public async Task<string> CreateAsync(SupervisorCreateDTO Supervisor)
         {
             var entity = new Supervisor
@@ -33,6 +34,7 @@ namespace BlazorApp.Infrastructure
             return entity.Id;
         }
 
+        //Gets supervisor details for the specified supervisorId
         public async Task<SupervisorDetailsDTO> ReadAsync(string SupervisorId)
         {
             var Supervisors = from s in _context.Supervisors
@@ -48,12 +50,14 @@ namespace BlazorApp.Infrastructure
             return await Supervisors.FirstOrDefaultAsync();
         }
 
+        //Gets all supervisor from the database
         public async Task<IReadOnlyCollection<SupervisorDTO>> ReadAsync() =>
             (await _context.Supervisors
                             .Select(u => new SupervisorDTO(u.Id, u.Name))
                             .ToListAsync())
                             .AsReadOnly();
 
+        //Updates a supervisor if it exists in the database
         public async Task<HttpStatusCode> UpdateAsync(SupervisorUpdateDTO Supervisor)
         {
             var entity = await _context.Supervisors.Where(u => u.Id == Supervisor.Id).FirstOrDefaultAsync();

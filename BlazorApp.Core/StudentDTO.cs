@@ -15,7 +15,6 @@ namespace BlazorApp.Core
 
         [Required]
         [StringLength(50)]
-        // [MinLength(10)]
         public string Name { get; set; }
     }
 

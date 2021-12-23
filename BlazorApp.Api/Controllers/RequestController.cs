@@ -22,13 +22,17 @@ namespace BlazorApp.Api.Controllers
             _logger = logger;
             _repository = repository;
         }
-    
+       /* 
+        This method returns every entry in the repository with requests through a GET request. 
+        */
         [HttpGet("all")]
         public async Task<IEnumerable<RequestDTO>> Get()
         {
             return await _repository.ReadAsync();
         }
-    
+        /*
+        This method returns a specific request in the repository using an id through a GET request
+        */
         [HttpGet("{id}")]
         public async Task<ActionResult<RequestDetailsDTO>> Get(int id)
         {
@@ -38,13 +42,17 @@ namespace BlazorApp.Api.Controllers
 
             return request;
         }
-
+        /*
+        This method is used when to create a request with a HTTP POST request. 
+        */
         [HttpPost]
         public async Task<int> Post([FromBody] RequestCreateDTO request)
         {
             return await _repository.CreateAsync(request);
         }
-
+        /*
+        This method deletes requests through a DELETE request.
+        */
         [HttpDelete("{id}")]
         public async Task<HttpStatusCode> Delete(int id)
         {

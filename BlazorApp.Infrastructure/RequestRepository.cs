@@ -1,4 +1,4 @@
-using BlazorApp.Core;
+ using BlazorApp.Core;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace BlazorApp.Infrastructure
         }
 
 
-        //TODO: Should check if studens/supervisors are in the database (Sames goes for project create)
+        //Creates request and inserts it into the database
         public async Task<int> CreateAsync(RequestCreateDTO request)
         {
             var entity = new Request
@@ -36,6 +36,7 @@ namespace BlazorApp.Infrastructure
             return entity.Id;
         }
 
+        //Gets a request by the specified requestId from the database
         public async Task<RequestDetailsDTO> ReadAsync(int requestId)
         {
             return await _context.Requests.Where(r => r.Id == requestId)
@@ -50,6 +51,7 @@ namespace BlazorApp.Infrastructure
                                             )).FirstOrDefaultAsync();
         }
 
+        //Fetches all requests in the database
         public async Task<IReadOnlyCollection<RequestDTO>> ReadAsync()
         {
             return (await _context.Requests.Select(r => new RequestDTO
@@ -62,6 +64,7 @@ namespace BlazorApp.Infrastructure
                                                        )).ToListAsync()).AsReadOnly();
         }
 
+        //Deletes a request by the specified requestId
         public async Task<HttpStatusCode> DeleteAsync(int requestId)
         {
             var entity = await _context.Requests.FindAsync(requestId);
