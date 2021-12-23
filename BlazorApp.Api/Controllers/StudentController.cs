@@ -25,13 +25,14 @@ namespace BlazorApp.Api.Controllers
             _repository = repository;
         }
 
+        /* Returns all students in the repository through a GET request */
         [HttpGet("all")]
         public async Task<IEnumerable<StudentDTO>> Get()
         {
             return await _repository.ReadAsync();
         }
 
-
+        /* Given a studentID, returns the student if found in the repository through a GET request */
         [HttpGet("{id}")]
         [ProducesResponseType(Status200OK)]
         [ProducesResponseType(Status404NotFound)]
@@ -44,12 +45,14 @@ namespace BlazorApp.Api.Controllers
             else return student;
         }
 
+        /* Create a student in the repo through a POST request*/
         [HttpPost]
         public async Task<string> Post([FromBody] StudentCreateDTO student)
         {
             return await _repository.CreateAsync(student);
         }
 
+        /* updates students through a PUT request */
         [HttpPut("update")]
         public async Task<ActionResult> Put([FromBody] StudentUpdateDTO student)
         {
@@ -63,6 +66,7 @@ namespace BlazorApp.Api.Controllers
             return NotFound();
         }
 
+        /* Assigns a project to a student with given studentID through PUT request */
         [HttpPut("updateProject/{projectId}")]
         public async Task<ActionResult> Put([FromBody] string studentId, int projectId)
         {

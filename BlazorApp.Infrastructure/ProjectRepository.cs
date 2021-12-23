@@ -18,6 +18,7 @@ namespace BlazorApp.Infrastructure
             _context = context;
         }
 
+        //Creates project and inserts it into the database
         public async Task<int> CreateAsync(ProjectCreateDTO project)
         {
             var entity = new Project
@@ -34,7 +35,7 @@ namespace BlazorApp.Infrastructure
 
             return entity.Id;
         }
-
+        //Gets a project by the specified requestId from the database
         public async Task<ProjectDetailsDTO> ReadAsync(int projectId)
         {
             return await _context.Projects.Where(p => p.Id == projectId)
@@ -48,7 +49,7 @@ namespace BlazorApp.Infrastructure
                                                 p.Tags.Select(t => t.Name).ToList()
                                             )).FirstOrDefaultAsync();
         }
-
+        //Fetches all projects in the database
         public async Task<IReadOnlyCollection<ProjectDetailsDTO>> ReadAsync()
         {
             return (await _context.Projects
@@ -62,7 +63,7 @@ namespace BlazorApp.Infrastructure
                                             p.Tags.Select(t => t.Name).ToList()
                                     )).ToListAsync()).AsReadOnly();
         }
-
+        //Updates a project.
         public async Task<HttpStatusCode> UpdateAsync(ProjectUpdateDTO project)
         {
             var entity = await _context.Projects.FindAsync(project.Id);
@@ -77,6 +78,7 @@ namespace BlazorApp.Infrastructure
             return OK;
 
         }
+        //Deletes a project by the specified requestId
         public async Task<HttpStatusCode> DeleteAsync(int projectId)
         {
             var entity = await _context.Projects.FindAsync(projectId);

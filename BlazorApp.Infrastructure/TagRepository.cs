@@ -16,6 +16,7 @@ namespace BlazorApp.Infrastructure
             _context = context;
         }
 
+        //Gets all tags in the database
         public async Task<IReadOnlyCollection<TagDetailsDTO>> ReadAsyncAll()
         {
             return (await _context.Tags.Select(t => new TagDetailsDTO

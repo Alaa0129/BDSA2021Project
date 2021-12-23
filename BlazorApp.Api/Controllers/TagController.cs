@@ -18,7 +18,7 @@ namespace BlazorApp.Api.Controllers
             _logger = logger;
             _repository = repository;
         }
-
+        /* Returns all tags in the repository through a GET request */
         [HttpGet("all")]
         public async Task<IEnumerable<TagDetailsDTO>> Get()
         {

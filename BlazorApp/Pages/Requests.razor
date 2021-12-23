@@ -94,6 +94,7 @@
         totalPages = (int)Math.Ceiling(requests.Count() / (decimal)pageSize);
     }
 
+    // This method filters the projects based on the titles and student id.
     private void SearchRequests()
     {
         filteredRequests = requests.Where(p => p.Title

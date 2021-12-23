@@ -136,7 +136,7 @@
 
     }
 
-
+    // Assigns a project to a student
     private async Task Apply()
     {
         var response = await StudentRemote.UpdateProject(projectId, authUser.GetObjectId());

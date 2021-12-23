@@ -28,7 +28,7 @@ namespace BlazorApp.Api.Tests.Controllers
             //Then
             Assert.Equal(expected, actual);
         }
-
+        
         [Fact]
         public async Task Get_given_valid_id_returns_project()
         {
