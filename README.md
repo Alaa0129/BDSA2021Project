@@ -57,3 +57,5 @@ dotnet user-secrets set "ConnectionStrings:PBank" "$connectionString"
 database.ps1
 run.ps1
 ```
+
+A Chrome Browser will open on the localhost with port 5001. It might have some trouble loading the first time as the application needs a few seconds to start up, meaning a refresh of the page might be needed.
